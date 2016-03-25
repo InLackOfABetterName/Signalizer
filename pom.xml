@@ -22,5 +22,15 @@
             <artifactId>matsim</artifactId>
             <version>0.7.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.matsim.contrib</groupId>
+            <artifactId>signals</artifactId>
+            <version>0.7.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.matsim.contrib</groupId>
+            <artifactId>otfvis</artifactId>
+            <version>0.7.0</version>
+        </dependency>
     </dependencies>
 </project>
