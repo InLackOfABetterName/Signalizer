@@ -14,23 +14,33 @@
             <name>MATSim release repository</name>
             <url>http://dl.bintray.com/matsim/matsim</url>
         </repository>
+        <repository>
+            <id>cubyte</id>
+            <name>CuByte</name>
+            <url>http://repo.cubyte.org</url>
+        </repository>
     </repositories>
 
     <dependencies>
         <dependency>
             <groupId>org.matsim</groupId>
             <artifactId>matsim</artifactId>
-            <version>0.7.0</version>
+            <version>0.8.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.matsim.contrib</groupId>
             <artifactId>signals</artifactId>
-            <version>0.7.0</version>
+            <version>0.8.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.matsim.contrib</groupId>
             <artifactId>otfvis</artifactId>
-            <version>0.7.0</version>
+            <version>0.8.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.matsim.contrib</groupId>
+            <artifactId>networkEditor</artifactId>
+            <version>0.8.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>
