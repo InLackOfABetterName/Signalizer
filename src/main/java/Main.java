@@ -1,5 +1,7 @@
+import com.google.inject.Inject;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.contrib.otfvis.OTFVis;
+import org.matsim.contrib.otfvis.OTFVisLiveModule;
 import org.matsim.contrib.signals.SignalSystemsConfigGroup;
 import org.matsim.contrib.signals.controler.SignalsModule;
 import org.matsim.contrib.signals.data.SignalsData;
@@ -7,8 +9,17 @@ import org.matsim.contrib.signals.data.SignalsScenarioLoader;
 import org.matsim.contrib.signals.otfvis.OTFVisWithSignals;
 import org.matsim.core.config.Config;
 import org.matsim.core.config.ConfigUtils;
+import org.matsim.core.controler.AbstractModule;
 import org.matsim.core.controler.Controler;
+import org.matsim.core.router.PlanRouter;
+import org.matsim.core.router.TripRouter;
 import org.matsim.core.scenario.ScenarioUtils;
+import org.matsim.facilities.ActivityFacilities;
+import org.matsim.population.algorithms.AbstractPersonAlgorithm;
+import org.matsim.population.algorithms.ParallelPersonAlgorithmRunner;
+import org.matsim.population.algorithms.PersonPrepareForSim;
+
+import javax.inject.Provider;
 
 import static org.matsim.core.controler.OutputDirectoryHierarchy.OverwriteFileSetting.deleteDirectoryIfExists;
 
@@ -23,12 +34,14 @@ public class Main {
 
         signalSystemsModule.setSignalSystemFile("./conf/signalSystems.xml");
         signalSystemsModule.setSignalGroupsFile("./conf/signalGroups.xml");
-        signalSystemsModule.setSignalControlFile("./conf/signalControl.xml");
+        signalSystemsModule.setSignalControlFile("./conf/signalControl.xml");*/
 
         Controler c = new Controler(scenario);
         c.addOverridingModule(new SignalsModule());
-        c.getConfig().controler().setOverwriteFileSetting(deleteDirectoryIfExists);*/
-        OTFVis.playScenario(scenario);
-        //c.run();
+        c.addOverridingModule(new OTFVisLiveModule());
+        c.getConfig().controler().setOverwriteFileSetting(deleteDirectoryIfExists);
+
+        //OTFVis.playScenario(scenario);
+        c.run();
     }
 }
