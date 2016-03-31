@@ -4,18 +4,26 @@
 <config>
 
     <module name="network">
-        <param name="inputNetworkFile" value="./conf/network.xml" />
+        <param name="inputNetworkFile" value="./conf/scenario1/network.xml" />
     </module>
 
     <module name="plans">
-        <param name="inputPlansFile" value="./conf/plans.xml" />
+        <param name="inputPlansFile" value="./conf/scenario1/plans.xml" />
     </module>
 
     <module name="controler">
-        <param name="outputDirectory" value="output/matsim" />
+        <param name="outputDirectory" value="output/scenario1" />
         <param name="firstIteration" value="0" />
         <param name="lastIteration" value="10" />
         <param name="eventsFileFormat" value="xml" />
+    </module>
+
+    <module name="signalsystems">
+        <param name="useSignalsystems" value="true" />
+        <param name="useAmbertimes" value="true" />
+        <param name="signalsystems" value="./conf/scenario1/signal/systems.xml" />
+        <param name="signalcontrol" value="./conf/scenario1/signal/control.xml" />
+        <param name="signalgroups" value="./conf/scenario1/signal/groups.xml" />
     </module>
 
     <module name="qsim">

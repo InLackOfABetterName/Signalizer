@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE network SYSTEM "http://www.matsim.org/files/dtd/network_v1.dtd">
+<network>
+
+<!-- ====================================================================== -->
+
+	<nodes>
+		<node id="1"  x="1000"  y="0" />
+		<node id="2"  x="2000"  y="0" />
+		<node id="3"  x="4000"  y="0" />
+		<node id="4"  x="13500" y="0" />
+		<node id="5"  x="16500" y="0" />
+		<node id="6"  x="17000" y="0" />
+		
+		<node id="7"  x="1000"  y="-1000" />
+		<node id="8"  x="2000"  y="-1000" />
+		<node id="9"  x="4000"  y="-1000" />
+		<node id="10" x="13500" y="-1000" />
+		<node id="11" x="16500" y="-1000" />
+		<node id="12" x="17000" y="-1000" />
+		
+		<node id="13" x="2500" y="-2000" />
+		<node id="14" x="3500" y="-2000" />
+		<node id="15" x="2500" y="-7000" />
+		<node id="16" x="3500" y="-7000" />
+		
+		<node id="17" x="2000" y="-8000" />
+		<node id="18" x="1000" y="-8000" />
+		
+		<node id="19" x="4500" y="-8000" />
+		<node id="20" x="4500" y="-9000" />
+		
+		<node id="21" x="14500" y="-2000" />
+		<node id="22" x="15500" y="-2000" />
+		<node id="23" x="14500" y="-7000" />
+		<node id="24" x="15500" y="-7000" />
+		
+		<node id="25" x="13500" y="-8000" />
+		<node id="26" x="13500" y="-9000" />
+		
+		<node id="27" x="16500" y="-8000" />
+		<node id="28" x="16500" y="-9000" />
+		
+		<node id="29" x="14500" y="-10000" />
+		<node id="30" x="15500" y="-10000" />
+		
+		<node id="31" x="17500" y="-8000" />
+		<node id="32" x="17500" y="-9000" />
+		
+		<node id="33" x="14500" y="-11000" />
+		<node id="34" x="15500" y="-11000" />
+		
+		<node id="35" x="14500" y="1000" />
+		<node id="36" x="15500" y="1000" />
+		<node id="37" x="14500" y="2000" />
+		<node id="38" x="15500" y="2000" />
+		
+		<!--
+		<node id="" x="" y="" />
+		-->
+	</nodes>
+
+<!-- ====================================================================== -->
+
+	<links capperiod="01:00:00" effectivecellsize="20" effectivelanewidth="10">
+		<link id="1" from="6" to="5" length="10"  freespeed="50" capacity="3000.0" permlanes="2.0" oneway="1" modes="car" />
+		<link id="2" from="5" to="4" length="10"  freespeed="50" capacity="3000.0" permlanes="2.0" oneway="1" modes="car" />
+		<link id="3" from="4" to="3" length="100" freespeed="50" capacity="3000.0" permlanes="2.0" oneway="1" modes="car" />
+		<link id="4" from="3" to="2" length="10"  freespeed="50" capacity="3000.0" permlanes="2.0" oneway="1" modes="car" />
+		<link id="5" from="2" to="1" length="10"  freespeed="50" capacity="3000.0" permlanes="2.0" oneway="1" modes="car" />
+
+		<link id="6"  from="7"  to="8"  length="10"  freespeed="50" capacity="3000.0" permlanes="2.0" oneway="1" modes="car" />
+		<link id="7"  from="8"  to="9"  length="10"  freespeed="50" capacity="3000.0" permlanes="2.0" oneway="1" modes="car" />
+		<link id="8"  from="9"  to="10" length="100" freespeed="50" capacity="3000.0" permlanes="2.0" oneway="1" modes="car" />
+		<link id="9"  from="10" to="11" length="10"  freespeed="50" capacity="3000.0" permlanes="2.0" oneway="1" modes="car" />
+		<link id="10" from="11" to="12" length="10"  freespeed="50" capacity="3000.0" permlanes="2.0" oneway="1" modes="car" />
+
+		<link id="11" from="8"  to="13" length="10" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="12" from="14" to="9"  length="10" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="13" from="3"  to="13" length="10" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="14" from="14" to="2"  length="10" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+
+		<link id="15" from="13" to="15" length="50" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="16" from="16" to="14" length="50" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+
+		<link id="17" from="18" to="17" length="10" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="18" from="17" to="16" length="20" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="19" from="17" to="20" length="25" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+
+		<link id="20" from="21" to="23" length="50" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="21" from="24" to="22" length="50" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+
+		<link id="22" from="20" to="26" length="50" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="23" from="25" to="19" length="50" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="24" from="19" to="16" length="50" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="25" from="15" to="20" length="50" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+
+		<link id="26" from="24" to="23" length="10" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="27" from="23" to="25" length="10" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="28" from="25" to="26" length="10" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="29" from="26" to="29" length="10" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="30" from="29" to="30" length="10" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="31" from="30" to="28" length="10" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="32" from="28" to="27" length="10" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="33" from="27" to="24" length="10" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+
+		<link id="34" from="29" to="33" length="10" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="35" from="34" to="30" length="10" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+
+		<link id="36" from="28" to="32" length="10" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="37" from="31" to="27" length="10" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+
+		<link id="38" from="36" to="38" length="10" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="39" from="37" to="35" length="10" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+
+		<link id="40" from="22" to="36" length="30" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="41" from="35" to="21" length="30" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+
+		<link id="42" from="22" to="11" length="10" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="43" from="22" to="4"  length="20" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+
+		<link id="44" from="5" to="36" length="10" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="45" from="5" to="21" length="20" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+
+		<link id="46" from="35" to="4"  length="10" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="47" from="35" to="11" length="20" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+
+		<link id="48" from="10" to="21" length="10" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="49" from="10" to="36" length="20" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+
+		<!--
+		<link id="" from="" to="" length="" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		-->
+	</links>
+
+<!-- ====================================================================== -->
+
+</network>
