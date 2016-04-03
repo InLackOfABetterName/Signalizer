@@ -31,6 +31,7 @@ public class SignalizerModule extends AbstractModule {
 
     public void install() {
         this.addMobsimListenerBinding().to(OTFVisMobsimListener.class);
+        this.bind(NodeTraverseHandler.class);
     }
 
     public class SignalizerSignalModelFactory implements SignalModelFactory {
