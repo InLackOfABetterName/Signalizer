@@ -11,6 +11,7 @@ import org.matsim.contrib.signals.data.SignalsData;
 import org.matsim.contrib.signals.data.SignalsScenarioLoader;
 import org.matsim.core.config.Config;
 import org.matsim.core.config.ConfigUtils;
+import org.matsim.core.config.groups.NetworkConfigGroup;
 import org.matsim.core.controler.Controler;
 import org.matsim.core.scenario.ScenarioUtils;
 
@@ -30,6 +31,7 @@ public class Main {
         final Config config = ConfigUtils.loadConfig(base.resolve("config.xml").toString());
         final SignalSystemsConfigGroup signalsConf = addOrGetModule(config, SignalSystemsConfigGroup.GROUPNAME, SignalSystemsConfigGroup.class);
 
+
         final Scenario scenario = ScenarioUtils.loadScenario(config);
         scenario.addScenarioElement(SignalsData.ELEMENT_NAME, new SignalsScenarioLoader(signalsConf).loadSignalsData());
         config.travelTimeCalculator().setCalculateLinkToLinkTravelTimes(true);
@@ -42,7 +44,7 @@ public class Main {
         final SignalNetworkController networkController = new SignalNetworkController();
 
         final Controler c = new Controler(scenario);
-        c.addOverridingModule(new OTFVisLiveModule());
+        //c.addOverridingModule(new OTFVisLiveModule());
         c.addOverridingModule(new SignalsModule());
         c.addOverridingModule(new SignalizerModule(networkController));
         c.getConfig().controler().setOverwriteFileSetting(deleteDirectoryIfExists);

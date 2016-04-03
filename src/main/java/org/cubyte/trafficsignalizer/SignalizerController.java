@@ -16,10 +16,14 @@ public class SignalizerController implements SignalController {
     }
 
     public void updateState(double timeSeconds) {
-        System.out.println("Time: " + timeSeconds);
         this.networkController.updateState(this, timeSeconds);
         for (Signal signal : system.getSignals().values()) {
-            signal.setState(SignalGroupState.GREEN);
+            int time = (int) timeSeconds;
+            if (time % 10 == 0) {
+                signal.setState(SignalGroupState.RED);
+            } else if (time % 5 == 0) {
+                signal.setState(SignalGroupState.GREEN);
+            }
         }
     }
 
