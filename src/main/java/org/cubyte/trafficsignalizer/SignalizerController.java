@@ -8,15 +8,16 @@ import org.matsim.core.mobsim.qsim.interfaces.SignalGroupState;
 
 public class SignalizerController implements SignalController {
 
-    private final SignalNetworkController masterController;
+    private final SignalNetworkController networkController;
     private SignalSystem system;
 
-    public SignalizerController(SignalNetworkController masterController) {
-        this.masterController = masterController;
+    public SignalizerController(SignalNetworkController networkController) {
+        this.networkController = networkController;
     }
 
     public void updateState(double timeSeconds) {
         System.out.println("Time: " + timeSeconds);
+        this.networkController.updateState(this, timeSeconds);
         for (Signal signal : system.getSignals().values()) {
             signal.setState(SignalGroupState.GREEN);
         }
@@ -28,13 +29,15 @@ public class SignalizerController implements SignalController {
 
     public void setSignalSystem(SignalSystem system) {
         this.system = system;
+        this.networkController.receivedSystem(this, system);
     }
 
     public void reset(Integer iterationNumber) {
-
+        this.networkController.reset(this, iterationNumber);
     }
 
     public void simulationInitialized(double simStartTimeSeconds) {
         System.out.println("Start Time: " + simStartTimeSeconds);
+        this.networkController.simulationInitialized(this, simStartTimeSeconds);
     }
 }

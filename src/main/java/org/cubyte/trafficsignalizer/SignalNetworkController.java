@@ -29,4 +29,20 @@ public class SignalNetworkController
         }
         return others;
     }
+
+    public void updateState(SignalizerController signalizerController, double timeSeconds) {
+
+    }
+
+    public void receivedSystem(SignalizerController signalizerController, SignalSystem system) {
+
+    }
+
+    public void reset(SignalizerController signalizerController, Integer iterationNumber) {
+
+    }
+
+    public void simulationInitialized(SignalizerController signalizerController, double simStartTimeSeconds) {
+
+    }
 }
