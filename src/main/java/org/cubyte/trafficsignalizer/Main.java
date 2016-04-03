@@ -11,13 +11,18 @@ import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.controler.Controler;
 import org.matsim.core.scenario.ScenarioUtils;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import static org.matsim.core.config.ConfigUtils.addOrGetModule;
 import static org.matsim.core.controler.OutputDirectoryHierarchy.OverwriteFileSetting.deleteDirectoryIfExists;
 
 public class Main {
 
     public static void main(String[] args) {
-        final Config config = ConfigUtils.loadConfig("./conf/" + (args.length > 0 ? args[0] : "initial") + "/config.xml");
+        final Path base = Paths.get("conf", (args.length > 0 ? args[0] : "initial"));
+        final Config config = ConfigUtils.loadConfig(base.resolve("config.xml").toString());
         final SignalSystemsConfigGroup signalsConf = addOrGetModule(config, SignalSystemsConfigGroup.GROUPNAME, SignalSystemsConfigGroup.class);
 
         final Scenario scenario = ScenarioUtils.loadScenario(config);
