@@ -1,6 +1,9 @@
 package org.cubyte.trafficsignalizer;
 
+import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
+import org.matsim.api.core.v01.network.Link;
+import org.matsim.api.core.v01.population.*;
 import org.matsim.contrib.otfvis.OTFVisLiveModule;
 import org.matsim.contrib.signals.SignalSystemsConfigGroup;
 import org.matsim.contrib.signals.controler.SignalsModule;
@@ -11,9 +14,11 @@ import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.controler.Controler;
 import org.matsim.core.scenario.ScenarioUtils;
 
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
 
 import static org.matsim.core.config.ConfigUtils.addOrGetModule;
 import static org.matsim.core.controler.OutputDirectoryHierarchy.OverwriteFileSetting.deleteDirectoryIfExists;
@@ -29,12 +34,47 @@ public class Main {
         scenario.addScenarioElement(SignalsData.ELEMENT_NAME, new SignalsScenarioLoader(signalsConf).loadSignalsData());
         config.travelTimeCalculator().setCalculateLinkToLinkTravelTimes(true);
 
+        if (scenario.getPopulation().getPersons().isEmpty()) {
+            generatePopulation(scenario);
+            new PopulationWriter(scenario.getPopulation(), scenario.getNetwork()).write(config.plans().getInputFile());
+        }
+
         final SignalNetworkController networkController = new SignalNetworkController();
+
         final Controler c = new Controler(scenario);
         c.addOverridingModule(new OTFVisLiveModule());
         c.addOverridingModule(new SignalsModule());
         c.addOverridingModule(new SignalizerModule(networkController));
         c.getConfig().controler().setOverwriteFileSetting(deleteDirectoryIfExists);
         c.run();
+    }
+
+    private static void generatePopulation(Scenario scenario) {
+        final double SIMULATION_START = 0;
+        final double SIMULATION_END = 3600;
+        Random random = new Random(System.currentTimeMillis());
+        Population population = scenario.getPopulation();
+        PopulationFactory populationFactory = population.getFactory();
+        List<Id<Link>> startLinks = scenario.getNetwork().getLinks().values().stream()
+                .filter((Link link) -> link.getFromNode().getInLinks().isEmpty())
+                .map(Link::getId).collect(Collectors.toList());
+        List<Id<Link>> endLinks   = scenario.getNetwork().getLinks().values().stream()
+                .filter((Link link) -> link.getToNode().getOutLinks().isEmpty())
+                .map(Link::getId).collect(Collectors.toList());
+        for (int i = 0; i < 5000; i++) {
+            Person person = populationFactory.createPerson(Id.createPersonId(i));
+            for (int n = 0; n < random.nextInt(3) + 1; n++) {
+                Plan plan = populationFactory.createPlan();
+                Activity activity = populationFactory.createActivityFromLinkId("from", startLinks.get(random.nextInt(startLinks.size())));
+                activity.setEndTime(random.nextDouble() * (SIMULATION_END - SIMULATION_START) + SIMULATION_START);
+                plan.addActivity(activity);
+                Leg leg = populationFactory.createLeg("car");
+                plan.addLeg(leg);
+                activity = populationFactory.createActivityFromLinkId("to", endLinks.get(random.nextInt(endLinks.size())));
+                plan.addActivity(activity);
+                person.addPlan(plan);
+            }
+            population.addPerson(person);
+        }
     }
 }
