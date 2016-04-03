@@ -24,10 +24,11 @@ public class Main {
         scenario.addScenarioElement(SignalsData.ELEMENT_NAME, new SignalsScenarioLoader(signalsConf).loadSignalsData());
         config.travelTimeCalculator().setCalculateLinkToLinkTravelTimes(true);
 
+        final SignalNetworkController networkController = new SignalNetworkController();
         final Controler c = new Controler(scenario);
         c.addOverridingModule(new OTFVisLiveModule());
         c.addOverridingModule(new SignalsModule());
-        c.addOverridingModule(new SignalizerModule());
+        c.addOverridingModule(new SignalizerModule(networkController));
         c.getConfig().controler().setOverwriteFileSetting(deleteDirectoryIfExists);
         c.run();
     }

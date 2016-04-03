@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <signalGroups xsi:schemaLocation="http://www.matsim.org/files/dtd http://www.matsim.org/files/dtd/signalGroups_v2.0.xsd" xmlns="http://www.matsim.org/files/dtd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <signalSystem refId="exampleSignalSystem">
-        <signalGroup id="exampleSignalGroup">
-            <signal refId="exampleSignal6"/>
-            <signal refId="exampleSignal7"/>
+    <signalSystem refId="topleft">
+        <signalGroup id="a">
+            <signal refId="topright_topleft"/>
         </signalGroup>
-        <signalGroup id="exampleSignalGroupB">
-        <!-- signal group not used by signal control: -->
-            <signal refId="exampleSignal8"/>
-            <signal refId="exampleSignal9"/>
+    </signalSystem>
+    <signalSystem refId="bottomleft">
+        <signalGroup id="a">
+            <signal refId="bottomright_topright"/>
+        </signalGroup>
+    </signalSystem>
+    <signalSystem refId="topright">
+        <signalGroup id="a">
+            <signal refId="right_left"/>
         </signalGroup>
     </signalSystem>
 </signalGroups>

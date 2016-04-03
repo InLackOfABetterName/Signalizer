@@ -13,11 +13,17 @@ import org.matsim.core.controler.AbstractModule;
 import org.matsim.core.replanning.ReplanningContext;
 
 public class SignalizerModule extends AbstractModule {
-    public void install() {
 
+    private final SignalNetworkController networkController;
+
+    public SignalizerModule(SignalNetworkController networkController) {
+        this.networkController = networkController;
     }
 
-    private static class SignalizerSignalModelFactory implements SignalModelFactory {
+    public void install() {
+    }
+
+    private class SignalizerSignalModelFactory implements SignalModelFactory {
 
         private final SignalModelFactory defaultImpl = new DefaultSignalModelFactory();
 
@@ -33,18 +39,10 @@ public class SignalizerModule extends AbstractModule {
         public SignalController createSignalSystemController(String controllerIdentifier) {
             if (controllerIdentifier.equals(DefaultPlanbasedSignalSystemController.IDENTIFIER)) {
                 return new DefaultPlanbasedSignalSystemController();
-            }
-            try {
-                Class controllerClass = Class.forName(controllerIdentifier);
-                if (SignalController.class.isAssignableFrom(controllerClass) && controllerClass.getConstructor() != null) {
-                    return (SignalController)controllerClass.newInstance();
-                } else {
-                    throw new IllegalArgumentException("Controller " + controllerIdentifier + " does not implement " + SignalController.class.getName() + " or does not have a default constructor!");
-                }
-            } catch (ClassNotFoundException e) {
-                throw new IllegalArgumentException("Controller " + controllerIdentifier + " not found!");
-            } catch (ReflectiveOperationException e) {
-                throw new IllegalArgumentException("Could not load controller " + controllerIdentifier + ": " + e.getLocalizedMessage());
+            } else {
+                SignalizerController c = new SignalizerController(networkController);
+                networkController.addController(c);
+                return c;
             }
         }
 
