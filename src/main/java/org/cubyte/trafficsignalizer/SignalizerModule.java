@@ -15,6 +15,7 @@ import org.matsim.contrib.signals.data.signalgroups.v20.SignalPlanData;
 import org.matsim.contrib.signals.model.*;
 import org.matsim.contrib.signals.otfvis.OTFClientLiveWithSignals;
 import org.matsim.core.api.experimental.events.EventsManager;
+import org.matsim.core.config.Config;
 import org.matsim.core.config.ConfigGroup;
 import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.config.groups.ControlerConfigGroup;
@@ -31,14 +32,18 @@ import javax.inject.Inject;
 public class SignalizerModule extends AbstractModule {
 
     private final SignalNetworkController networkController;
+    private final boolean learn;
 
-    public SignalizerModule(SignalNetworkController networkController) {
+    public SignalizerModule(SignalNetworkController networkController, boolean learn) {
         this.networkController = networkController;
+        this.learn = learn;
     }
 
     public void install() {
         this.addMobsimListenerBinding().to(OTFVisMobsimListener.class);
-        this.bind(NodeTraverseHandler.class).asEagerSingleton();
+        this.bind(NodeTraverseHandler.class);
+        this.addEventHandlerBinding().to(NodeTraverseHandler.class);
+        this.addControlerListenerBinding().to(LearnAndMeasureHandler.class);
     }
 
     public class SignalizerSignalModelFactory implements SignalModelFactory {
@@ -82,15 +87,26 @@ public class SignalizerModule extends AbstractModule {
     }
 
     @Provides
-    PredictionNetwork providePredictionNetwork(Network network) {
+    PredictionNetwork providePredictionNetwork(Network network, SignalizerConfig signalizerConfig) {
         PredictionNetwork predictionNetwork;
-        ConfigGroup controlerConfigModule = getConfig().getModule(ControlerConfigGroup.GROUP_NAME);
-        if (controlerConfigModule != null && controlerConfigModule.getValue("outputDirectory") != null) {
-            predictionNetwork = new PredictionNetwork(network, controlerConfigModule.getValue("outputDirectory"));
+        if (signalizerConfig.neuralNetworkSaveFolder != null) {
+            predictionNetwork = new PredictionNetwork(network, signalizerConfig.neuralNetworkSaveFolder);
         } else {
-            predictionNetwork = new PredictionNetwork(network);
+            predictionNetwork = new PredictionNetwork(network, "");
         }
         return predictionNetwork;
+    }
+
+    @Provides
+    SignalizerConfig provideSignalizerConfig() {
+        ConfigGroup controlerConfigModule = getConfig().getModule(ControlerConfigGroup.GROUP_NAME);
+        String neuralNetworkSaveFolder;
+        if (controlerConfigModule != null && controlerConfigModule.getValue("outputDirectory") != null) {
+            neuralNetworkSaveFolder = controlerConfigModule.getValue("outputDirectory") + "/neuralNetworks";
+        } else {
+            neuralNetworkSaveFolder = null;
+        }
+        return new SignalizerConfig(learn, neuralNetworkSaveFolder);
     }
 
     public static class OTFVisMobsimListener implements MobsimInitializedListener {

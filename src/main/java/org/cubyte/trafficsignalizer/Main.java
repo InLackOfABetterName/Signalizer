@@ -33,7 +33,22 @@ import static org.matsim.core.controler.OutputDirectoryHierarchy.OverwriteFileSe
 public class Main {
 
     public static void main(String[] args) {
-        final Path base = Paths.get("conf", (args.length > 0 ? args[0] : "initial"));
+        boolean learn = false;
+        String configName = "";
+
+        if (args.length > 0) {
+            for (String arg : args) {
+                switch (arg) {
+                    case "-l":
+                        learn = true;
+                        break;
+                    default:
+                        configName = arg;
+                }
+            }
+        }
+
+        final Path base = Paths.get("conf", (!"".equals(configName) ? configName : "initial"));
         final Config config = ConfigUtils.loadConfig(base.resolve("config.xml").toString());
         final SignalSystemsConfigGroup signalsConf = addOrGetModule(config, SignalSystemsConfigGroup.GROUPNAME, SignalSystemsConfigGroup.class);
 
@@ -64,14 +79,14 @@ public class Main {
         final Controler c = new Controler(scenario);
         //c.addOverridingModule(new OTFVisLiveModule());
         c.addOverridingModule(new SignalsModule());
-        c.addOverridingModule(new SignalizerModule(networkController));
+        c.addOverridingModule(new SignalizerModule(networkController, learn));
         c.getConfig().controler().setOverwriteFileSetting(deleteDirectoryIfExists);
         c.run();
     }
 
     private static void generatePopulation(Scenario scenario) {
         final double SIMULATION_START = 0;
-        final double SIMULATION_END = 3600;
+        final double SIMULATION_END = 25000;
         Random random = new Random(System.currentTimeMillis());
         Population population = scenario.getPopulation();
         PopulationFactory populationFactory = population.getFactory();
@@ -81,7 +96,7 @@ public class Main {
         List<Id<Link>> endLinks   = scenario.getNetwork().getLinks().values().stream()
                 .filter((Link link) -> link.getToNode().getOutLinks().isEmpty())
                 .map(Link::getId).collect(Collectors.toList());
-        for (int i = 0; i < 5000; i++) {
+        for (int i = 0; i < 30000; i++) {
             Person person = populationFactory.createPerson(Id.createPersonId(i));
             for (int n = 0; n < random.nextInt(3) + 1; n++) {
                 Plan plan = populationFactory.createPlan();
