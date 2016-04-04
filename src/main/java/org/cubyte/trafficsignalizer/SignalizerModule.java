@@ -3,6 +3,10 @@ package org.cubyte.trafficsignalizer;
 import com.google.inject.Provides;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
+import org.matsim.api.core.v01.events.handler.LinkEnterEventHandler;
+import org.matsim.api.core.v01.events.handler.LinkLeaveEventHandler;
+import org.matsim.api.core.v01.network.Network;
+import org.matsim.api.core.v01.network.Node;
 import org.matsim.contrib.otfvis.OTFVis;
 import org.matsim.contrib.signals.builder.DefaultSignalModelFactory;
 import org.matsim.contrib.signals.builder.FromDataBuilder;
@@ -11,6 +15,9 @@ import org.matsim.contrib.signals.data.signalgroups.v20.SignalPlanData;
 import org.matsim.contrib.signals.model.*;
 import org.matsim.contrib.signals.otfvis.OTFClientLiveWithSignals;
 import org.matsim.core.api.experimental.events.EventsManager;
+import org.matsim.core.config.ConfigGroup;
+import org.matsim.core.config.ConfigUtils;
+import org.matsim.core.config.groups.ControlerConfigGroup;
 import org.matsim.core.controler.AbstractModule;
 import org.matsim.core.mobsim.framework.events.MobsimInitializedEvent;
 import org.matsim.core.mobsim.framework.listeners.MobsimInitializedListener;
@@ -31,7 +38,7 @@ public class SignalizerModule extends AbstractModule {
 
     public void install() {
         this.addMobsimListenerBinding().to(OTFVisMobsimListener.class);
-        this.bind(NodeTraverseHandler.class);
+        this.bind(NodeTraverseHandler.class).asEagerSingleton();
     }
 
     public class SignalizerSignalModelFactory implements SignalModelFactory {
@@ -72,6 +79,18 @@ public class SignalizerModule extends AbstractModule {
         SignalSystemsManager signalSystemsManager = modelBuilder.createAndInitializeSignalSystemsManager();
         signalSystemsManager.resetModel(replanningContext.getIteration());
         return signalSystemsManager;
+    }
+
+    @Provides
+    PredictionNetwork providePredictionNetwork(Network network) {
+        PredictionNetwork predictionNetwork;
+        ConfigGroup controlerConfigModule = getConfig().getModule(ControlerConfigGroup.GROUP_NAME);
+        if (controlerConfigModule != null && controlerConfigModule.getValue("outputDirectory") != null) {
+            predictionNetwork = new PredictionNetwork(network, controlerConfigModule.getValue("outputDirectory"));
+        } else {
+            predictionNetwork = new PredictionNetwork(network);
+        }
+        return predictionNetwork;
     }
 
     public static class OTFVisMobsimListener implements MobsimInitializedListener {

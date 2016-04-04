@@ -18,6 +18,9 @@ import org.matsim.core.scenario.ScenarioUtils;
 import org.neuroph.core.NeuralNetwork;
 import org.neuroph.nnet.Perceptron;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -34,6 +37,18 @@ public class Main {
         final Config config = ConfigUtils.loadConfig(base.resolve("config.xml").toString());
         final SignalSystemsConfigGroup signalsConf = addOrGetModule(config, SignalSystemsConfigGroup.GROUPNAME, SignalSystemsConfigGroup.class);
 
+        File plansFile = new File(config.plans().getInputFile());
+        if (!plansFile.exists()) {
+            try(FileWriter fileWriter = new FileWriter(plansFile)) {
+                fileWriter.write("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+                        "<!DOCTYPE plans SYSTEM \"http://www.matsim.org/files/dtd/plans_v4.dtd\">\n" +
+                        "<plans>\n" +
+                        "    \n" +
+                        "</plans>");
+            } catch (IOException e) {
+                // do nothing
+            }
+        }
 
         final Scenario scenario = ScenarioUtils.loadScenario(config);
         scenario.addScenarioElement(SignalsData.ELEMENT_NAME, new SignalsScenarioLoader(signalsConf).loadSignalsData());

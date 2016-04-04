@@ -4,6 +4,7 @@ import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Network;
 import org.matsim.api.core.v01.network.Node;
 import org.neuroph.core.NeuralNetwork;
+import org.neuroph.core.data.DataSet;
 import org.neuroph.core.exceptions.NeurophException;
 import org.neuroph.nnet.MultiLayerPerceptron;
 
@@ -17,10 +18,7 @@ public class PredictionNetwork {
 
     public PredictionNetwork(Network network) {
         this.network = network;
-        List<Node> nodesWithMultiOut = network.getNodes().values().stream()
-                .filter((Node node) -> node.getOutLinks().size() > 1).map(node -> (Node) node)
-                .collect(Collectors.toList());
-        for (Node node : nodesWithMultiOut) {
+        for (Node node : getNodesWithMultiOut(this.network)) {
             neuralNetworkMap.put(node.getId(), new MultiLayerPerceptron(3, 5, node.getOutLinks().size()));
         }
     }
@@ -40,6 +38,7 @@ public class PredictionNetwork {
                 neuralNetwork = NeuralNetwork.createFromFile(folder + "/node" + node.getId().toString() + ".nnet");
             } catch (NeurophException ex) {
                 neuralNetwork = new MultiLayerPerceptron(3, 5, node.getOutLinks().size());
+                // Input: Vehicle count that came in aggregated over one minute | Hour of the day | Minute of the hour
             }
             neuralNetworkMap.put(node.getId(), neuralNetwork);
         }
@@ -57,5 +56,19 @@ public class PredictionNetwork {
                 // do something...
             }
         }
+    }
+
+    public void learn(Map<Id<Node>, DataSet> dataSet) {
+        for (Map.Entry<Id<Node>, DataSet> nodeSet : dataSet.entrySet()) {
+            neuralNetworkMap.get(nodeSet.getKey()).learn(nodeSet.getValue());
+        }
+    }
+
+    /**
+     * Returns the nodes of the network in a list that have multiple outgoing links
+     */
+    public static List<Node> getNodesWithMultiOut(Network network) {
+        return network.getNodes().values().stream().filter((Node node) -> node.getOutLinks().size() > 1)
+                .map(node -> (Node) node).collect(Collectors.toList());
     }
 }
