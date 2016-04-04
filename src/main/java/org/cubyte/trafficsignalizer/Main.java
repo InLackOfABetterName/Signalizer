@@ -74,12 +74,10 @@ public class Main {
             new PopulationWriter(scenario.getPopulation(), scenario.getNetwork()).write(config.plans().getInputFile());
         }
 
-        final SignalNetworkController networkController = new SignalNetworkController();
-
         final Controler c = new Controler(scenario);
         //c.addOverridingModule(new OTFVisLiveModule());
         c.addOverridingModule(new SignalsModule());
-        c.addOverridingModule(new SignalizerModule(networkController, learn));
+        c.addOverridingModule(new SignalizerModule(learn));
         c.getConfig().controler().setOverwriteFileSetting(deleteDirectoryIfExists);
         c.run();
     }

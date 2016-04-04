@@ -67,6 +67,8 @@ public class SignalNetworkController
                 return true;
             }
         }).collect(Collectors.toSet());
+
+        System.out.println("Useful groups: " + usefulGroups.size());
     }
     private boolean conflictingLinks(Signal a, Signal b) {
         final Map<Id<Link>, ? extends Link> links = network.getLinks();

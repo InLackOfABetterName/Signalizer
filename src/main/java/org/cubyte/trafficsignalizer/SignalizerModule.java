@@ -31,24 +31,28 @@ import javax.inject.Inject;
 
 public class SignalizerModule extends AbstractModule {
 
-    private final SignalNetworkController networkController;
     private final boolean learn;
 
-    public SignalizerModule(SignalNetworkController networkController, boolean learn) {
-        this.networkController = networkController;
+    public SignalizerModule(boolean learn) {
         this.learn = learn;
     }
 
     public void install() {
         this.addMobsimListenerBinding().to(OTFVisMobsimListener.class);
         this.bind(NodeTraverseHandler.class);
+        this.bind(SignalNetworkController.class);
         this.addEventHandlerBinding().to(NodeTraverseHandler.class);
         this.addControlerListenerBinding().to(LearnAndMeasureHandler.class);
     }
 
-    public class SignalizerSignalModelFactory implements SignalModelFactory {
+    public static class SignalizerSignalModelFactory implements SignalModelFactory {
 
         private final SignalModelFactory defaultImpl = new DefaultSignalModelFactory();
+        private final SignalNetworkController networkController;
+
+        public SignalizerSignalModelFactory(SignalNetworkController c) {
+            networkController = c;
+        }
 
         public SignalSystemsManager createSignalSystemsManager() {
             return defaultImpl.createSignalSystemsManager();
@@ -75,8 +79,13 @@ public class SignalizerModule extends AbstractModule {
     }
 
     @Provides
-    FromDataBuilder provideFromDataBuilder(Scenario scenario, EventsManager eventsManager) {
-        return new FromDataBuilder(scenario, new SignalizerSignalModelFactory(), eventsManager);
+    SignalModelFactory provideSignalizerSignalModelFactory(SignalNetworkController c) {
+        return new SignalizerSignalModelFactory(c);
+    }
+
+    @Provides
+    FromDataBuilder provideFromDataBuilder(Scenario scenario, SignalModelFactory modelFactory, EventsManager eventsManager) {
+        return new FromDataBuilder(scenario, modelFactory, eventsManager);
     }
 
     @Provides
