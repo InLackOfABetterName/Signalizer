@@ -2,39 +2,38 @@
 <signalSystems xsi:schemaLocation="http://www.matsim.org/files/dtd http://www.matsim.org/files/dtd/signalSystems_v2.0.xsd" xmlns="http://www.matsim.org/files/dtd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <signalSystem id="topleft">
         <signals>
-            <signal linkIdRef="4" id="topright_topleft" />
-            <signal linkIdRef="7" id="topleft_topright" />
-            <signal linkIdRef="14" id="bottomright_topleft" />
-            <signal linkIdRef="13" id="topright_bottomleft" />
-            <signal linkIdRef="12" id="bottomright_topright" />
-            <signal linkIdRef="11" id="topright_bottomright" />
+            <signal linkIdRef="134" id="topright_topleft" />
+            <signal linkIdRef="59"  id="topleft_topright" />
+            <signal linkIdRef="11"  id="bottomright_topleft" />
+            <signal linkIdRef="172" id="topright_bottomleft" />
+            <signal linkIdRef="112" id="bottomright_topright" />
+            <signal linkIdRef="14"  id="topleft_bottomright" />
         </signals>
     </signalSystem>
     <signalSystem id="bottomleft">
         <signals>
-            <signal linkIdRef="24" id="bottomright_topright" />
-            <signal linkIdRef="25" id="topleft_bottomright" />
-            <signal linkIdRef="18" id="bottomleft_topright" />
-            <signal linkIdRef="19" id="bottomleft_bottomright" />
+            <signal linkIdRef="23" id="bottomright_topright" />
+            <signal linkIdRef="15" id="topleft_bottomright" />
+            <signal linkIdRef="17" id="bottomleft_right" />
         </signals>
     </signalSystem>
     <signalSystem id="topright">
         <signals>
-            <signal linkIdRef="2" id="right_left" />
-            <signal linkIdRef="9" id="left_right" />
+            <signal linkIdRef="121" id="right_left" />
+            <signal linkIdRef="64"  id="left_right" />
 
-            <signal linkIdRef="41" id="top_bottom" />
-            <signal linkIdRef="40" id="bottom_top" />
+            <signal linkIdRef="125" id="top_bottom" />
+            <signal linkIdRef="166" id="bottom_top" />
 
-            <signal linkIdRef="46" id="top_left" />
-            <signal linkIdRef="49" id="left_top" />
-            <signal linkIdRef="45" id="right_bottom" />
-            <signal linkIdRef="42" id="bottom_right" />
+            <signal linkIdRef="118" id="top_left" />
+            <signal linkIdRef="105" id="left_top" />
+            <signal linkIdRef="92" id="right_bottom" />
+            <signal linkIdRef="137" id="bottom_right" />
 
-            <signal linkIdRef="44" id="right_top" />
-            <signal linkIdRef="47" id="top_right" />
-            <signal linkIdRef="43" id="bottom_left" />
-            <signal linkIdRef="48" id="left_bottom" />
+            <signal linkIdRef="124" id="right_top" />
+            <signal linkIdRef="94" id="top_right" />
+            <signal linkIdRef="13" id="bottom_left" />
+            <signal linkIdRef="114" id="left_bottom" />
         </signals>
     </signalSystem>
 </signalSystems>

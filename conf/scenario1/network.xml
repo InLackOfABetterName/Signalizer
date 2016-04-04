@@ -5,132 +5,139 @@
 <!-- ====================================================================== -->
 
 	<nodes>
-		<node id="1"  x="1000"  y="0" />
-		<node id="2"  x="2000"  y="0" />
-		<node id="3"  x="4000"  y="0" />
-		<node id="4"  x="13500" y="0" />
-		<node id="5"  x="16500" y="0" />
-		<node id="6"  x="17000" y="0" />
-		
-		<node id="7"  x="1000"  y="-1000" />
-		<node id="8"  x="2000"  y="-1000" />
-		<node id="9"  x="4000"  y="-1000" />
-		<node id="10" x="13500" y="-1000" />
-		<node id="11" x="16500" y="-1000" />
-		<node id="12" x="17000" y="-1000" />
-		
-		<node id="13" x="2500" y="-2000" />
-		<node id="14" x="3500" y="-2000" />
-		<node id="15" x="2500" y="-7000" />
-		<node id="16" x="3500" y="-7000" />
-		
-		<node id="17" x="2000" y="-8000" />
-		<node id="18" x="1000" y="-8000" />
-		
-		<node id="19" x="4500" y="-8000" />
-		<node id="20" x="4500" y="-9000" />
-		
-		<node id="21" x="14500" y="-2000" />
-		<node id="22" x="15500" y="-2000" />
-		<node id="23" x="14500" y="-7000" />
-		<node id="24" x="15500" y="-7000" />
-		
-		<node id="25" x="13500" y="-8000" />
-		<node id="26" x="13500" y="-9000" />
-		
-		<node id="27" x="16500" y="-8000" />
-		<node id="28" x="16500" y="-9000" />
-		
-		<node id="29" x="14500" y="-10000" />
-		<node id="30" x="15500" y="-10000" />
-		
-		<node id="31" x="17500" y="-8000" />
-		<node id="32" x="17500" y="-9000" />
-		
-		<node id="33" x="14500" y="-11000" />
-		<node id="34" x="15500" y="-11000" />
-		
-		<node id="35" x="14500" y="1000" />
-		<node id="36" x="15500" y="1000" />
-		<node id="37" x="14500" y="2000" />
-		<node id="38" x="15500" y="2000" />
-		
-		<!--
-		<node id="" x="" y="" />
-		-->
+		<node id="0" x="4662.551696230525" y="0.0" />
+		<node id="1" x="1000.0" y="0.0" />
+		<node id="10" x="13500.0" y="-1000.0" />
+		<node id="100" x="16679.856252393758" y="10.367487887954667" />
+		<node id="107" x="14729.083357574389" y="1114.5269083188982" />
+		<node id="11" x="16500.0" y="-1000.0" />
+		<node id="112" x="16692.216542962742" y="0.0" />
+		<node id="12" x="17000.0" y="-1000.0" />
+		<node id="13" x="2500.0" y="-2000.0" />
+		<node id="133" x="16467.05431381426" y="-372.5995038470164" />
+		<node id="139" x="13408.61143647811" y="-750.8834168401622" />
+		<node id="14" x="3500.0" y="-2000.0" />
+		<node id="15" x="2500.0" y="-7000.0" />
+		<node id="154" x="15235.698373158482" y="-1801.4072331828957" />
+		<node id="156" x="7628.804157810191" y="-1000.0" />
+		<node id="16" x="3500.0" y="-7000.0" />
+		<node id="167" x="14058.109048167169" y="-7441.890951832831" />
+		<node id="17" x="2000.0" y="-8000.0" />
+		<node id="18" x="1000.0" y="-8000.0" />
+		<node id="19" x="4500.0" y="-8000.0" />
+		<node id="2" x="2000.0" y="0.0" />
+		<node id="20" x="4500.0" y="-9000.0" />
+		<node id="21" x="14500.0" y="-2000.0" />
+		<node id="22" x="15500.0" y="-2000.0" />
+		<node id="23" x="14500.0" y="-7000.0" />
+		<node id="24" x="15500.0" y="-7000.0" />
+		<node id="25" x="13500.0" y="-8000.0" />
+		<node id="26" x="13500.0" y="-9000.0" />
+		<node id="27" x="16500.0" y="-8000.0" />
+		<node id="28" x="16500.0" y="-9000.0" />
+		<node id="29" x="14500.0" y="-10000.0" />
+		<node id="3" x="4000.0" y="0.0" />
+		<node id="30" x="15500.0" y="-10000.0" />
+		<node id="31" x="17500.0" y="-8000.0" />
+		<node id="32" x="17500.0" y="-9000.0" />
+		<node id="33" x="14500.0" y="-11000.0" />
+		<node id="34" x="15500.0" y="-11000.0" />
+		<node id="35" x="14500.0" y="1000.0" />
+		<node id="36" x="15500.0" y="1000.0" />
+		<node id="37" x="14500.0" y="2000.0" />
+		<node id="38" x="15500.0" y="2000.0" />
+		<node id="4" x="13500.0" y="0.0" />
+		<node id="41" x="13722.753645687428" y="-736.6556300278089" />
+		<node id="47" x="13150.07364751661" y="-1000.0" />
+		<node id="5" x="16500.0" y="0.0" />
+		<node id="50" x="15249.771012480262" y="-2161.039110634784" />
+		<node id="55" x="16054.514157125966" y="-9445.485842874034" />
+		<node id="56" x="14500.0" y="1270.0433958656604" />
+		<node id="6" x="17000.0" y="0.0" />
+		<node id="60" x="13297.279668464824" y="-1000.0" />
+		<node id="61" x="14715.01071825261" y="696.5763480369742" />
+		<node id="63" x="15500.0" y="-2365.1545005399093" />
+		<node id="7" x="1000.0" y="-1000.0" />
+		<node id="72" x="1607.9639415149688" y="-1000.0" />
+		<node id="74" x="3500.0" y="-2268.9662232346273" />
+		<node id="78" x="7680.946060164243" y="0.0" />
+		<node id="8" x="2000.0" y="-1000.0" />
+		<node id="9" x="4000.0" y="-1000.0" />
+		<node id="90" x="16692.216542962742" y="-372.5995038470164" />
 	</nodes>
 
 <!-- ====================================================================== -->
 
-	<links capperiod="01:00:00" effectivelanewidth="10">
-		<link id="1" from="6" to="5" length="10"  freespeed="50" capacity="3000.0" permlanes="2.0" oneway="1" modes="car" />
-		<link id="2" from="5" to="4" length="10"  freespeed="50" capacity="3000.0" permlanes="2.0" oneway="1" modes="car" />
-		<link id="3" from="4" to="3" length="100" freespeed="50" capacity="3000.0" permlanes="2.0" oneway="1" modes="car" />
-		<link id="4" from="3" to="2" length="10"  freespeed="50" capacity="3000.0" permlanes="2.0" oneway="1" modes="car" />
-		<link id="5" from="2" to="1" length="10"  freespeed="50" capacity="3000.0" permlanes="2.0" oneway="1" modes="car" />
-
-		<link id="6"  from="7"  to="8"  length="10"  freespeed="50" capacity="3000.0" permlanes="2.0" oneway="1" modes="car" />
-		<link id="7"  from="8"  to="9"  length="10"  freespeed="50" capacity="3000.0" permlanes="2.0" oneway="1" modes="car" />
-		<link id="8"  from="9"  to="10" length="100" freespeed="50" capacity="3000.0" permlanes="2.0" oneway="1" modes="car" />
-		<link id="9"  from="10" to="11" length="10"  freespeed="50" capacity="3000.0" permlanes="2.0" oneway="1" modes="car" />
-		<link id="10" from="11" to="12" length="10"  freespeed="50" capacity="3000.0" permlanes="2.0" oneway="1" modes="car" />
-
-		<link id="11" from="8"  to="13" length="10" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
-		<link id="12" from="14" to="9"  length="10" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
-		<link id="13" from="3"  to="13" length="10" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
-		<link id="14" from="14" to="2"  length="10" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
-
-		<link id="15" from="13" to="15" length="50" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
-		<link id="16" from="16" to="14" length="50" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
-
-		<link id="17" from="18" to="17" length="10" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
-		<link id="18" from="17" to="16" length="20" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
-		<link id="19" from="17" to="20" length="25" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
-
-		<link id="20" from="21" to="23" length="50" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
-		<link id="21" from="24" to="22" length="50" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
-
-		<link id="22" from="20" to="26" length="50" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
-		<link id="23" from="25" to="19" length="50" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
-		<link id="24" from="19" to="16" length="50" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
-		<link id="25" from="15" to="20" length="50" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
-
-		<link id="26" from="24" to="23" length="10" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
-		<link id="27" from="23" to="25" length="10" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
-		<link id="28" from="25" to="26" length="10" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
-		<link id="29" from="26" to="29" length="10" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
-		<link id="30" from="29" to="30" length="10" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
-		<link id="31" from="30" to="28" length="10" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
-		<link id="32" from="28" to="27" length="10" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
-		<link id="33" from="27" to="24" length="10" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
-
-		<link id="34" from="29" to="33" length="10" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
-		<link id="35" from="34" to="30" length="10" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
-
-		<link id="36" from="28" to="32" length="10" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
-		<link id="37" from="31" to="27" length="10" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
-
-		<link id="38" from="36" to="38" length="10" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
-		<link id="39" from="37" to="35" length="10" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
-
-		<link id="40" from="22" to="36" length="30" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
-		<link id="41" from="35" to="21" length="30" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
-
-		<link id="42" from="22" to="11" length="10" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
-		<link id="43" from="22" to="4"  length="20" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
-
-		<link id="44" from="5" to="36" length="10" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
-		<link id="45" from="5" to="21" length="20" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
-
-		<link id="46" from="35" to="4"  length="10" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
-		<link id="47" from="35" to="11" length="20" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
-
-		<link id="48" from="10" to="21" length="10" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
-		<link id="49" from="10" to="36" length="20" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
-
-		<!--
-		<link id="" from="" to="" length="" freespeed="50" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
-		-->
+	<links capperiod="01:00:00" effectivecellsize="7.5" effectivelanewidth="10.0">
+		<link id="10" from="11" to="12" length="10.0" freespeed="50.0" capacity="3000.0" permlanes="2.0" oneway="1" modes="car" />
+		<link id="105" from="139" to="41" length="314.46423886427647" freespeed="8.3333" capacity="600.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="108" from="156" to="47" length="58.118626207435995" freespeed="50.0" capacity="3000.0" permlanes="2.0" oneway="1" modes="car" />
+		<link id="11" from="74" to="14" length="2.689662232346274" freespeed="50.0" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="112" from="74" to="9" length="1363.9190869367412" freespeed="8.3333" capacity="600.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="114" from="60" to="21" length="1564.1407212549914" freespeed="8.3333" capacity="600.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="118" from="56" to="4" length="1616.4808156554097" freespeed="8.3333" capacity="600.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="121" from="112" to="5" length="3.8443308592548417" freespeed="50.0" capacity="3000.0" permlanes="2.0" oneway="1" modes="car" />
+		<link id="122" from="60" to="139" length="272.86229965716495" freespeed="8.3333" capacity="600.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="124" from="112" to="36" length="1556.0784958716035" freespeed="8.3333" capacity="2000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="125" from="56" to="35" length="2.700433958656604" freespeed="50.0" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="127" from="16" to="74" length="47.31033776765373" freespeed="50.0" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="13" from="50" to="154" length="359.9071080946454" freespeed="8.3333" capacity="600.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="130" from="30" to="55" length="5.545141571259665" freespeed="50.0" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="134" from="0" to="3" length="6.974228381373948" freespeed="50.0" capacity="3000.0" permlanes="2.0" oneway="1" modes="car" />
+		<link id="137" from="63" to="11" length="1692.2313111227936" freespeed="8.3333" capacity="600.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="14" from="14" to="2" length="10.0" freespeed="50.0" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="140" from="72" to="13" length="1340.047883337573" freespeed="8.3333" capacity="600.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="141" from="24" to="63" length="46.34845499460091" freespeed="50.0" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="15" from="13" to="15" length="50.0" freespeed="50.0" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="152" from="47" to="60" length="1.549537062612772" freespeed="50.0" capacity="3000.0" permlanes="2.0" oneway="1" modes="car" />
+		<link id="159" from="9" to="156" length="38.19793850326516" freespeed="50.0" capacity="3000.0" permlanes="2.0" oneway="1" modes="car" />
+		<link id="160" from="61" to="11" length="2462.632339727459" freespeed="8.3333" capacity="600.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="166" from="63" to="22" length="3.6515450053990928" freespeed="50.0" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="169" from="63" to="50" length="322.9204833875901" freespeed="8.3333" capacity="600.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="17" from="18" to="17" length="10.0" freespeed="50.0" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="172" from="0" to="13" length="2945.611963390548" freespeed="8.3333" capacity="600.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="178" from="37" to="56" length="7.299566041343396" freespeed="50.0" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="18" from="17" to="16" length="20.0" freespeed="50.0" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="186" from="23" to="167" length="4.418909518328309" freespeed="50.0" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="189" from="55" to="28" length="4.454858428740335" freespeed="50.0" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="19" from="17" to="20" length="25.0" freespeed="50.0" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="2" from="5" to="4" length="10.0" freespeed="50.0" capacity="3000.0" permlanes="2.0" oneway="1" modes="car" />
+		<link id="20" from="21" to="23" length="50.0" freespeed="50.0" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="22" from="20" to="26" length="50.0" freespeed="50.0" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="23" from="25" to="19" length="50.0" freespeed="50.0" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="24" from="19" to="16" length="50.0" freespeed="50.0" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="25" from="15" to="20" length="50.0" freespeed="50.0" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="26" from="24" to="23" length="10.0" freespeed="50.0" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="27" from="41" to="36" length="2484.8696909948044" freespeed="8.3333" capacity="600.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="28" from="25" to="26" length="10.0" freespeed="50.0" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="29" from="26" to="29" length="10.0" freespeed="50.0" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="30" from="29" to="30" length="10.0" freespeed="50.0" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="32" from="28" to="27" length="10.0" freespeed="50.0" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="33" from="27" to="24" length="10.0" freespeed="50.0" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="34" from="29" to="33" length="10.0" freespeed="50.0" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="35" from="34" to="30" length="10.0" freespeed="50.0" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="36" from="28" to="32" length="10.0" freespeed="50.0" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="37" from="31" to="27" length="10.0" freespeed="50.0" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="38" from="36" to="38" length="10.0" freespeed="50.0" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="4" from="3" to="2" length="10.0" freespeed="50.0" capacity="3000.0" permlanes="2.0" oneway="1" modes="car" />
+		<link id="40" from="22" to="36" length="30.0" freespeed="50.0" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="41" from="35" to="21" length="30.0" freespeed="50.0" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="49" from="56" to="107" length="276.8836626029742" freespeed="8.3333" capacity="600.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="5" from="2" to="1" length="10.0" freespeed="50.0" capacity="3000.0" permlanes="2.0" oneway="1" modes="car" />
+		<link id="50" from="7" to="72" length="6.079639415149688" freespeed="50.0" capacity="3000.0" permlanes="2.0" oneway="1" modes="car" />
+		<link id="55" from="6" to="112" length="6.155669140745158" freespeed="50.0" capacity="3000.0" permlanes="2.0" oneway="1" modes="car" />
+		<link id="59" from="72" to="8" length="3.920360584850312" freespeed="50.0" capacity="3000.0" permlanes="2.0" oneway="1" modes="car" />
+		<link id="64" from="60" to="10" length="2.1338982266860707" freespeed="50.0" capacity="3000.0" permlanes="2.0" oneway="1" modes="car" />
+		<link id="65" from="78" to="0" length="31.772572251933873" freespeed="50.0" capacity="3000.0" permlanes="2.0" oneway="1" modes="car" />
+		<link id="7" from="8" to="9" length="10.0" freespeed="50.0" capacity="3000.0" permlanes="2.0" oneway="1" modes="car" />
+		<link id="73" from="100" to="90" length="383.16640450525296" freespeed="8.3333" capacity="600.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="74" from="154" to="4" length="2501.5428963638933" freespeed="8.3333" capacity="600.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="82" from="167" to="25" length="5.581090481671691" freespeed="50.0" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="88" from="4" to="78" length="61.25319936669218" freespeed="50.0" capacity="3000.0" permlanes="2.0" oneway="1" modes="car" />
+		<link id="9" from="10" to="11" length="10.0" freespeed="50.0" capacity="3000.0" permlanes="2.0" oneway="1" modes="car" />
+		<link id="92" from="90" to="133" length="225.16222914848186" freespeed="8.3333" capacity="600.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="93" from="133" to="21" length="2552.985516679299" freespeed="8.3333" capacity="600.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="94" from="107" to="61" length="418.18741016134754" freespeed="8.3333" capacity="600.0" permlanes="1.0" oneway="1" modes="car" />
 	</links>
 
 <!-- ====================================================================== -->
