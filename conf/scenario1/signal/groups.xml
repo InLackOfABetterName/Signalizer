@@ -3,6 +3,17 @@
     <signalSystem refId="topleft">
         <signalGroup id="a">
             <signal refId="topright_topleft"/>
+            <signal refId="bottomright_topleft"/>
+        </signalGroup>
+        <signalGroup id="b">
+            <signal refId="topright_topleft"/>
+            <signal refId="topleft_topright"/>
+            <signal refId="topleft_bottomleft"/>
+        </signalGroup>
+        <signalGroup id="c">
+            <signal refId="bottomright_topleft"/>
+            <signal refId="topleft_bottomleft"/>
+            <signal refId="bottomright_topleft"/>
         </signalGroup>
     </signalSystem>
     <signalSystem refId="bottomleft">

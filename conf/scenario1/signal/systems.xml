@@ -7,7 +7,7 @@
             <signal linkIdRef="11"  id="bottomright_topleft" />
             <signal linkIdRef="172" id="topright_bottomleft" />
             <signal linkIdRef="112" id="bottomright_topright" />
-            <signal linkIdRef="14"  id="topleft_bottomright" />
+            <signal linkIdRef="140"  id="topleft_bottomleft" />
         </signals>
     </signalSystem>
     <signalSystem id="bottomleft">
