@@ -1,22 +1,19 @@
 package org.cubyte.trafficsignalizer;
 
+import org.cubyte.trafficsignalizer.routes.Routes;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.population.*;
-import org.matsim.contrib.otfvis.OTFVisLiveModule;
 import org.matsim.contrib.signals.SignalSystemsConfigGroup;
 import org.matsim.contrib.signals.controler.SignalsModule;
 import org.matsim.contrib.signals.data.SignalsData;
 import org.matsim.contrib.signals.data.SignalsScenarioLoader;
 import org.matsim.core.config.Config;
+import org.matsim.core.config.ConfigGroup;
 import org.matsim.core.config.ConfigUtils;
-import org.matsim.core.config.groups.NetworkConfigGroup;
 import org.matsim.core.controler.Controler;
-import org.matsim.core.controler.listener.ControlerListener;
 import org.matsim.core.scenario.ScenarioUtils;
-import org.neuroph.core.NeuralNetwork;
-import org.neuroph.nnet.Perceptron;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -70,8 +67,14 @@ public class Main {
         config.travelTimeCalculator().setCalculateLinkToLinkTravelTimes(true);
 
         if (scenario.getPopulation().getPersons().isEmpty()) {
-            generatePopulation(scenario);
-            new PopulationWriter(scenario.getPopulation(), scenario.getNetwork()).write(config.plans().getInputFile());
+            ConfigGroup signalizerRoutesConfig = config.getModule(Routes.CONFIG_MODULE);
+            if (signalizerRoutesConfig != null) {
+                generatePopulation(scenario.getPopulation(),
+                        Routes.load(signalizerRoutesConfig.getValue(Routes.CONFIG_PARAM_INPUT_FILE), scenario.getNetwork()));
+                new PopulationWriter(scenario.getPopulation(), scenario.getNetwork()).write(config.plans().getInputFile());
+            } else {
+                System.err.println("Could not find signalizerConfig module in config which contains the filepath");
+            }
         }
 
         final SignalNetworkController networkController = new SignalNetworkController();
@@ -84,16 +87,15 @@ public class Main {
         c.run();
     }
 
-    private static void generatePopulation(Scenario scenario) {
+    private static void generatePopulation(Population population, Routes routes) {
         final double SIMULATION_START = 0;
         final double SIMULATION_END = 25000;
         Random random = new Random(System.currentTimeMillis());
-        Population population = scenario.getPopulation();
         PopulationFactory populationFactory = population.getFactory();
-        List<Id<Link>> startLinks = scenario.getNetwork().getLinks().values().stream()
+        List<Id<Link>> startLinks = routes.getNetwork().getLinks().values().stream()
                 .filter((Link link) -> link.getFromNode().getInLinks().isEmpty())
                 .map(Link::getId).collect(Collectors.toList());
-        List<Id<Link>> endLinks   = scenario.getNetwork().getLinks().values().stream()
+        List<Id<Link>> endLinks   = routes.getNetwork().getLinks().values().stream()
                 .filter((Link link) -> link.getToNode().getOutLinks().isEmpty())
                 .map(Link::getId).collect(Collectors.toList());
         for (int i = 0; i < 30000; i++) {

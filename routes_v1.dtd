@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+        <!ELEMENT routes (startNodes,endNodes)>
+
+        <!ELEMENT startNodes (node)*>
+
+        <!ELEMENT endNodes (node)*>
+
+        <!ELEMENT node EMPTY>
+        <!ATTLIST node id   CDATA #REQUIRED
+                weight    CDATA #IMPLIED>

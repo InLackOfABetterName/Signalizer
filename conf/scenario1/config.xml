@@ -11,6 +11,10 @@
         <param name="inputPlansFile" value="./conf/scenario1/plans.xml" />
     </module>
 
+    <module name="signalizerRoutes">
+        <param name="inputRoutesFile" value="./conf/scenario1/routes.xml" />
+    </module>
+
     <module name="controler">
         <param name="outputDirectory" value="output/scenario1" />
         <param name="firstIteration" value="0" />
@@ -52,5 +56,9 @@
 
         <param name="ModuleProbability_3" value="0.1" />
         <param name="Module_3" value="TimeAllocationMutator" />
+    </module>
+
+    <module name="signalizerRoutes">
+
     </module>
 </config>
