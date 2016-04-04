@@ -1,5 +1,6 @@
 package org.cubyte.trafficsignalizer;
 
+import com.google.inject.Inject;
 import org.matsim.contrib.signals.model.Signal;
 import org.matsim.contrib.signals.model.SignalController;
 import org.matsim.contrib.signals.model.SignalPlan;
@@ -11,6 +12,7 @@ public class SignalizerController implements SignalController {
     private final SignalNetworkController networkController;
     private SignalSystem system;
 
+    @Inject
     public SignalizerController(SignalNetworkController networkController) {
         this.networkController = networkController;
     }
