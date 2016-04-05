@@ -14,9 +14,13 @@ import org.matsim.contrib.signals.model.SignalSystem;
 import java.awt.geom.Line2D;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.awt.geom.Line2D.linesIntersect;
+import static java.util.Collections.disjoint;
+import static java.util.Collections.singleton;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 
 @Singleton
 public class SignalNetworkController
@@ -49,7 +53,7 @@ public class SignalNetworkController
         final Set<Signal> signals = new HashSet<>(signalTable.values());
         final Set<Set<Signal>> possibleGroups = powerSet(signals);
 
-        final Set<Set<Signal>> usefulGroups = possibleGroups.parallelStream().filter(group -> {
+        final Set<Set<Signal>> usefulGroups = possibleGroups.stream().filter(group -> {
             if (group.isEmpty()) {
                 return false;
             } else {
@@ -66,21 +70,42 @@ public class SignalNetworkController
                 }
                 return true;
             }
-        }).collect(Collectors.toSet());
+        }).collect(toSet());
 
+        final Set<Set<Id<Signal>>> usefulIdGroups = usefulGroups.stream().map(g -> g.stream().map(Signal::getId).collect(toSet())).collect(toSet());
+
+        Set<Set<Signal>> minimalGroups = usefulGroups.stream().filter(group -> {
+            final Set<Id<Signal>> signalIds = group.stream().map(Signal::getId).collect(toSet());
+            for (Set<Id<Signal>> other : usefulIdGroups) {
+                if (other.containsAll(signalIds) && !signalIds.containsAll(other)) {
+                    return false;
+                }
+            }
+            return true;
+        }).collect(toSet());
+
+        System.out.println("Possible groups: " + possibleGroups.size());
         System.out.println("Useful groups: " + usefulGroups.size());
+        System.out.println("Minimal groups: " + minimalGroups.size());
     }
     private boolean conflictingLinks(Signal a, Signal b) {
         final Map<Id<Link>, ? extends Link> links = network.getLinks();
-        final Link linkA = links.get(a.getLinkId());
-        final Link linkB = links.get(b.getLinkId());
+        final Collection<? extends Link> linkA = links.get(a.getLinkId()).getToNode().getOutLinks().values();
+        final Collection<? extends Link> linkB = links.get(b.getLinkId()).getToNode().getOutLinks().values();
 
-        if (intersect(linkA, linkB)) {
-            return true;
-        }
+        for (Link outer : linkA) {
+            for (Link inner : linkB) {
+                if (inner == outer) {
+                    continue;
+                }
+                if (intersect(inner, outer)) {
+                    return true;
+                }
 
-        if (targetSameWay(linkA.getToNode(), linkB.getToNode())) {
-            return false;
+                if (targetSameWay(inner.getToNode(), outer.getToNode())) {
+                    return true;
+                }
+            }
         }
 
         return false;
@@ -92,11 +117,28 @@ public class SignalNetworkController
         final Coord bf = b.getFromNode().getCoord();
         final Coord bt = b.getToNode().getCoord();
 
-        return linesIntersect(af.getX(), af.getY(), at.getX(), at.getY(), bf.getX(), bf.getY(), bt.getX(), bt.getY());
+        if (linesIntersect(af.getX(), af.getY(), at.getX(), at.getY(), bf.getX(), bf.getY(), bt.getX(), bt.getY())) {
+            return !af.equals(bf) && !at.equals(bt);
+        }
+        return false;
     }
 
     public static boolean targetSameWay(Node a, Node b) {
-        return a.equals(b);
+        Set<Id<Node>> followA = selectFollowingNodes(singleton(a), 5);
+        Set<Id<Node>> followB = selectFollowingNodes(singleton(b), 5);
+        return !disjoint(followA, followB);
+    }
+
+    public static Set<Id<Node>> selectFollowingNodes(Set<Node> in, int levels) {
+        if (levels == 0) {
+            return Collections.emptySet();
+        } else {
+            Set<Node> next = in.stream().flatMap(n -> n.getOutLinks().values().stream().map(Link::getToNode)).collect(toSet());
+
+            Set<Id<Node>> out = next.stream().map(Node::getId).collect(toSet());
+            out.addAll(selectFollowingNodes(next, levels - 1));
+            return out;
+        }
     }
 
     public static <T> Set<Set<T>> powerSet(Set<T> originalSet) {
