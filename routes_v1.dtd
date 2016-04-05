@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-        <!ELEMENT routes (startNodes,endNodes)>
+        <!ELEMENT routes (startLinks,endLinks)>
 
-        <!ELEMENT startNodes (node)*>
+        <!ELEMENT startLinks (link)*>
 
-        <!ELEMENT endNodes (node)*>
+        <!ELEMENT endLinks (link)*>
 
-        <!ELEMENT node EMPTY>
-        <!ATTLIST node id   CDATA #REQUIRED
-                weight    CDATA #IMPLIED>
+        <!ELEMENT link EMPTY>
+        <!ATTLIST link id   CDATA #REQUIRED
+                weight    CDATA #REQUIRED>

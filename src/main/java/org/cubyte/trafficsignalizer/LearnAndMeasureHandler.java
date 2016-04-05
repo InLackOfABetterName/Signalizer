@@ -8,11 +8,11 @@ public class LearnAndMeasureHandler implements IterationEndsListener {
 
     private final PredictionNetwork predictionNetwork;
     private final NodeTraverseHandler nodeTraverseHandler;
-    private final SignalizerConfig signalizerConfig;
+    private final SignalizerConfigGroup signalizerConfig;
 
     @Inject
     public LearnAndMeasureHandler(PredictionNetwork predictionNetwork, NodeTraverseHandler nodeTraverseHandler,
-                                  SignalizerConfig signalizerConfig) {
+                                  SignalizerConfigGroup signalizerConfig) {
         this.predictionNetwork = predictionNetwork;
         this.nodeTraverseHandler = nodeTraverseHandler;
         this.signalizerConfig = signalizerConfig;
@@ -20,9 +20,9 @@ public class LearnAndMeasureHandler implements IterationEndsListener {
 
     @Override
     public void notifyIterationEnds(IterationEndsEvent event) {
-        if (signalizerConfig.learn) {
+        if (signalizerConfig.isLearn()) {
             predictionNetwork.learn(nodeTraverseHandler.getDataSets());
-            predictionNetwork.save(signalizerConfig.neuralNetworkSaveFolder);
+            predictionNetwork.save(signalizerConfig.getNeuralNetworkSaveFolder());
         }
         System.out.println("Network error: " + predictionNetwork.measureError(nodeTraverseHandler.getDataSets()));
     }

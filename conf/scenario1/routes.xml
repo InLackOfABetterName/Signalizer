@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE routes SYSTEM "../../routes_v1.dtd">
+<!DOCTYPE routes SYSTEM "routes_v1.dtd">
 <routes>
-    <startNodes>
-        <node id="1" weight="70" />
-    </startNodes>
-    <endNodes>
-        <node id="2" weight="3000" />
-    </endNodes>
+    <startLinks>
+        <link id="50" weight="70" />
+        <link id="17" weight="30" />
+    </startLinks>
+    <endLinks>
+        <link id="5" weight="70" />
+        <link id="36" weight="30" />
+    </endLinks>
 </routes>
