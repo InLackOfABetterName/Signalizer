@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE routes SYSTEM "routes_v1.dtd">
 <routes>
-    <startLinks>
-        <link id="50" weight="70" />
-        <link id="17" weight="30" />
-    </startLinks>
-    <endLinks>
-        <link id="5" weight="70" />
-        <link id="36" weight="30" />
-    </endLinks>
+    <links>
+        <start id="50" weight="30"/>
+        <start id="17" weight="30"/>
+
+        <inter id="108" weight="50"/>
+        <nointer weight="700"/>
+
+        <end id="5" weight="70"/>
+        <end id="36" weight="30"/>
+    </links>
 </routes>

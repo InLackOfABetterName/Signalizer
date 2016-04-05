@@ -3,6 +3,7 @@ package org.cubyte.trafficsignalizer;
 import org.cubyte.trafficsignalizer.routes.Routes;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
+import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.population.*;
 import org.matsim.contrib.signals.SignalSystemsConfigGroup;
 import org.matsim.contrib.signals.controler.SignalsModule;
@@ -94,6 +95,16 @@ public class Main {
                 plan.addActivity(activity);
                 Leg leg = populationFactory.createLeg("car");
                 plan.addLeg(leg);
+                Link interLink = routes.getRandomInterLink();
+                double startActivityEndTime = activity.getEndTime();
+                if (interLink != null) {
+                    activity = populationFactory.createActivityFromLinkId("inter", interLink.getId());
+                    activity.setEndTime(random.nextDouble() * (SIMULATION_END - startActivityEndTime)
+                            + startActivityEndTime);
+                    plan.addActivity(activity);
+                    leg = populationFactory.createLeg("car");
+                    plan.addLeg(leg);
+                }
                 activity = populationFactory.createActivityFromLinkId("to", routes.getRandomEndLink().getId());
                 plan.addActivity(activity);
                 person.addPlan(plan);

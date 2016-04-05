@@ -15,8 +15,7 @@ public class RoutesXmlParser extends MatsimXmlParser{
     private Routes routes;
 
     private enum State {
-        START_LINKS,
-        END_LINKS,
+        LINKS,
         NONE
     }
 
@@ -30,29 +29,34 @@ public class RoutesXmlParser extends MatsimXmlParser{
     @Override
     public void startTag(String name, Attributes atts, Stack<String> context) {
         Map<Id<Link>, ? extends Link> links = network.getLinks();
+        Link link;
         switch (name) {
             case "routes":
                 routes = new Routes(network);
                 break;
-            case "startLinks":
-                state = State.START_LINKS;
+            case "links":
+                state = State.LINKS;
                 break;
-            case "endLinks":
-                state = State.END_LINKS;
-                break;
-            case "link":
-                Link link = links.get(Id.createLinkId(atts.getValue("id")));
-                Float weight = Float.parseFloat(atts.getValue("weight"));
+            case "start":
+            case "inter":
+            case "end":
+                link = links.get(Id.createLinkId(atts.getValue("id")));
+                float weight = Float.parseFloat(atts.getValue("weight"));
                 if (link != null) {
-                    if (state == State.START_LINKS) {
+                    if ("start".equals(name)) {
                         routes.addStartLink(link, weight);
-                    } else if (state == State.END_LINKS) {
+                    } else if ("inter".equals(name)) {
+                        routes.addInterLink(link, weight);
+                    } else if ("end".equals(name)) {
                         routes.addEndLink(link, weight);
                     }
                 } else {
                     System.err.println("Link with id " + atts.getValue("id") + " does not exist. It could not be inserted " +
                             "as link for the route generation.");
                 }
+                break;
+            case "nointer":
+                routes.setNoInter(Float.parseFloat(atts.getValue("weight")));
                 break;
         }
     }

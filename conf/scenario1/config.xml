@@ -42,6 +42,7 @@
         <param name="waiting" value="-0" />
 
         <param name="activityType_0" value="from" />
+        <param name="activityType_0" value="inter" />
         <param name="activityType_1" value="to" />
     </module>
 

@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-        <!ELEMENT routes (startLinks,endLinks)>
+        <!ELEMENT routes (links)>
 
-        <!ELEMENT startLinks (link)*>
+        <!ELEMENT links (start|inter|nointer|end)*>
 
-        <!ELEMENT endLinks (link)*>
+        <!ELEMENT start EMPTY>
+        <!ATTLIST start id   CDATA #REQUIRED
+                weight    CDATA #REQUIRED>
 
-        <!ELEMENT link EMPTY>
-        <!ATTLIST link id   CDATA #REQUIRED
+        <!ELEMENT inter EMPTY>
+        <!ATTLIST inter id   CDATA #REQUIRED
+                weight    CDATA #REQUIRED>
+
+        <!ELEMENT nointer EMPTY>
+        <!ATTLIST nointer weight    CDATA #REQUIRED>
+
+        <!ELEMENT end EMPTY>
+        <!ATTLIST end id   CDATA #REQUIRED
                 weight    CDATA #REQUIRED>
