@@ -1,4 +1,4 @@
-package org.cubyte.trafficsignalizer;
+package org.cubyte.trafficsignalizer.prediction;
 
 import com.google.inject.Singleton;
 import org.matsim.api.core.v01.Id;
@@ -9,16 +9,12 @@ import org.matsim.api.core.v01.events.handler.LinkEnterEventHandler;
 import org.matsim.api.core.v01.events.handler.LinkLeaveEventHandler;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Node;
-import org.matsim.core.api.experimental.events.EventsManager;
-import org.matsim.core.controler.events.StartupEvent;
-import org.matsim.core.controler.listener.StartupListener;
 import org.matsim.vehicles.Vehicle;
 import org.neuroph.core.data.DataSet;
 import org.neuroph.core.data.DataSetRow;
 
 import javax.inject.Inject;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Singleton
 public class NodeTraverseHandler implements LinkEnterEventHandler, LinkLeaveEventHandler {

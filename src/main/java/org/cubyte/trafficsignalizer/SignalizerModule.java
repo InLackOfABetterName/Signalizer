@@ -1,6 +1,9 @@
 package org.cubyte.trafficsignalizer;
 
 import com.google.inject.Provides;
+import org.cubyte.trafficsignalizer.prediction.LearnAndMeasureHandler;
+import org.cubyte.trafficsignalizer.prediction.NodeTraverseHandler;
+import org.cubyte.trafficsignalizer.prediction.PredictionNetwork;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.network.Network;
@@ -12,8 +15,6 @@ import org.matsim.contrib.signals.data.signalgroups.v20.SignalPlanData;
 import org.matsim.contrib.signals.model.*;
 import org.matsim.contrib.signals.otfvis.OTFClientLiveWithSignals;
 import org.matsim.core.api.experimental.events.EventsManager;
-import org.matsim.core.config.ConfigGroup;
-import org.matsim.core.config.groups.ControlerConfigGroup;
 import org.matsim.core.controler.AbstractModule;
 import org.matsim.core.mobsim.framework.events.MobsimInitializedEvent;
 import org.matsim.core.mobsim.framework.listeners.MobsimInitializedListener;

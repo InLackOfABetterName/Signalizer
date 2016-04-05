@@ -1,6 +1,7 @@
-package org.cubyte.trafficsignalizer;
+package org.cubyte.trafficsignalizer.prediction;
 
 import com.google.inject.Inject;
+import org.cubyte.trafficsignalizer.SignalizerConfigGroup;
 import org.matsim.core.controler.events.IterationEndsEvent;
 import org.matsim.core.controler.listener.IterationEndsListener;
 

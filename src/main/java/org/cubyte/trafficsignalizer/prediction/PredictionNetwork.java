@@ -1,4 +1,4 @@
-package org.cubyte.trafficsignalizer;
+package org.cubyte.trafficsignalizer.prediction;
 
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Network;
