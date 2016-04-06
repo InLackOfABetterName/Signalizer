@@ -2,6 +2,7 @@ package org.cubyte.trafficsignalizer;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import org.cubyte.trafficsignalizer.stress.StressFunction;
 import org.matsim.api.core.v01.Coord;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;
@@ -27,10 +28,12 @@ public class SignalNetworkController
 {
     private final List<SignalizerController> controllers;
     private final Network network;
+    private final StressFunction stressFunction;
 
     @Inject
-    public SignalNetworkController(Network network) {
+    public SignalNetworkController(Network network, StressFunction stressFunction) {
         this.network = network;
+        this.stressFunction = stressFunction;
         this.controllers = new ArrayList<>();
     }
 
@@ -40,6 +43,10 @@ public class SignalNetworkController
 
     public List<SignalizerController> otherControllers(SignalizerController c) {
         return this.controllers.stream().filter(controller -> controller != c).collect(toList());
+    }
+
+    public double stressFor(Signal signal, SignalSystem system) {
+        return stressFunction.calculateStress(network, signal, system);
     }
 
     public void updateState(SignalizerController signalizerController, double timeSeconds) {

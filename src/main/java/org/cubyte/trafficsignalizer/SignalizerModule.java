@@ -4,14 +4,13 @@ import com.google.inject.Provides;
 import org.cubyte.trafficsignalizer.prediction.LearnAndMeasureHandler;
 import org.cubyte.trafficsignalizer.prediction.NodeTraverseHandler;
 import org.cubyte.trafficsignalizer.prediction.PredictionNetwork;
-import org.matsim.api.core.v01.Id;
+import org.cubyte.trafficsignalizer.stress.NoStressFunction;
+import org.cubyte.trafficsignalizer.stress.StressFunction;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.network.Network;
 import org.matsim.contrib.otfvis.OTFVis;
-import org.matsim.contrib.signals.builder.DefaultSignalModelFactory;
 import org.matsim.contrib.signals.builder.FromDataBuilder;
 import org.matsim.contrib.signals.builder.SignalModelFactory;
-import org.matsim.contrib.signals.data.signalgroups.v20.SignalPlanData;
 import org.matsim.contrib.signals.model.*;
 import org.matsim.contrib.signals.otfvis.OTFClientLiveWithSignals;
 import org.matsim.core.api.experimental.events.EventsManager;
@@ -39,44 +38,9 @@ public class SignalizerModule extends AbstractModule {
         this.bind(SignalNetworkController.class);
         this.addEventHandlerBinding().to(NodeTraverseHandler.class);
         this.addControlerListenerBinding().to(LearnAndMeasureHandler.class);
-    }
-
-    public static class SignalizerSignalModelFactory implements SignalModelFactory {
-
-        private final SignalModelFactory defaultImpl = new DefaultSignalModelFactory();
-        private final SignalNetworkController networkController;
-
-        public SignalizerSignalModelFactory(SignalNetworkController c) {
-            networkController = c;
-        }
-
-        public SignalSystemsManager createSignalSystemsManager() {
-            return defaultImpl.createSignalSystemsManager();
-        }
-
-        public SignalSystem createSignalSystem(Id<SignalSystem> id) {
-            return defaultImpl.createSignalSystem(id);
-        }
-
-        @SuppressWarnings("unchecked")
-        public SignalController createSignalSystemController(String controllerIdentifier) {
-            if (controllerIdentifier.equals(DefaultPlanbasedSignalSystemController.IDENTIFIER)) {
-                return new DefaultPlanbasedSignalSystemController();
-            } else {
-                SignalizerController c = new SignalizerController(networkController);
-                networkController.addController(c);
-                return c;
-            }
-        }
-
-        public SignalPlan createSignalPlan(SignalPlanData planData) {
-            return defaultImpl.createSignalPlan(planData);
-        }
-    }
-
-    @Provides
-    SignalModelFactory provideSignalizerSignalModelFactory(SignalNetworkController c) {
-        return new SignalizerSignalModelFactory(c);
+        this.bind(StressFunction.class).to(NoStressFunction.class);
+        this.bind(SignalModelFactory.class).to(SignalizerSignalModelFactory.class);
+        this.bind(SignalizerController.class);
     }
 
     @Provides
