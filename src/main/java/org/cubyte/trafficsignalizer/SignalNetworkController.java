@@ -88,6 +88,7 @@ public class SignalNetworkController
         System.out.println("Useful groups: " + usefulGroups.size());
         System.out.println("Minimal groups: " + minimalGroups.size());
     }
+
     private boolean conflictingLinks(Signal a, Signal b) {
         final Map<Id<Link>, ? extends Link> links = network.getLinks();
         final Collection<? extends Link> linkA = links.get(a.getLinkId()).getToNode().getOutLinks().values();
@@ -118,7 +119,7 @@ public class SignalNetworkController
         final Coord bt = b.getToNode().getCoord();
 
         if (linesIntersect(af.getX(), af.getY(), at.getX(), at.getY(), bf.getX(), bf.getY(), bt.getX(), bt.getY())) {
-            return !af.equals(bf) && !at.equals(bt);
+            return !af.equals(bf);
         }
         return false;
     }

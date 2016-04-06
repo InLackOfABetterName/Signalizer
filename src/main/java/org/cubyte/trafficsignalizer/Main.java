@@ -54,10 +54,8 @@ public class Main {
         if (!plansFile.exists()) {
             try(FileWriter fileWriter = new FileWriter(plansFile)) {
                 fileWriter.write("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
-                        "<!DOCTYPE plans SYSTEM \"http://www.matsim.org/files/dtd/plans_v4.dtd\">\n" +
-                        "<plans>\n" +
-                        "    \n" +
-                        "</plans>");
+                                 "<!DOCTYPE plans SYSTEM \"http://www.matsim.org/files/dtd/plans_v4.dtd\">\n" +
+                                 "<plans></plans>");
             } catch (IOException e) {
                 // do nothing
             }
