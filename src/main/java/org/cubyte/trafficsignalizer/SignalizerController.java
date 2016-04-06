@@ -7,11 +7,10 @@ import org.matsim.api.core.v01.network.Network;
 import org.matsim.contrib.signals.model.*;
 import org.matsim.core.mobsim.qsim.interfaces.SignalGroupState;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public class SignalizerController implements SignalController {
 
@@ -36,7 +35,8 @@ public class SignalizerController implements SignalController {
         }
 
         Map<Id<SignalGroup>, Double> stressPerGroup = new HashMap<>();
-        for (SignalGroup g : this.system.getSignalGroups().values()) {
+        Collection<SignalGroup> groups = this.system.getSignalGroups().values();
+        for (SignalGroup g : groups) {
             double stress = g.getSignals().keySet().stream().map(stressPerSignal::get).mapToDouble(Double::doubleValue).sum();
             stressPerGroup.put(g.getId(), stress);
         }
@@ -46,6 +46,7 @@ public class SignalizerController implements SignalController {
         Optional<Map.Entry<Id<SignalGroup>, Double>> mostStressed = stressPerGroup.entrySet().stream().max((a, b) -> Double.compare(a.getValue(), b.getValue()));
         if (mostStressed.isPresent()) {
             SignalGroup group = system.getSignalGroups().get(mostStressed.get().getKey());
+            groups.stream().filter(g -> !g.getId().equals(group.getId())).forEach(g -> g.setState(SignalGroupState.RED));
             group.setState(SignalGroupState.GREEN);
         }
     }
