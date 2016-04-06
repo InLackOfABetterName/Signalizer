@@ -2,13 +2,15 @@ package org.cubyte.trafficsignalizer;
 
 import com.google.inject.Inject;
 import org.cubyte.trafficsignalizer.stress.StressFunction;
+import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Network;
-import org.matsim.contrib.signals.model.Signal;
-import org.matsim.contrib.signals.model.SignalController;
-import org.matsim.contrib.signals.model.SignalPlan;
-import org.matsim.contrib.signals.model.SignalSystem;
+import org.matsim.contrib.signals.model.*;
 import org.matsim.core.mobsim.qsim.interfaces.SignalGroupState;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class SignalizerController implements SignalController {
@@ -26,15 +28,25 @@ public class SignalizerController implements SignalController {
     }
 
     public void updateState(double timeSeconds) {
-        //this.system.getSignals().values().stream().map().collect(Collectors.toMap(x -> (x)))
         this.networkController.updateState(this, timeSeconds);
-        for (Signal signal : system.getSignals().values()) {
-            int time = (int) timeSeconds;
-            if (time % 10 == 0) {
-                signal.setState(SignalGroupState.RED);
-            } else if (time % 5 == 0) {
-                signal.setState(SignalGroupState.GREEN);
-            }
+
+        Map<Id<Signal>, Double> stressPerSignal = new HashMap<>();
+        for (Signal s : this.system.getSignals().values()) {
+            stressPerSignal.put(s.getId(), stressForSignal(s));
+        }
+
+        Map<Id<SignalGroup>, Double> stressPerGroup = new HashMap<>();
+        for (SignalGroup g : this.system.getSignalGroups().values()) {
+            double stress = g.getSignals().keySet().stream().map(stressPerSignal::get).mapToDouble(Double::doubleValue).sum();
+            stressPerGroup.put(g.getId(), stress);
+        }
+
+        //System.out.println("Stress in " + system.getId() + ": " + stressPerSignal.values().stream().mapToDouble(i -> i).sum());
+
+        Optional<Map.Entry<Id<SignalGroup>, Double>> mostStressed = stressPerGroup.entrySet().stream().max((a, b) -> Double.compare(a.getValue(), b.getValue()));
+        if (mostStressed.isPresent()) {
+            SignalGroup group = system.getSignalGroups().get(mostStressed.get().getKey());
+            group.setState(SignalGroupState.GREEN);
         }
     }
 
