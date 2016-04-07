@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <signalGroups xsi:schemaLocation="http://www.matsim.org/files/dtd http://www.matsim.org/files/dtd/signalGroups_v2.0.xsd" xmlns="http://www.matsim.org/files/dtd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <signalSystem refId="topleft">
+        <signalGroup id="generate_me">
+            <signal refId="topright_topleft"/>
+        </signalGroup>
+        <!--
         <signalGroup id="a">
             <signal refId="topright_topleft"/>
             <signal refId="bottomright_topleft"/>
@@ -15,14 +19,15 @@
             <signal refId="topleft_bottomleft"/>
             <signal refId="bottomright_topleft"/>
         </signalGroup>
+        -->
     </signalSystem>
     <signalSystem refId="bottomleft">
-        <signalGroup id="a">
+        <signalGroup id="generate_me">
             <signal refId="bottomright_topright"/>
         </signalGroup>
     </signalSystem>
     <signalSystem refId="topright">
-        <signalGroup id="a">
+        <signalGroup id="generate_me">
             <signal refId="right_left"/>
         </signalGroup>
     </signalSystem>

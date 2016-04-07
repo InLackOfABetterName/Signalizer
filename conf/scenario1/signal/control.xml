@@ -3,6 +3,7 @@
     <signalSystem refId="topleft">
         <signalSystemController>
             <controllerIdentifier>org.cubyte.trafficsignalizer.SignalizerController</controllerIdentifier>
+            <!--<signalPlan id="dummy"/>-->
         </signalSystemController>
     </signalSystem>
     <signalSystem refId="bottomleft">
