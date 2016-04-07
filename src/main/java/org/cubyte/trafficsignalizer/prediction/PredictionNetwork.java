@@ -71,7 +71,6 @@ public class PredictionNetwork {
 
     public void learn(Map<Id<Node>, DataSet> dataSet) {
         for (Map.Entry<Id<Node>, DataSet> nodeSet : dataSet.entrySet()) {
-            System.out.println("test");
             neuralNetworkMap.get(nodeSet.getKey()).learn(nodeSet.getValue());
         }
     }

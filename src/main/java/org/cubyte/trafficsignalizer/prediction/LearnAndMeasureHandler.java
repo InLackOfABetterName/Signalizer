@@ -25,6 +25,8 @@ public class LearnAndMeasureHandler implements IterationEndsListener {
             predictionNetwork.learn(nodeTraverseHandler.getDataSets());
             predictionNetwork.save(signalizerConfig.getNeuralNetworkSaveFolder());
         }
-        System.out.println("Network error: " + predictionNetwork.measureError(nodeTraverseHandler.getDataSets()));
+        System.out.println("==========================================================================================\n" +
+                "Prediction precision: " + predictionNetwork.measureError(nodeTraverseHandler.getDataSets()) + "\n" +
+                "==========================================================================================");
     }
 }

@@ -48,8 +48,6 @@ public class Main {
         final SignalSystemsConfigGroup signalsConf = addOrGetModule(config, SignalSystemsConfigGroup.GROUPNAME, SignalSystemsConfigGroup.class);
         final SignalizerConfigGroup signalizerConf = addOrGetModule(config, SignalizerConfigGroup.GROUPNAME, SignalizerConfigGroup.class);
 
-        signalizerConf.setLearn(learn);
-
         File plansFile = new File(config.plans().getInputFile());
         if (!plansFile.exists()) {
             try(FileWriter fileWriter = new FileWriter(plansFile)) {

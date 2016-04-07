@@ -13,12 +13,13 @@
 
     <module name="signalizer">
         <param name="routesInputFile" value="./conf/scenario1/routes.xml" />
+        <param name="neuralSaveFolder" value="./output/scenario1/neuralnetworks" />
     </module>
 
     <module name="controler">
         <param name="outputDirectory" value="output/scenario1" />
         <param name="firstIteration" value="0" />
-        <param name="lastIteration" value="10" />
+        <param name="lastIteration" value="0" />
         <param name="eventsFileFormat" value="xml" />
     </module>
 
@@ -42,8 +43,8 @@
         <param name="waiting" value="-0" />
 
         <param name="activityType_0" value="from" />
-        <param name="activityType_0" value="inter" />
-        <param name="activityType_1" value="to" />
+        <param name="activityType_1" value="inter" />
+        <param name="activityType_2" value="to" />
     </module>
 
     <module name="strategy">

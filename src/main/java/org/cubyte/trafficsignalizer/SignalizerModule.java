@@ -26,6 +26,8 @@ import org.matsim.vis.otfvis.OnTheFlyServer;
 
 import javax.inject.Inject;
 
+import static org.matsim.core.config.ConfigUtils.addOrGetModule;
+
 
 public class SignalizerModule extends AbstractModule {
 
@@ -36,7 +38,10 @@ public class SignalizerModule extends AbstractModule {
     }
 
     public void install() {
-        this.addMobsimListenerBinding().to(OTFVisMobsimListener.class);
+        addOrGetModule(getConfig(), SignalizerConfigGroup.GROUPNAME, SignalizerConfigGroup.class).setLearn(this.learn);
+        if (!this.learn) {
+            this.addMobsimListenerBinding().to(OTFVisMobsimListener.class);
+        }
         this.bind(NodeTraverseHandler.class);
         this.bind(SignalNetworkController.class);
         this.addEventHandlerBinding().to(NodeTraverseHandler.class);
