@@ -5,11 +5,12 @@ import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Network;
 import org.matsim.api.core.v01.network.Node;
+import org.matsim.contrib.signals.data.signalgroups.v20.SignalData;
+import org.matsim.contrib.signals.data.signalgroups.v20.SignalGroupData;
+import org.matsim.contrib.signals.data.signalgroups.v20.SignalGroupsDataFactory;
 import org.matsim.contrib.signals.model.Signal;
 import org.matsim.contrib.signals.model.SignalGroup;
-import org.matsim.contrib.signals.model.SignalGroupImpl;
 import org.matsim.contrib.signals.model.SignalSystem;
-import org.matsim.core.mobsim.qsim.interfaces.SignalGroupState;
 
 import java.util.*;
 
@@ -18,23 +19,20 @@ import static java.lang.String.CASE_INSENSITIVE_ORDER;
 import static java.util.Collections.disjoint;
 import static java.util.Collections.singleton;
 import static java.util.stream.Collectors.toSet;
-import static org.matsim.core.mobsim.qsim.interfaces.SignalGroupState.RED;
 
 public class SignalGroups {
 
-    public static Collection<SignalGroup> determineGroups(Network n, SignalSystem system) {
-        final Map<Id<Signal>, Signal> signalTable = system.getSignals();
+    public static Collection<SignalGroupData> determineGroups(Network n, Id<SignalSystem> systemId, Collection<SignalData> signals, SignalGroupsDataFactory factory) {
 
-        final Set<Signal> signals = new HashSet<>(signalTable.values());
-        final Set<Set<Signal>> possibleGroups = powerSet(signals);
+        final Set<Set<SignalData>> possibleGroups = powerSet(new HashSet<>(signals));
 
-        final Set<Set<Signal>> usefulGroups = possibleGroups.stream().filter(group -> {
+        final Set<Set<SignalData>> usefulGroups = possibleGroups.stream().filter(group -> {
             if (group.isEmpty()) {
                 return false;
             } else {
 
-                for (Signal outer : group) {
-                    for (Signal inner : group) {
+                for (SignalData outer : group) {
+                    for (SignalData inner : group) {
                         if (outer == inner) {
                             continue;
                         }
@@ -47,10 +45,10 @@ public class SignalGroups {
             }
         }).collect(toSet());
 
-        final Set<Set<Id<Signal>>> usefulIdGroups = usefulGroups.stream().map(g -> g.stream().map(Signal::getId).collect(toSet())).collect(toSet());
+        final Set<Set<Id<Signal>>> usefulIdGroups = usefulGroups.stream().map(g -> g.stream().map(SignalData::getId).collect(toSet())).collect(toSet());
 
-        final Set<Set<Signal>> minimalGroups = usefulGroups.stream().filter(group -> {
-            final Set<Id<Signal>> signalIds = group.stream().map(Signal::getId).collect(toSet());
+        final Set<Set<SignalData>> minimalGroups = usefulGroups.stream().filter(group -> {
+            final Set<Id<Signal>> signalIds = group.stream().map(SignalData::getId).collect(toSet());
             for (Set<Id<Signal>> other : usefulIdGroups) {
                 if (other.containsAll(signalIds) && !signalIds.containsAll(other)) {
                     return false;
@@ -60,19 +58,19 @@ public class SignalGroups {
         }).collect(toSet());
 
         int i = 0;
-        List<SignalGroup> groups = new ArrayList<>();
-        for (Set<Signal> group : minimalGroups) {
+        List<SignalGroupData> groups = new ArrayList<>();
+        for (Set<SignalData> group : minimalGroups) {
             String id = group.stream().map(s -> s.getId().toString()).sorted(CASE_INSENSITIVE_ORDER).reduce("", String::join);
-            final SignalGroup actualGroup = new SignalGroupImpl(Id.create(i + "_" + id, SignalGroup.class));
-            group.stream().forEach(actualGroup::addSignal);
-            actualGroup.setState(RED);
+
+            final SignalGroupData actualGroup = factory.createSignalGroupData(systemId, Id.create(i++ + "_" + id, SignalGroup.class));
+            group.stream().map(SignalData::getId).forEach(actualGroup::addSignalId);
             groups.add(actualGroup);
 
         }
         return groups;
     }
 
-    private static boolean conflictingLinks(Network n, Signal a, Signal b) {
+    private static boolean conflictingLinks(Network n, SignalData a, SignalData b) {
         final Map<Id<Link>, ? extends Link> links = n.getLinks();
         final Collection<? extends Link> linkA = links.get(a.getLinkId()).getToNode().getOutLinks().values();
         final Collection<? extends Link> linkB = links.get(b.getLinkId()).getToNode().getOutLinks().values();

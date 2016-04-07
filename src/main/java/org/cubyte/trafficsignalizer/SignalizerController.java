@@ -12,10 +12,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import static org.cubyte.trafficsignalizer.signal.SignalGroups.determineGroups;
-import static org.matsim.core.mobsim.qsim.interfaces.SignalGroupState.GREEN;
-import static org.matsim.core.mobsim.qsim.interfaces.SignalGroupState.RED;
-
 public class SignalizerController implements SignalController {
 
     private final Network network;
@@ -61,10 +57,12 @@ public class SignalizerController implements SignalController {
             double stress = mostStressed.get().getValue();
             if (this.activeGroup != group && stress > 0.0) {
                 if (this.activeGroup != null) {
-                    this.activeGroup.setState(RED);
+                    system.scheduleDropping(timeSeconds, this.activeGroup.getId());
+                    //this.activeGroup.setState(RED);
                 }
                 this.activeGroup = group;
-                group.setState(GREEN);
+                system.scheduleOnset(timeSeconds, group.getId());
+                //group.setState(GREEN);
             }
         }
     }
@@ -80,12 +78,6 @@ public class SignalizerController implements SignalController {
 
     public void setSignalSystem(SignalSystem system) {
         this.system = system;
-        final Map<Id<SignalGroup>, SignalGroup> groupTable = system.getSignalGroups();
-        if (groupTable.size() == 1 && groupTable.values().iterator().next().getId().toString().equals("generate_me")) {
-            groupTable.clear();
-            determineGroups(network, system).forEach(system::addSignalGroup);
-        }
-
         this.networkController.controllerReady(this, system);
     }
 

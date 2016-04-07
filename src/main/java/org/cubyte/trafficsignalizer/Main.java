@@ -4,15 +4,22 @@ import org.cubyte.trafficsignalizer.routes.Routes;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.network.Link;
+import org.matsim.api.core.v01.network.Network;
 import org.matsim.api.core.v01.population.*;
 import org.matsim.contrib.signals.SignalSystemsConfigGroup;
 import org.matsim.contrib.signals.controler.SignalsModule;
 import org.matsim.contrib.signals.data.SignalsData;
 import org.matsim.contrib.signals.data.SignalsScenarioLoader;
+import org.matsim.contrib.signals.data.signalgroups.v20.SignalGroupData;
+import org.matsim.contrib.signals.data.signalgroups.v20.SignalGroupsData;
+import org.matsim.contrib.signals.data.signalgroups.v20.SignalGroupsWriter20;
+import org.matsim.contrib.signals.data.signalsystems.v20.SignalSystemData;
 import org.matsim.core.config.Config;
-import org.matsim.core.config.ConfigGroup;
 import org.matsim.core.config.ConfigUtils;
+import org.matsim.core.config.groups.NetworkConfigGroup;
 import org.matsim.core.controler.Controler;
+import org.matsim.core.network.MatsimNetworkReader;
+import org.matsim.core.network.NetworkUtils;
 import org.matsim.core.scenario.ScenarioUtils;
 
 import java.io.File;
@@ -20,8 +27,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collection;
 import java.util.Random;
 
+import static org.cubyte.trafficsignalizer.signal.SignalGroups.determineGroups;
 import static org.matsim.core.config.ConfigUtils.addOrGetModule;
 import static org.matsim.core.controler.OutputDirectoryHierarchy.OverwriteFileSetting.deleteDirectoryIfExists;
 
@@ -47,21 +56,26 @@ public class Main {
         final Config config = ConfigUtils.loadConfig(base.resolve("config.xml").toString());
         final SignalSystemsConfigGroup signalsConf = addOrGetModule(config, SignalSystemsConfigGroup.GROUPNAME, SignalSystemsConfigGroup.class);
         final SignalizerConfigGroup signalizerConf = addOrGetModule(config, SignalizerConfigGroup.GROUPNAME, SignalizerConfigGroup.class);
+        final NetworkConfigGroup networkConf = addOrGetModule(config, NetworkConfigGroup.GROUP_NAME, NetworkConfigGroup.class);
 
         File plansFile = new File(config.plans().getInputFile());
         if (!plansFile.exists()) {
-            try(FileWriter fileWriter = new FileWriter(plansFile)) {
+            try (FileWriter fileWriter = new FileWriter(plansFile)) {
                 fileWriter.write("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
-                                 "<!DOCTYPE plans SYSTEM \"http://www.matsim.org/files/dtd/plans_v4.dtd\">\n" +
-                                 "<plans></plans>");
+                        "<!DOCTYPE plans SYSTEM \"http://www.matsim.org/files/dtd/plans_v4.dtd\">\n" +
+                        "<plans></plans>");
             } catch (IOException e) {
                 // do nothing
             }
         }
 
+
         final Scenario scenario = ScenarioUtils.loadScenario(config);
-        scenario.addScenarioElement(SignalsData.ELEMENT_NAME, new SignalsScenarioLoader(signalsConf).loadSignalsData());
-        config.travelTimeCalculator().setCalculateLinkToLinkTravelTimes(true);
+        final SignalsData signalsData = new SignalsScenarioLoader(signalsConf).loadSignalsData();
+        scenario.addScenarioElement(SignalsData.ELEMENT_NAME, signalsData);
+
+        generateSignalGroups(networkConf, signalsConf, signalsData);
+
 
         if (scenario.getPopulation().getPersons().isEmpty()) {
             generatePopulation(scenario.getPopulation(),
@@ -75,6 +89,18 @@ public class Main {
         c.addOverridingModule(new SignalizerModule(learn));
         c.getConfig().controler().setOverwriteFileSetting(deleteDirectoryIfExists);
         c.run();
+    }
+
+    private static void generateSignalGroups(NetworkConfigGroup networkConf, SignalSystemsConfigGroup signalsConf, SignalsData signalsData) {
+        final Network network = NetworkUtils.createNetwork();
+        new MatsimNetworkReader(network).parse(networkConf.getInputFile());
+        final SignalGroupsData groupsData = signalsData.getSignalGroupsData();
+        for (SignalSystemData system : signalsData.getSignalSystemsData().getSignalSystemData().values()) {
+            final Collection<SignalGroupData> groups = determineGroups(network, system.getId(), system.getSignalData().values(), groupsData.getFactory());
+            groupsData.getSignalGroupDataBySystemId(system.getId()).clear();
+            groups.stream().forEach(groupsData::addSignalGroupData);
+        }
+        new SignalGroupsWriter20(groupsData).write(signalsConf.getSignalGroupsFile());
     }
 
     private static void generatePopulation(Population population, Routes routes) {

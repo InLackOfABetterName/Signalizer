@@ -75,7 +75,7 @@
 
 <!-- ====================================================================== -->
 
-	<links capperiod="01:00:00" effectivecellsize="7.5" effectivelanewidth="10.0">
+	<links capperiod="01:00:00">
 		<link id="0" from="110" to="36" length="155.18617659506793" freespeed="8.3333" capacity="2000.0" permlanes="1.0" oneway="1" modes="car" />
 		<link id="10" from="11" to="12" length="10.0" freespeed="50.0" capacity="3000.0" permlanes="2.0" oneway="1" modes="car" />
 		<link id="105" from="139" to="41" length="314.46423886427647" freespeed="8.3333" capacity="600.0" permlanes="1.0" oneway="1" modes="car" />
