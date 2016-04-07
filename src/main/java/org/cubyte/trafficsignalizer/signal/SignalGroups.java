@@ -1,13 +1,16 @@
 package org.cubyte.trafficsignalizer.signal;
 
+import org.cubyte.trafficsignalizer.SignalizerController;
 import org.matsim.api.core.v01.Coord;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Network;
 import org.matsim.api.core.v01.network.Node;
+import org.matsim.contrib.signals.data.SignalsData;
 import org.matsim.contrib.signals.data.signalgroups.v20.SignalData;
 import org.matsim.contrib.signals.data.signalgroups.v20.SignalGroupData;
 import org.matsim.contrib.signals.data.signalgroups.v20.SignalGroupsDataFactory;
+import org.matsim.contrib.signals.data.signalgroups.v20.SignalSystemControllerData;
 import org.matsim.contrib.signals.model.Signal;
 import org.matsim.contrib.signals.model.SignalGroup;
 import org.matsim.contrib.signals.model.SignalSystem;
@@ -21,6 +24,11 @@ import static java.util.Collections.singleton;
 import static java.util.stream.Collectors.toSet;
 
 public class SignalGroups {
+
+    public static boolean shouldGenerate(SignalsData signalsData, Id<SignalSystem> system) {
+        final SignalSystemControllerData controlData = signalsData.getSignalControlData().getSignalSystemControllerDataBySystemId().get(system);
+        return controlData != null && controlData.getControllerIdentifier().equals(SignalizerController.class.getName());
+    }
 
     public static Collection<SignalGroupData> determineGroups(Network n, Id<SignalSystem> systemId, Collection<SignalData> signals, SignalGroupsDataFactory factory) {
 
@@ -93,7 +101,7 @@ public class SignalGroups {
         return false;
     }
 
-    public static boolean intersect(Link a, Link b) {
+    private static boolean intersect(Link a, Link b) {
         final Coord af = a.getFromNode().getCoord();
         final Coord at = a.getToNode().getCoord();
         final Coord bf = b.getFromNode().getCoord();
@@ -105,13 +113,13 @@ public class SignalGroups {
         return false;
     }
 
-    public static boolean targetSameWay(Node a, Node b) {
+    private static boolean targetSameWay(Node a, Node b) {
         Set<Id<Node>> followA = selectFollowingNodes(singleton(a), 5);
         Set<Id<Node>> followB = selectFollowingNodes(singleton(b), 5);
         return !disjoint(followA, followB);
     }
 
-    public static Set<Id<Node>> selectFollowingNodes(Set<Node> in, int levels) {
+    private static Set<Id<Node>> selectFollowingNodes(Set<Node> in, int levels) {
         if (levels == 0) {
             return Collections.emptySet();
         } else {
@@ -123,7 +131,7 @@ public class SignalGroups {
         }
     }
 
-    public static <T> Set<Set<T>> powerSet(Set<T> originalSet) {
+    private static <T> Set<Set<T>> powerSet(Set<T> originalSet) {
         Set<Set<T>> sets = new HashSet<>();
         if (originalSet.isEmpty()) {
             sets.add(new HashSet<>());

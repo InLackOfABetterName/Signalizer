@@ -1,138 +1,138 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <signalGroups xsi:schemaLocation="http://www.matsim.org/files/dtd http://www.matsim.org/files/dtd/signalGroups_v2.0.xsd" xmlns="http://www.matsim.org/files/dtd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <signalSystem refId="bottomleft">
-        <signalGroup id="1_topleft_bottomright">
+        <signalGroup id="1_bottomleft">
+            <signal refId="bottomleft"/>
+        </signalGroup>
+        <signalGroup id="0_topleft_bottomright">
             <signal refId="bottomright_topright"/>
             <signal refId="topleft_bottomright"/>
         </signalGroup>
-        <signalGroup id="0_bottomleft">
-            <signal refId="bottomleft"/>
-        </signalGroup>
     </signalSystem>
     <signalSystem refId="topleft">
-        <signalGroup id="0_topright_topleft">
+        <signalGroup id="1_topright_topleft">
+            <signal refId="bottomright_topright"/>
+            <signal refId="topleft_bottomleft"/>
+            <signal refId="topright_topleft"/>
+        </signalGroup>
+        <signalGroup id="2_topright_topleft">
             <signal refId="bottomright_topright"/>
             <signal refId="topright_bottomleft"/>
             <signal refId="topright_topleft"/>
         </signalGroup>
-        <signalGroup id="1_topright_topleft">
+        <signalGroup id="3_topright_topleft">
             <signal refId="topleft_bottomleft"/>
             <signal refId="topleft_topright"/>
             <signal refId="topright_topleft"/>
         </signalGroup>
-        <signalGroup id="3_topright_topleft">
-            <signal refId="bottomright_topright"/>
-            <signal refId="topleft_bottomleft"/>
-            <signal refId="topright_topleft"/>
-        </signalGroup>
-        <signalGroup id="2_topleft_bottomleft">
+        <signalGroup id="0_topleft_bottomleft">
             <signal refId="bottomright_topright"/>
             <signal refId="topleft_bottomleft"/>
             <signal refId="bottomright_topleft"/>
         </signalGroup>
     </signalSystem>
     <signalSystem refId="topright">
-        <signalGroup id="14_right_top">
-            <signal refId="right_bottom"/>
-            <signal refId="bottom_right"/>
-            <signal refId="right_top"/>
-            <signal refId="right_left"/>
-        </signalGroup>
-        <signalGroup id="0_right_top">
-            <signal refId="bottom_right"/>
-            <signal refId="bottom_left"/>
-            <signal refId="right_top"/>
-            <signal refId="left_bottom"/>
-        </signalGroup>
         <signalGroup id="1_top_left">
-            <signal refId="right_bottom"/>
-            <signal refId="top_left"/>
-            <signal refId="bottom_right"/>
-            <signal refId="left_top"/>
-        </signalGroup>
-        <signalGroup id="4_top_left">
-            <signal refId="top_left"/>
-            <signal refId="left_bottom"/>
-            <signal refId="left_right"/>
-            <signal refId="left_top"/>
-        </signalGroup>
-        <signalGroup id="5_top_right">
-            <signal refId="top_right"/>
             <signal refId="top_bottom"/>
             <signal refId="top_left"/>
-            <signal refId="right_top"/>
-        </signalGroup>
-        <signalGroup id="12_top_left">
-            <signal refId="right_bottom"/>
-            <signal refId="top_left"/>
+            <signal refId="bottom_top"/>
             <signal refId="bottom_right"/>
-            <signal refId="right_top"/>
         </signalGroup>
-        <signalGroup id="16_right_top">
-            <signal refId="right_top"/>
+        <signalGroup id="10_top_left">
+            <signal refId="top_left"/>
             <signal refId="left_bottom"/>
-            <signal refId="right_left"/>
             <signal refId="left_right"/>
-        </signalGroup>
-        <signalGroup id="15_top_left">
-            <signal refId="top_left"/>
-            <signal refId="bottom_right"/>
-            <signal refId="right_top"/>
-            <signal refId="left_bottom"/>
+            <signal refId="left_top"/>
         </signalGroup>
         <signalGroup id="7_top_left">
-            <signal refId="top_left"/>
-            <signal refId="bottom_right"/>
-            <signal refId="bottom_top"/>
-            <signal refId="left_bottom"/>
-        </signalGroup>
-        <signalGroup id="9_top_left">
             <signal refId="top_bottom"/>
             <signal refId="top_left"/>
             <signal refId="bottom_right"/>
             <signal refId="right_top"/>
         </signalGroup>
-        <signalGroup id="6_top_left">
-            <signal refId="top_left"/>
-            <signal refId="right_top"/>
+        <signalGroup id="15_right_top">
+            <signal refId="bottom_right"/>
+            <signal refId="right_left"/>
             <signal refId="left_bottom"/>
+            <signal refId="right_top"/>
+        </signalGroup>
+        <signalGroup id="5_right_top">
+            <signal refId="right_left"/>
+            <signal refId="left_bottom"/>
+            <signal refId="right_top"/>
             <signal refId="left_right"/>
         </signalGroup>
         <signalGroup id="8_top_right">
             <signal refId="top_right"/>
-            <signal refId="bottom_left"/>
-            <signal refId="right_top"/>
-            <signal refId="left_bottom"/>
-        </signalGroup>
-        <signalGroup id="13_top_right">
-            <signal refId="top_right"/>
             <signal refId="top_left"/>
-            <signal refId="right_top"/>
             <signal refId="left_bottom"/>
+            <signal refId="right_top"/>
+        </signalGroup>
+        <signalGroup id="0_top_left">
+            <signal refId="right_bottom"/>
+            <signal refId="top_left"/>
+            <signal refId="bottom_right"/>
+            <signal refId="left_top"/>
         </signalGroup>
         <signalGroup id="3_top_left">
             <signal refId="top_left"/>
             <signal refId="bottom_right"/>
             <signal refId="left_bottom"/>
-            <signal refId="left_top"/>
+            <signal refId="right_top"/>
         </signalGroup>
-        <signalGroup id="10_left_bottom">
-            <signal refId="bottom_right"/>
+        <signalGroup id="9_top_right">
+            <signal refId="top_right"/>
+            <signal refId="top_bottom"/>
+            <signal refId="top_left"/>
+            <signal refId="right_top"/>
+        </signalGroup>
+        <signalGroup id="12_left_bottom">
             <signal refId="bottom_top"/>
+            <signal refId="bottom_right"/>
             <signal refId="bottom_left"/>
             <signal refId="left_bottom"/>
         </signalGroup>
-        <signalGroup id="11_right_top">
-            <signal refId="bottom_right"/>
-            <signal refId="right_top"/>
-            <signal refId="left_bottom"/>
-            <signal refId="right_left"/>
-        </signalGroup>
-        <signalGroup id="2_top_left">
-            <signal refId="top_bottom"/>
+        <signalGroup id="14_top_left">
+            <signal refId="right_bottom"/>
             <signal refId="top_left"/>
             <signal refId="bottom_right"/>
+            <signal refId="right_top"/>
+        </signalGroup>
+        <signalGroup id="4_right_top">
+            <signal refId="bottom_right"/>
+            <signal refId="bottom_left"/>
+            <signal refId="left_bottom"/>
+            <signal refId="right_top"/>
+        </signalGroup>
+        <signalGroup id="11_right_top">
+            <signal refId="right_bottom"/>
+            <signal refId="bottom_right"/>
+            <signal refId="right_left"/>
+            <signal refId="right_top"/>
+        </signalGroup>
+        <signalGroup id="6_top_right">
+            <signal refId="top_right"/>
+            <signal refId="bottom_left"/>
+            <signal refId="left_bottom"/>
+            <signal refId="right_top"/>
+        </signalGroup>
+        <signalGroup id="16_top_left">
+            <signal refId="top_left"/>
+            <signal refId="left_bottom"/>
+            <signal refId="right_top"/>
+            <signal refId="left_right"/>
+        </signalGroup>
+        <signalGroup id="2_top_left">
+            <signal refId="top_left"/>
+            <signal refId="bottom_right"/>
+            <signal refId="left_bottom"/>
+            <signal refId="left_top"/>
+        </signalGroup>
+        <signalGroup id="13_top_left">
+            <signal refId="top_left"/>
             <signal refId="bottom_top"/>
+            <signal refId="bottom_right"/>
+            <signal refId="left_bottom"/>
         </signalGroup>
     </signalSystem>
 </signalGroups>

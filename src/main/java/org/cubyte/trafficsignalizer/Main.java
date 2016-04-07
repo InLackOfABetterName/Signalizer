@@ -1,6 +1,11 @@
 package org.cubyte.trafficsignalizer;
 
+import net.sourceforge.argparse4j.ArgumentParsers;
+import net.sourceforge.argparse4j.inf.ArgumentParser;
+import net.sourceforge.argparse4j.inf.ArgumentParserException;
+import net.sourceforge.argparse4j.inf.Namespace;
 import org.cubyte.trafficsignalizer.routes.Routes;
+import org.cubyte.trafficsignalizer.signal.SignalGroups;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.network.Link;
@@ -14,6 +19,7 @@ import org.matsim.contrib.signals.data.signalgroups.v20.SignalGroupData;
 import org.matsim.contrib.signals.data.signalgroups.v20.SignalGroupsData;
 import org.matsim.contrib.signals.data.signalgroups.v20.SignalGroupsWriter20;
 import org.matsim.contrib.signals.data.signalsystems.v20.SignalSystemData;
+import org.matsim.contrib.signals.model.SignalGroup;
 import org.matsim.core.config.Config;
 import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.config.groups.NetworkConfigGroup;
@@ -28,8 +34,10 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.Map;
 import java.util.Random;
 
+import static net.sourceforge.argparse4j.impl.Arguments.storeTrue;
 import static org.cubyte.trafficsignalizer.signal.SignalGroups.determineGroups;
 import static org.matsim.core.config.ConfigUtils.addOrGetModule;
 import static org.matsim.core.controler.OutputDirectoryHierarchy.OverwriteFileSetting.deleteDirectoryIfExists;
@@ -37,22 +45,21 @@ import static org.matsim.core.controler.OutputDirectoryHierarchy.OverwriteFileSe
 public class Main {
 
     public static void main(String[] args) {
-        boolean learn = false;
-        String configName = "";
 
-        if (args.length > 0) {
-            for (String arg : args) {
-                switch (arg) {
-                    case "-l":
-                        learn = true;
-                        break;
-                    default:
-                        configName = arg;
-                }
-            }
+        final ArgumentParser argParser = ArgumentParsers.newArgumentParser("Signalizer");
+        argParser.addArgument("scenario").type(String.class).setDefault("initial").help("The scenario folder name in ./conf");
+        argParser.addArgument("-l", "--learn").action(storeTrue()).help("This flag starts the simulation in learning mode");
+        argParser.addArgument("-r", "--refresh-groups").action(storeTrue()).help("The flag forces the regeneration of controlled signal groups");
+        Namespace ns;
+        try {
+            ns = argParser.parseArgs(args);
+        } catch (ArgumentParserException e) {
+            argParser.handleError(e);
+            System.exit(1);
+            return; // compiler will no detect termination here unless return is added
         }
 
-        final Path base = Paths.get("conf", (!"".equals(configName) ? configName : "initial"));
+        final Path base = Paths.get("conf", ns.getString("scenario"));
         final Config config = ConfigUtils.loadConfig(base.resolve("config.xml").toString());
         final SignalSystemsConfigGroup signalsConf = addOrGetModule(config, SignalSystemsConfigGroup.GROUPNAME, SignalSystemsConfigGroup.class);
         final SignalizerConfigGroup signalizerConf = addOrGetModule(config, SignalizerConfigGroup.GROUPNAME, SignalizerConfigGroup.class);
@@ -74,7 +81,7 @@ public class Main {
         final SignalsData signalsData = new SignalsScenarioLoader(signalsConf).loadSignalsData();
         scenario.addScenarioElement(SignalsData.ELEMENT_NAME, signalsData);
 
-        generateSignalGroups(networkConf, signalsConf, signalsData);
+        generateSignalGroups(networkConf, signalsConf, signalsData, ns.getBoolean("refresh_groups"));
 
 
         if (scenario.getPopulation().getPersons().isEmpty()) {
@@ -86,19 +93,24 @@ public class Main {
         final Controler c = new Controler(scenario);
         //c.addOverridingModule(new OTFVisLiveModule());
         c.addOverridingModule(new SignalsModule());
-        c.addOverridingModule(new SignalizerModule(learn));
+        c.addOverridingModule(new SignalizerModule(ns.getBoolean("learn")));
         c.getConfig().controler().setOverwriteFileSetting(deleteDirectoryIfExists);
         c.run();
     }
 
-    private static void generateSignalGroups(NetworkConfigGroup networkConf, SignalSystemsConfigGroup signalsConf, SignalsData signalsData) {
+    private static void generateSignalGroups(NetworkConfigGroup networkConf, SignalSystemsConfigGroup signalsConf, SignalsData signalsData, boolean refresh) {
         final Network network = NetworkUtils.createNetwork();
         new MatsimNetworkReader(network).parse(networkConf.getInputFile());
         final SignalGroupsData groupsData = signalsData.getSignalGroupsData();
         for (SignalSystemData system : signalsData.getSignalSystemsData().getSignalSystemData().values()) {
-            final Collection<SignalGroupData> groups = determineGroups(network, system.getId(), system.getSignalData().values(), groupsData.getFactory());
-            groupsData.getSignalGroupDataBySystemId(system.getId()).clear();
-            groups.stream().forEach(groupsData::addSignalGroupData);
+            if (SignalGroups.shouldGenerate(signalsData, system.getId())) {
+                final Map<Id<SignalGroup>, SignalGroupData> existingGroups = groupsData.getSignalGroupDataBySystemId(system.getId());
+                if (refresh || existingGroups.size() == 1 && existingGroups.values().iterator().next().getId().toString().equals("generate_me")) {
+                    existingGroups.clear();
+                    final Collection<SignalGroupData> groups = determineGroups(network, system.getId(), system.getSignalData().values(), groupsData.getFactory());
+                    groups.stream().forEach(groupsData::addSignalGroupData);
+                }
+            }
         }
         new SignalGroupsWriter20(groupsData).write(signalsConf.getSignalGroupsFile());
     }
