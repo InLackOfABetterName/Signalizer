@@ -1,4 +1,4 @@
-package org.cubyte.trafficsignalizer.trafficsensors;
+package org.cubyte.trafficsignalizer.trafficsensors.sensors;
 
 import com.google.inject.Inject;
 import org.cubyte.trafficsignalizer.trafficsensors.events.CountingTrafficEvent;
@@ -17,31 +17,35 @@ public class AllKnowingTrafficSensor extends TrafficSensor<CountingTrafficEvent>
     @Inject
     public AllKnowingTrafficSensor(EventsManager eventsManager, Id<Link> linkId) {
         super(eventsManager, linkId);
-        vehicles = 0;
+        reset(-1);
     }
 
     @Override
-    public void handleEvent(LinkEnterEvent event) {
-
+    public void handleLinkEnter(LinkEnterEvent event) {
+        vehicles++;
+        processEvent(new CountingTrafficEvent(event.getTime(), vehicles));
     }
 
     @Override
-    public void handleEvent(LinkLeaveEvent event) {
-
+    public void handleLinkLeave(LinkLeaveEvent event) {
+        vehicles--;
+        processEvent(new CountingTrafficEvent(event.getTime(), vehicles));
     }
 
     @Override
-    public void handleEvent(PersonArrivalEvent event) {
-
+    public void handlePersonArrival(PersonArrivalEvent event) {
+        vehicles--;
+        processEvent(new CountingTrafficEvent(event.getTime(), vehicles));
     }
 
     @Override
-    public void handleEvent(PersonDepartureEvent event) {
-
+    public void handlePersonDeparture(PersonDepartureEvent event) {
+        vehicles++;
+        processEvent(new CountingTrafficEvent(event.getTime(), vehicles));
     }
 
     @Override
     public void reset(int iteration) {
-
+        vehicles = 0;
     }
 }

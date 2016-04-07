@@ -1,16 +1,21 @@
 package org.cubyte.trafficsignalizer.trafficsensors;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import org.cubyte.trafficsignalizer.trafficsensors.events.TrafficSensorEvent;
+import org.cubyte.trafficsignalizer.trafficsensors.sensors.TrafficSensor;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.core.api.experimental.events.EventsManager;
 
 import java.lang.reflect.InvocationTargetException;
 
+@Singleton
 public class TrafficSensorFactory {
 
     private EventsManager eventsManager;
 
+    @Inject
     public TrafficSensorFactory(EventsManager eventsManager) {
         this.eventsManager = eventsManager;
     }
@@ -18,7 +23,9 @@ public class TrafficSensorFactory {
     public <T extends TrafficSensorEvent> TrafficSensor<T> createTrafficSensor(Class<? extends TrafficSensor<T>> clazz,
                                                                                Id<Link> linkId) {
         try {
-            return clazz.getConstructor(EventsManager.class, Id.class).newInstance(eventsManager, linkId);
+            TrafficSensor<T> sensor = clazz.getConstructor(EventsManager.class, Id.class).newInstance(eventsManager, linkId);
+            eventsManager.addHandler(sensor);
+            return sensor;
         } catch (NoSuchMethodException e) {
             System.err.println("Could not create traffic sensor." +
                     "The constructor of the TrafficSensor should not be overriden with another default constructor " +

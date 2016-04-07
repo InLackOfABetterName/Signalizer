@@ -2,14 +2,13 @@ package org.cubyte.trafficsignalizer.stress;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import org.cubyte.trafficsignalizer.trafficsensors.TrafficSensorFactory;
+import org.cubyte.trafficsignalizer.trafficsensors.TrafficSensorHandler;
+import org.cubyte.trafficsignalizer.trafficsensors.events.CountingTrafficEvent;
+import org.cubyte.trafficsignalizer.trafficsensors.sensors.AllKnowingTrafficSensor;
 import org.matsim.api.core.v01.Id;
-import org.matsim.api.core.v01.events.LinkEnterEvent;
-import org.matsim.api.core.v01.events.LinkLeaveEvent;
-import org.matsim.api.core.v01.events.PersonDepartureEvent;
-import org.matsim.api.core.v01.events.handler.LinkEnterEventHandler;
-import org.matsim.api.core.v01.events.handler.LinkLeaveEventHandler;
-import org.matsim.api.core.v01.events.handler.PersonDepartureEventHandler;
 import org.matsim.api.core.v01.network.Link;
+import org.matsim.api.core.v01.network.Network;
 import org.matsim.core.api.experimental.events.EventsManager;
 
 import java.util.HashMap;
@@ -21,8 +20,11 @@ public class LinkTrafficTracker {
     private Map<Id<Link>, Integer> linkState = new HashMap<>();
 
     @Inject
-    public LinkTrafficTracker(EventsManager em) {
+    public LinkTrafficTracker(Network network, TrafficSensorFactory trafficSensorFactory, EventsManager em) {
         this.linkState = new HashMap<>();
+        for (Map.Entry<Id<Link>, ? extends Link> link : network.getLinks().entrySet()) {
+            trafficSensorFactory.createTrafficSensor(AllKnowingTrafficSensor.class, link.getKey());
+        }
         em.addHandler(new Handler());
     }
 
@@ -31,35 +33,15 @@ public class LinkTrafficTracker {
         return count != null ? count : 0;
     }
 
-    private class Handler implements LinkEnterEventHandler, LinkLeaveEventHandler, PersonDepartureEventHandler {
+    private class Handler implements TrafficSensorHandler<CountingTrafficEvent> {
 
         @Override
-        public void handleEvent(LinkEnterEvent event) {
-            initializeOrIncrease(event.getLinkId());
+        public void handleEvent(CountingTrafficEvent event) {
+            setLinkState(event.getLinkId(), event.vehicles);
         }
 
-        private void initializeOrIncrease(Id<Link> link) {
-            final Integer count = linkState.get(link);
-            if (count != null) {
-                linkState.put(link, count + 1);
-            } else {
-                linkState.put(link, 1);
-            }
-        }
-
-        private void decrease(Id<Link> link) {
-            final Integer count = linkState.get(link);
-            linkState.put(link, count - 1);
-        }
-
-        @Override
-        public void handleEvent(LinkLeaveEvent event) {
-            decrease(event.getLinkId());
-        }
-
-        @Override
-        public void handleEvent(PersonDepartureEvent event) {
-            initializeOrIncrease(event.getLinkId());
+        private void setLinkState(Id<Link> link, int count) {
+            linkState.put(link, count);
         }
 
         @Override
