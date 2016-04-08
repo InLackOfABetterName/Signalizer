@@ -6,10 +6,10 @@ import net.sourceforge.argparse4j.inf.ArgumentParserException;
 import net.sourceforge.argparse4j.inf.Namespace;
 import org.cubyte.trafficsignalizer.routes.Routes;
 import org.cubyte.trafficsignalizer.signal.SignalGroups;
+import org.matsim.api.core.v01.Coord;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
-import org.matsim.api.core.v01.network.Link;
-import org.matsim.api.core.v01.network.Network;
+import org.matsim.api.core.v01.network.*;
 import org.matsim.api.core.v01.population.*;
 import org.matsim.contrib.signals.SignalSystemsConfigGroup;
 import org.matsim.contrib.signals.controler.SignalsModule;
@@ -27,15 +27,14 @@ import org.matsim.core.controler.Controler;
 import org.matsim.core.network.MatsimNetworkReader;
 import org.matsim.core.network.NetworkUtils;
 import org.matsim.core.scenario.ScenarioUtils;
+import org.matsim.core.utils.geometry.CoordUtils;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 import static net.sourceforge.argparse4j.impl.Arguments.storeTrue;
 import static org.cubyte.trafficsignalizer.signal.SignalGroups.determineGroups;
@@ -50,6 +49,7 @@ public class Main {
         argParser.addArgument("scenario").type(String.class).setDefault("initial").help("The scenario folder name in ./conf");
         argParser.addArgument("-l", "--learn").action(storeTrue()).help("This flag starts the simulation in learning mode");
         argParser.addArgument("-r", "--refresh-groups").action(storeTrue()).help("The flag forces the regeneration of controlled signal groups");
+        argParser.addArgument("-c", "--calculate-length").action(storeTrue()).help("This flag forces the recalculation of the street lengths");
         Namespace ns;
         try {
             ns = argParser.parseArgs(args);
@@ -76,13 +76,13 @@ public class Main {
             }
         }
 
+        recalculateLengths(networkConf, ns.getBoolean("calculate_length"));
 
         final Scenario scenario = ScenarioUtils.loadScenario(config);
         final SignalsData signalsData = new SignalsScenarioLoader(signalsConf).loadSignalsData();
         scenario.addScenarioElement(SignalsData.ELEMENT_NAME, signalsData);
 
-        generateSignalGroups(networkConf, signalsConf, signalsData, ns.getBoolean("refresh_groups"));
-
+        generateSignalGroups(scenario.getNetwork(), signalsConf, signalsData, ns.getBoolean("refresh_groups"));
 
         if (scenario.getPopulation().getPersons().isEmpty()) {
             generatePopulation(scenario.getPopulation(),
@@ -98,9 +98,7 @@ public class Main {
         c.run();
     }
 
-    private static void generateSignalGroups(NetworkConfigGroup networkConf, SignalSystemsConfigGroup signalsConf, SignalsData signalsData, boolean refresh) {
-        final Network network = NetworkUtils.createNetwork();
-        new MatsimNetworkReader(network).parse(networkConf.getInputFile());
+    private static void generateSignalGroups(Network network, SignalSystemsConfigGroup signalsConf, SignalsData signalsData, boolean refresh) {
         final SignalGroupsData groupsData = signalsData.getSignalGroupsData();
         for (SignalSystemData system : signalsData.getSignalSystemsData().getSignalSystemData().values()) {
             if (SignalGroups.shouldGenerate(signalsData, system.getId())) {
@@ -113,6 +111,33 @@ public class Main {
             }
         }
         new SignalGroupsWriter20(groupsData).write(signalsConf.getSignalGroupsFile());
+    }
+
+    private static void recalculateLengths(NetworkConfigGroup networkConfigGroup,  boolean recalculate) {
+        if (recalculate) {
+            Network network = NetworkUtils.createNetwork();
+            new MatsimNetworkReader(network).parse(networkConfigGroup.getInputFile());
+            NetworkFactory networkFactory = network.getFactory();
+            List<Link> links = new ArrayList<>(network.getLinks().values());
+            for (Node node : new ArrayList<>(network.getNodes().values())) {
+                Node newNode = networkFactory.createNode(node.getId(),
+                        new Coord(node.getCoord().getX() / 10, node.getCoord().getY() / 10));
+                network.removeNode(node.getId());
+                network.addNode(newNode);
+                for (Link link : node.getInLinks().values()) {
+                    link.setToNode(newNode);
+                }
+                for (Link link : node.getOutLinks().values()) {
+                    link.setFromNode(newNode);
+                }
+            }
+            for (Link link : links) {
+                link.setLength(CoordUtils.calcEuclideanDistance(link.getFromNode().getCoord(), link.getToNode().getCoord()) / 10);
+                link.setFreespeed(50f / 3.6f);
+                network.addLink(link);
+            }
+            new NetworkWriter(network).write(networkConfigGroup.getInputFile());
+        }
     }
 
     private static void generatePopulation(Population population, Routes routes) {
