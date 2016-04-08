@@ -50,6 +50,7 @@ public class Main {
         argParser.addArgument("-l", "--learn").action(storeTrue()).help("This flag starts the simulation in learning mode");
         argParser.addArgument("-r", "--refresh-groups").action(storeTrue()).help("The flag forces the regeneration of controlled signal groups");
         argParser.addArgument("-c", "--calculate-length").action(storeTrue()).help("This flag forces the recalculation of the street lengths");
+        argParser.addArgument("-s", "--coord-scale").type(Double.class).metavar("scale").setDefault(1).help("This flag forces the recalculation of the street lengths");
         Namespace ns;
         try {
             ns = argParser.parseArgs(args);
@@ -76,7 +77,7 @@ public class Main {
             }
         }
 
-        recalculateLengths(networkConf, ns.getBoolean("calculate_length"));
+        recalculateLengths(networkConf, ns.getDouble("coord_scale"), ns.getBoolean("calculate_length"));
 
         final Scenario scenario = ScenarioUtils.loadScenario(config);
         final SignalsData signalsData = new SignalsScenarioLoader(signalsConf).loadSignalsData();
@@ -113,7 +114,7 @@ public class Main {
         new SignalGroupsWriter20(groupsData).write(signalsConf.getSignalGroupsFile());
     }
 
-    private static void recalculateLengths(NetworkConfigGroup networkConfigGroup,  boolean recalculate) {
+    private static void recalculateLengths(NetworkConfigGroup networkConfigGroup, double scale, boolean recalculate) {
         if (recalculate) {
             Network network = NetworkUtils.createNetwork();
             new MatsimNetworkReader(network).parse(networkConfigGroup.getInputFile());
@@ -121,7 +122,7 @@ public class Main {
             List<Link> links = new ArrayList<>(network.getLinks().values());
             for (Node node : new ArrayList<>(network.getNodes().values())) {
                 Node newNode = networkFactory.createNode(node.getId(),
-                        new Coord(node.getCoord().getX() / 10, node.getCoord().getY() / 10));
+                        new Coord(node.getCoord().getX() / scale, node.getCoord().getY() / scale));
                 network.removeNode(node.getId());
                 network.addNode(newNode);
                 for (Link link : node.getInLinks().values()) {
