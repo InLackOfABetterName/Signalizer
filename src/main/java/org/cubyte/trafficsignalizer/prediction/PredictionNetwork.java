@@ -105,8 +105,8 @@ public class PredictionNetwork {
     /**
      * Returns the prediction for all the outgoing links or {-1} if there is no neural network for the given link
      */
-    public double[] getPrediction(Id<Link> trafficLightLinkId, int vehicles, double time) {
-        Id<Node> nodeId = network.getLinks().get(trafficLightLinkId).getToNode().getId();
+    public double[] getPrediction(Id<Link> fromLinkId, int vehicles, double time) {
+        Id<Node> nodeId = network.getLinks().get(fromLinkId).getToNode().getId();
         if (neuralNetworkMap.containsKey(nodeId)) {
             NeuralNetwork neuralNetwork = neuralNetworkMap.get(nodeId);
             double hours = Math.round(time / 60 / 60) % 24;
@@ -120,16 +120,16 @@ public class PredictionNetwork {
     }
 
     /**
-     * Returns the prediction for the outgoing link or -1 when the outgoing link or a neural network for the link cannot
+     * Returns the prediction for the outgoing link or -1 when the outgoing link or a neural network for the fromlink cannot
      * be found
      */
-    public double getPrediction(Id<Link> trafficLightLinkId, Id<Link> outgoingLinkId, int vehicles, double time) {
+    public double getPrediction(Id<Link> fromLinkId, Id<Link> toLinkId, int vehicles, double time) {
         List<Id<Link>> outLinks = new ArrayList<>();
-        outLinks.addAll(network.getLinks().get(trafficLightLinkId).getToNode().getOutLinks().keySet());
+        outLinks.addAll(network.getLinks().get(fromLinkId).getToNode().getOutLinks().keySet());
         outLinks.sort(Id<Link>::compareTo);
-        int indexOfOutLink = outLinks.indexOf(outgoingLinkId);
+        int indexOfOutLink = outLinks.indexOf(toLinkId);
         if (indexOfOutLink != -1) {
-            double[] predictions = getPrediction(trafficLightLinkId, vehicles, time);
+            double[] predictions = getPrediction(fromLinkId, vehicles, time);
             if (predictions.length == 1 && predictions[0] == -1) {
                 return -1;
             }
