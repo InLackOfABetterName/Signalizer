@@ -2,7 +2,7 @@ package org.cubyte.trafficsignalizer.signal;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import org.cubyte.trafficsignalizer.stress.StressFunction;
+import org.cubyte.trafficsignalizer.signal.stress.StressFunction;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Network;
 import org.matsim.contrib.signals.events.SignalGroupStateChangedEvent;
@@ -47,7 +47,7 @@ public class SignalNetworkController {
                     }
                 }
                 if (ctrl != null) {
-                    ctrl.groupStateChanged(event.getSignalGroupId(), event.getNewState());
+                    ctrl.groupStateChanged(event.getSignalGroupId(), event.getNewState(), event.getTime());
                 }
             }
 
@@ -66,10 +66,6 @@ public class SignalNetworkController {
         return this.controllers.stream().filter(controller -> controller != c).collect(toList());
     }
 
-    public double stressFor(Signal signal, SignalSystem system) {
-        return stressFunction.calculateStress(network, signal, system);
-    }
-
     public void updateState(StressBasedController controller, double timeSeconds) {
 
     }
@@ -78,11 +74,11 @@ public class SignalNetworkController {
     }
 
 
-    public void reset(StressBasedController controller, Integer iterationNumber) {
+    public void controllerReset(StressBasedController controller, Integer iterationNumber) {
 
     }
 
-    public void simulationInitialized(StressBasedController controller, double simStartTimeSeconds) {
+    public void controllerInitialized(StressBasedController controller, double simStartTimeSeconds) {
 
     }
 }

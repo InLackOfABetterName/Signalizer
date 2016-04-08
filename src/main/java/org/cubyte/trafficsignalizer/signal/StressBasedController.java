@@ -1,7 +1,7 @@
 package org.cubyte.trafficsignalizer.signal;
 
 import com.google.inject.Inject;
-import org.cubyte.trafficsignalizer.stress.StressFunction;
+import org.cubyte.trafficsignalizer.signal.stress.StressFunction;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Network;
 import org.matsim.contrib.signals.model.*;
@@ -18,10 +18,11 @@ public class StressBasedController implements SignalController {
     private final SignalNetworkController networkController;
     private final StressFunction stressFunction;
     private SignalSystem system;
-    private SignalGroup activeGroup;
     private SignalGroup upcomingGroup;
-    private SignalGroupState activeGroupState;
-    private SignalGroupState upcomingGroupState;
+    private SignalGroup activeGroup;
+    private SignalGroup expiringGroup;
+    private double greenSince;
+    private Map<Id<Signal>, Double> redSince = new HashMap<>();
 
     @Inject
     public StressBasedController(Network network, SignalNetworkController networkController, StressFunction stressFunction) {
@@ -30,8 +31,26 @@ public class StressBasedController implements SignalController {
         this.stressFunction = stressFunction;
     }
 
+    public void setSignalSystem(SignalSystem system) {
+        this.system = system;
+        this.networkController.controllerReady(this, system);
+    }
+
     public SignalSystem getSystem() {
         return system;
+    }
+
+    public void simulationInitialized(double timeSeconds) {
+        for (Id<SignalGroup> group : system.getSignalGroups().keySet()) {
+            system.scheduleDropping(timeSeconds, group);
+        }
+
+        this.redSince.clear();
+        for (Id<Signal> signalId : system.getSignals().keySet()) {
+            this.redSince.put(signalId, timeSeconds);
+        }
+
+        this.networkController.controllerInitialized(this, timeSeconds);
     }
 
     public void updateState(double timeSeconds) {
@@ -39,7 +58,7 @@ public class StressBasedController implements SignalController {
 
         Map<Id<Signal>, Double> stressPerSignal = new HashMap<>();
         for (Signal s : this.system.getSignals().values()) {
-            stressPerSignal.put(s.getId(), stressForSignal(s));
+            stressPerSignal.put(s.getId(), calculateStress(timeSeconds, s));
         }
 
         Map<Id<SignalGroup>, Double> stressPerGroup = new HashMap<>();
@@ -51,45 +70,54 @@ public class StressBasedController implements SignalController {
 
         //System.out.println("Stress in " + system.getId() + ": " + stressPerSignal.values().stream().mapToDouble(i -> i).sum());
 
-        Optional<Map.Entry<Id<SignalGroup>, Double>> mostStressed = stressPerGroup.entrySet().stream().max((a, b) -> Double.compare(a.getValue(), b.getValue()));
-        if (mostStressed.isPresent()) {
-            SignalGroup group = system.getSignalGroups().get(mostStressed.get().getKey());
-            double stress = mostStressed.get().getValue();
-            if (this.activeGroup != group && stress > 0.0) {
-                if (this.activeGroup != null) {
-                    system.scheduleDropping(timeSeconds, this.activeGroup.getId());
-                    //this.activeGroup.setState(RED);
-                }
-                this.activeGroup = group;
+        if (activeGroup != null && upcomingGroup == null && expiringGroup == null) {
+
+            if ((timeSeconds - greenSince) > 30) {
+                system.scheduleDropping(timeSeconds, activeGroup.getId());
+                this.expiringGroup = this.activeGroup;
+                this.activeGroup = null;
+            }
+
+        } else if (activeGroup == null && upcomingGroup == null && expiringGroup == null) {
+
+            Optional<Map.Entry<Id<SignalGroup>, Double>> mostStressed = stressPerGroup.entrySet().stream().max((a, b) -> Double.compare(a.getValue(), b.getValue()));
+            if (mostStressed.isPresent()) {
+                SignalGroup group = system.getSignalGroups().get(mostStressed.get().getKey());
+                //double stress = mostStressed.get().getValue();
                 system.scheduleOnset(timeSeconds, group.getId());
-                //group.setState(GREEN);
+                this.upcomingGroup = group;
             }
         }
-    }
 
 
-    protected double stressForSignal(Signal s) {
-        return stressFunction.calculateStress(network, s, system);
     }
+
+    protected double calculateStress(double timeSeconds, Signal s) {
+        return stressFunction.calculateStress(network, s, system, timeSeconds - redSince.get(s.getId()));
+    }
+
 
     public void addPlan(SignalPlan plan) {
 
     }
 
-    public void setSignalSystem(SignalSystem system) {
-        this.system = system;
-        this.networkController.controllerReady(this, system);
-    }
-
     public void reset(Integer iterationNumber) {
-        this.networkController.reset(this, iterationNumber);
+        this.networkController.controllerReset(this, iterationNumber);
     }
 
-    public void simulationInitialized(double simStartTimeSeconds) {
-        System.out.println("Start Time: " + simStartTimeSeconds);
-        this.networkController.simulationInitialized(this, simStartTimeSeconds);
-    }
-
-    public void groupStateChanged(Id<SignalGroup> signalGroupId, SignalGroupState newState) {
+    public void groupStateChanged(Id<SignalGroup> signalGroupId, SignalGroupState newState, double time) {
+        switch (newState) {
+            case RED:
+                for (Signal signal : this.system.getSignalGroups().get(signalGroupId).getSignals().values()) {
+                    this.redSince.put(signal.getId(), time);
+                }
+                this.expiringGroup = null;
+                break;
+            case GREEN:
+                this.activeGroup = this.upcomingGroup;
+                this.upcomingGroup = null;
+                this.greenSince = time;
+                break;
+        }
     }
 }

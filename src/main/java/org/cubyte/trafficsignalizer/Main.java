@@ -120,7 +120,7 @@ public class Main {
         final double SIMULATION_END = 25000;
         Random random = new Random(System.currentTimeMillis());
         PopulationFactory populationFactory = population.getFactory();
-        for (int i = 0; i < 30000; i++) {
+        for (int i = 0; i < 10000; i++) {
             Person person = populationFactory.createPerson(Id.createPersonId(i));
             for (int n = 0; n < random.nextInt(3) + 1; n++) {
                 Plan plan = populationFactory.createPlan();
