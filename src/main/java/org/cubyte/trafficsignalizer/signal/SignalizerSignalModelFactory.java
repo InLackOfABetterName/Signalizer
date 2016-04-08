@@ -1,6 +1,8 @@
-package org.cubyte.trafficsignalizer;
+package org.cubyte.trafficsignalizer.signal;
 
 import com.google.inject.Provider;
+import org.cubyte.trafficsignalizer.signal.SignalNetworkController;
+import org.cubyte.trafficsignalizer.signal.SignalizerController;
 import org.matsim.api.core.v01.Id;
 import org.matsim.contrib.signals.builder.DefaultSignalModelFactory;
 import org.matsim.contrib.signals.builder.SignalModelFactory;

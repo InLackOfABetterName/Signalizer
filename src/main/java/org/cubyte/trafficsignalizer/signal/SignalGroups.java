@@ -1,6 +1,5 @@
 package org.cubyte.trafficsignalizer.signal;
 
-import org.cubyte.trafficsignalizer.SignalizerController;
 import org.matsim.api.core.v01.Coord;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;

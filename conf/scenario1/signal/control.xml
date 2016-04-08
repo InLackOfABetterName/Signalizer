@@ -2,18 +2,18 @@
 <signalControl xsi:schemaLocation="http://www.matsim.org/files/dtd http://www.matsim.org/files/dtd/signalControl_v2.0.xsd" xmlns="http://www.matsim.org/files/dtd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <signalSystem refId="topleft">
         <signalSystemController>
-            <controllerIdentifier>org.cubyte.trafficsignalizer.SignalizerController</controllerIdentifier>
+            <controllerIdentifier>org.cubyte.trafficsignalizer.signal.SignalizerController</controllerIdentifier>
             <!--<signalPlan id="dummy"/>-->
         </signalSystemController>
     </signalSystem>
     <signalSystem refId="bottomleft">
         <signalSystemController>
-            <controllerIdentifier>org.cubyte.trafficsignalizer.SignalizerController</controllerIdentifier>
+            <controllerIdentifier>org.cubyte.trafficsignalizer.signal.SignalizerController</controllerIdentifier>
         </signalSystemController>
     </signalSystem>
     <signalSystem refId="topright">
         <signalSystemController>
-            <controllerIdentifier>org.cubyte.trafficsignalizer.SignalizerController</controllerIdentifier>
+            <controllerIdentifier>org.cubyte.trafficsignalizer.signal.SignalizerController</controllerIdentifier>
         </signalSystemController>
     </signalSystem>
 </signalControl>

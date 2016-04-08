@@ -1,6 +1,7 @@
-package org.cubyte.trafficsignalizer;
+package org.cubyte.trafficsignalizer.signal;
 
 import com.google.inject.Inject;
+import org.cubyte.trafficsignalizer.signal.SignalNetworkController;
 import org.cubyte.trafficsignalizer.stress.StressFunction;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Network;

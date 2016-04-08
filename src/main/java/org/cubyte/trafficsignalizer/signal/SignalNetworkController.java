@@ -1,4 +1,4 @@
-package org.cubyte.trafficsignalizer;
+package org.cubyte.trafficsignalizer.signal;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -8,7 +8,6 @@ import org.matsim.api.core.v01.network.Network;
 import org.matsim.contrib.signals.events.SignalGroupStateChangedEvent;
 import org.matsim.contrib.signals.events.SignalGroupStateChangedEventHandler;
 import org.matsim.contrib.signals.model.Signal;
-import org.matsim.contrib.signals.model.SignalGroup;
 import org.matsim.contrib.signals.model.SignalSystem;
 import org.matsim.core.api.experimental.events.EventsManager;
 
