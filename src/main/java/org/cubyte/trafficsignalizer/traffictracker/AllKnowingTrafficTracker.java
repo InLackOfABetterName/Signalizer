@@ -1,4 +1,4 @@
-package org.cubyte.trafficsignalizer.stress;
+package org.cubyte.trafficsignalizer.traffictracker;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -15,12 +15,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Singleton
-public class LinkTrafficTracker {
+public class AllKnowingTrafficTracker implements TrafficTracker {
 
     private Map<Id<Link>, Integer> linkState = new HashMap<>();
 
     @Inject
-    public LinkTrafficTracker(Network network, TrafficSensorFactory trafficSensorFactory, EventsManager em) {
+    public AllKnowingTrafficTracker(Network network, TrafficSensorFactory trafficSensorFactory, EventsManager em) {
         this.linkState = new HashMap<>();
         for (Map.Entry<Id<Link>, ? extends Link> link : network.getLinks().entrySet()) {
             trafficSensorFactory.createTrafficSensor(AllKnowingTrafficSensor.class, link.getKey());
@@ -37,11 +37,7 @@ public class LinkTrafficTracker {
 
         @Override
         public void handleEvent(CountingTrafficEvent event) {
-            setLinkState(event.getLinkId(), event.vehicles);
-        }
-
-        private void setLinkState(Id<Link> link, int count) {
-            linkState.put(link, count);
+            linkState.put(event.getLinkId(), event.vehicles);
         }
 
         @Override

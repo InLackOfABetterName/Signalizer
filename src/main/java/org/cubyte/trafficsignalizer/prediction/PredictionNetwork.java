@@ -1,6 +1,7 @@
 package org.cubyte.trafficsignalizer.prediction;
 
 import org.matsim.api.core.v01.Id;
+import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Network;
 import org.matsim.api.core.v01.network.Node;
 import org.neuroph.core.NeuralNetwork;
@@ -15,6 +16,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -98,6 +100,42 @@ public class PredictionNetwork {
             }
         }
         return error / tests;
+    }
+
+    /**
+     * Returns the prediction for all the outgoing links or {-1} if there is no neural network for the given link
+     */
+    public double[] getPrediction(Id<Link> trafficLightLinkId, int vehicles, double time) {
+        Id<Node> nodeId = network.getLinks().get(trafficLightLinkId).getToNode().getId();
+        if (neuralNetworkMap.containsKey(nodeId)) {
+            NeuralNetwork neuralNetwork = neuralNetworkMap.get(nodeId);
+            double hours = Math.round(time / 60 / 60) % 24;
+            double minutes = Math.round(time / 60) % 60;
+            neuralNetwork.setInput(vehicles, hours, minutes);
+            neuralNetwork.calculate();
+            return neuralNetwork.getOutput();
+        } else {
+            return new double[] {-1d};
+        }
+    }
+
+    /**
+     * Returns the prediction for the outgoing link or -1 when the outgoing link or a neural network for the link cannot
+     * be found
+     */
+    public double getPrediction(Id<Link> trafficLightLinkId, Id<Link> outgoingLinkId, int vehicles, double time) {
+        List<Id<Link>> outLinks = new ArrayList<>();
+        outLinks.addAll(network.getLinks().get(trafficLightLinkId).getToNode().getOutLinks().keySet());
+        outLinks.sort(Id<Link>::compareTo);
+        int indexOfOutLink = outLinks.indexOf(outgoingLinkId);
+        if (indexOfOutLink != -1) {
+            double[] predictions = getPrediction(trafficLightLinkId, vehicles, time);
+            if (predictions.length == 1 && predictions[0] == -1) {
+                return -1;
+            }
+            return predictions[indexOfOutLink];
+        }
+        return -1;
     }
 
     /**

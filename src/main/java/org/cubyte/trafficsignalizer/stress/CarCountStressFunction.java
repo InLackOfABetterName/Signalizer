@@ -1,18 +1,18 @@
 package org.cubyte.trafficsignalizer.stress;
 
+import org.cubyte.trafficsignalizer.traffictracker.TrafficTracker;
 import org.matsim.api.core.v01.network.Network;
 import org.matsim.contrib.signals.model.Signal;
 import org.matsim.contrib.signals.model.SignalSystem;
-import org.matsim.core.mobsim.qsim.QSim;
 
 import javax.inject.Inject;
 
 public class CarCountStressFunction implements StressFunction {
 
-    private final LinkTrafficTracker trafficTracker;
+    private final TrafficTracker trafficTracker;
 
     @Inject
-    public CarCountStressFunction(LinkTrafficTracker trafficTracker) {
+    public CarCountStressFunction(TrafficTracker trafficTracker) {
         this.trafficTracker = trafficTracker;
     }
 

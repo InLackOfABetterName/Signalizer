@@ -5,8 +5,9 @@ import org.cubyte.trafficsignalizer.prediction.LearnAndMeasureHandler;
 import org.cubyte.trafficsignalizer.prediction.NodeTraverseHandler;
 import org.cubyte.trafficsignalizer.prediction.PredictionNetwork;
 import org.cubyte.trafficsignalizer.stress.CarCountStressFunction;
-import org.cubyte.trafficsignalizer.stress.LinkTrafficTracker;
+import org.cubyte.trafficsignalizer.traffictracker.AllKnowingTrafficTracker;
 import org.cubyte.trafficsignalizer.stress.StressFunction;
+import org.cubyte.trafficsignalizer.traffictracker.TrafficTracker;
 import org.cubyte.trafficsignalizer.trafficsensors.TrafficSensorFactory;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.network.Network;
@@ -48,7 +49,7 @@ public class SignalizerModule extends AbstractModule {
         this.bind(StressFunction.class).to(CarCountStressFunction.class);
         this.bind(SignalModelFactory.class).to(SignalizerSignalModelFactory.class);
         this.bind(SignalizerController.class);
-        this.bind(LinkTrafficTracker.class).asEagerSingleton();
+        this.bind(TrafficTracker.class).to(AllKnowingTrafficTracker.class).asEagerSingleton();
         this.bind(TrafficSensorFactory.class);
     }
 
