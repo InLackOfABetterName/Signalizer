@@ -10,6 +10,7 @@ import org.cubyte.trafficsignalizer.signal.SignalizerSignalModelFactory;
 import org.cubyte.trafficsignalizer.stress.CarCountStressFunction;
 import org.cubyte.trafficsignalizer.tracker.AllKnowingTrafficTracker;
 import org.cubyte.trafficsignalizer.stress.StressFunction;
+import org.cubyte.trafficsignalizer.tracker.PredictedTrafficTracker;
 import org.cubyte.trafficsignalizer.tracker.TrafficTracker;
 import org.cubyte.trafficsignalizer.sensors.TrafficSensorFactory;
 import org.matsim.api.core.v01.Scenario;
@@ -54,6 +55,7 @@ public class SignalizerModule extends AbstractModule {
         this.bind(SignalizerController.class);
         this.bind(TrafficTracker.class).to(AllKnowingTrafficTracker.class).asEagerSingleton();
         this.bind(TrafficSensorFactory.class);
+        this.bind(PredictedTrafficTracker.class);
     }
 
     @Provides

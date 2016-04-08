@@ -1,6 +1,7 @@
 package org.cubyte.trafficsignalizer.tracker;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import org.cubyte.trafficsignalizer.prediction.PredictionNetwork;
 import org.cubyte.trafficsignalizer.sensors.TrafficSensorFactory;
 import org.cubyte.trafficsignalizer.sensors.TrafficSensorHandler;
@@ -15,6 +16,7 @@ import org.matsim.core.mobsim.framework.listeners.MobsimBeforeSimStepListener;
 
 import java.util.*;
 
+@Singleton
 public class PredictedTrafficTracker implements TrafficTracker {
 
     private final Network network;
