@@ -2,13 +2,15 @@
 <!DOCTYPE routes SYSTEM "routes_v1.dtd">
 <routes>
     <links>
-        <start id="50" weight="30"/>
-        <start id="17" weight="30"/>
+        <start id="50" weight="30" />
+        <start id="17" weight="30" />
+        <start id="178" weight="20" />
 
         <inter id="108" weight="50"/>
         <nointer weight="700"/>
 
         <end id="5" weight="70"/>
         <end id="36" weight="30"/>
+        <end id="10" weight="50" />
     </links>
 </routes>

@@ -26,7 +26,7 @@ public class SignalGroups {
 
     public static boolean shouldGenerate(SignalsData signalsData, Id<SignalSystem> system) {
         final SignalSystemControllerData controlData = signalsData.getSignalControlData().getSignalSystemControllerDataBySystemId().get(system);
-        return controlData != null && controlData.getControllerIdentifier().equals(SignalizerController.class.getName());
+        return controlData != null && controlData.getControllerIdentifier().equals(StressBasedController.class.getName());
     }
 
     public static Collection<SignalGroupData> determineGroups(Network n, Id<SignalSystem> systemId, Collection<SignalData> signals, SignalGroupsDataFactory factory) {

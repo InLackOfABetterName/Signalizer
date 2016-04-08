@@ -1,4 +1,4 @@
-package org.cubyte.trafficsignalizer.stress;
+package org.cubyte.trafficsignalizer.signal.stress;
 
 import org.cubyte.trafficsignalizer.tracker.TrafficTracker;
 import org.matsim.api.core.v01.network.Network;
@@ -17,7 +17,7 @@ public class CarCountStressFunction implements StressFunction {
     }
 
     @Override
-    public double calculateStress(Network network, Signal signal, SignalSystem system) {
+    public double calculateStress(Network network, Signal signal, SignalSystem system, double timeSeconds) {
         return trafficTracker.getCarCount(signal.getLinkId());
     }
 }

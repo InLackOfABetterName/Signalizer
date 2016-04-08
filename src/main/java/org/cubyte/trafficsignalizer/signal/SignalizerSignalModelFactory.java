@@ -1,8 +1,6 @@
 package org.cubyte.trafficsignalizer.signal;
 
 import com.google.inject.Provider;
-import org.cubyte.trafficsignalizer.signal.SignalNetworkController;
-import org.cubyte.trafficsignalizer.signal.SignalizerController;
 import org.matsim.api.core.v01.Id;
 import org.matsim.contrib.signals.builder.DefaultSignalModelFactory;
 import org.matsim.contrib.signals.builder.SignalModelFactory;
@@ -15,10 +13,10 @@ public class SignalizerSignalModelFactory implements SignalModelFactory {
 
     private final SignalModelFactory defaultImpl = new DefaultSignalModelFactory();
     private final SignalNetworkController networkController;
-    private final Provider<SignalizerController> signalController;
+    private final Provider<StressBasedController> signalController;
 
     @Inject
-    public SignalizerSignalModelFactory(SignalNetworkController c, Provider<SignalizerController> signalController) {
+    public SignalizerSignalModelFactory(SignalNetworkController c, Provider<StressBasedController> signalController) {
         networkController = c;
         this.signalController = signalController;
     }
@@ -36,7 +34,7 @@ public class SignalizerSignalModelFactory implements SignalModelFactory {
         if (controllerIdentifier.equals(DefaultPlanbasedSignalSystemController.IDENTIFIER)) {
             return new DefaultPlanbasedSignalSystemController();
         } else {
-            SignalizerController c = signalController.get();
+            StressBasedController c = signalController.get();
             networkController.addController(c);
             return c;
         }
