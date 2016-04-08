@@ -1,7 +1,6 @@
 package org.cubyte.trafficsignalizer.signal;
 
 import com.google.inject.Inject;
-import org.cubyte.trafficsignalizer.signal.SignalNetworkController;
 import org.cubyte.trafficsignalizer.stress.StressFunction;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Network;
@@ -13,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public class SignalizerController implements SignalController {
+public class StressBasedController implements SignalController {
 
     private final Network network;
     private final SignalNetworkController networkController;
@@ -25,7 +24,7 @@ public class SignalizerController implements SignalController {
     private SignalGroupState upcomingGroupState;
 
     @Inject
-    public SignalizerController(Network network, SignalNetworkController networkController, StressFunction stressFunction) {
+    public StressBasedController(Network network, SignalNetworkController networkController, StressFunction stressFunction) {
         this.network = network;
         this.networkController = networkController;
         this.stressFunction = stressFunction;
@@ -92,6 +91,5 @@ public class SignalizerController implements SignalController {
     }
 
     public void groupStateChanged(Id<SignalGroup> signalGroupId, SignalGroupState newState) {
-        System.out.println(system.getId() + " -> " + signalGroupId + " -> " + newState);
     }
 }

@@ -20,7 +20,7 @@ import static java.util.stream.Collectors.toList;
 
 @Singleton
 public class SignalNetworkController {
-    private final List<SignalizerController> controllers;
+    private final List<StressBasedController> controllers;
     private final Network network;
     private final StressFunction stressFunction;
 
@@ -30,15 +30,14 @@ public class SignalNetworkController {
         this.stressFunction = stressFunction;
         this.controllers = new ArrayList<>();
         em.addHandler(new SignalGroupStateChangedEventHandler() {
-            private final Map<Id<SignalSystem>, SignalizerController> cache = new HashMap<>();
+            private final Map<Id<SignalSystem>, StressBasedController> cache = new HashMap<>();
 
             @Override
             public void handleEvent(SignalGroupStateChangedEvent event) {
-                System.out.println("state change!");
                 final Id<SignalSystem> system = event.getSignalSystemId();
-                SignalizerController ctrl = cache.get(system);
+                StressBasedController ctrl = cache.get(system);
                 if (ctrl == null) {
-                    for (SignalizerController c : controllers) {
+                    for (StressBasedController c : controllers) {
                         final SignalSystem s = c.getSystem();
                         if (s != null && s.getId().equals(system)) {
                             cache.put(system, c);
@@ -59,11 +58,11 @@ public class SignalNetworkController {
         });
     }
 
-    public void addController(SignalizerController c) {
+    public void addController(StressBasedController c) {
         this.controllers.add(c);
     }
 
-    public List<SignalizerController> otherControllers(SignalizerController c) {
+    public List<StressBasedController> otherControllers(StressBasedController c) {
         return this.controllers.stream().filter(controller -> controller != c).collect(toList());
     }
 
@@ -71,19 +70,19 @@ public class SignalNetworkController {
         return stressFunction.calculateStress(network, signal, system);
     }
 
-    public void updateState(SignalizerController signalizerController, double timeSeconds) {
+    public void updateState(StressBasedController controller, double timeSeconds) {
 
     }
 
-    public void controllerReady(SignalizerController signalizerController, SignalSystem system) {
+    public void controllerReady(StressBasedController controller, SignalSystem system) {
     }
 
 
-    public void reset(SignalizerController signalizerController, Integer iterationNumber) {
+    public void reset(StressBasedController controller, Integer iterationNumber) {
 
     }
 
-    public void simulationInitialized(SignalizerController signalizerController, double simStartTimeSeconds) {
+    public void simulationInitialized(StressBasedController controller, double simStartTimeSeconds) {
 
     }
 }
