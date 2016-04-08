@@ -23,7 +23,8 @@ public class CarCountStressFunction implements StressFunction {
     public double calculateStress(Network network, Signal signal, SignalSystem system, double timeSeconds) {
         int predicted = predictedTrafficTracker.getCarCount(signal.getLinkId());
         int actual = trafficTracker.getCarCount(signal.getLinkId());
-        System.out.println("predicted: " + predicted + " actual: " + actual);
-        return actual;
+        if (predicted != 0 && actual != 0)
+            System.out.println("predicted: " + predicted + " actual: " + actual);
+        return predicted;
     }
 }

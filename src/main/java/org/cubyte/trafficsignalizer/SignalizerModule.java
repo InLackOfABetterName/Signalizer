@@ -56,6 +56,7 @@ public class SignalizerModule extends AbstractModule {
         this.bind(TrafficTracker.class).to(AllKnowingTrafficTracker.class).asEagerSingleton();
         this.bind(TrafficSensorFactory.class);
         this.bind(PredictedTrafficTracker.class);
+        this.addMobsimListenerBinding().to(PredictedTrafficTracker.class);
     }
 
     @Provides
