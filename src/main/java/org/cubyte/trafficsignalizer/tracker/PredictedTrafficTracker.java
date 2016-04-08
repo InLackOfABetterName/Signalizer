@@ -1,16 +1,14 @@
-package org.cubyte.trafficsignalizer.traffictracker;
+package org.cubyte.trafficsignalizer.tracker;
 
 import com.google.inject.Inject;
 import org.cubyte.trafficsignalizer.prediction.PredictionNetwork;
-import org.cubyte.trafficsignalizer.trafficsensors.TrafficSensorFactory;
-import org.cubyte.trafficsignalizer.trafficsensors.TrafficSensorHandler;
-import org.cubyte.trafficsignalizer.trafficsensors.events.EnteringTrafficEvent;
-import org.cubyte.trafficsignalizer.trafficsensors.sensors.AllKnowingTrafficSensor;
-import org.cubyte.trafficsignalizer.trafficsensors.sensors.EnteringTrafficSensor;
+import org.cubyte.trafficsignalizer.sensors.TrafficSensorFactory;
+import org.cubyte.trafficsignalizer.sensors.TrafficSensorHandler;
+import org.cubyte.trafficsignalizer.sensors.events.EnteringTrafficEvent;
+import org.cubyte.trafficsignalizer.sensors.sensors.EnteringTrafficSensor;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Network;
-import org.matsim.api.core.v01.network.Node;
 import org.matsim.core.api.experimental.events.EventsManager;
 import org.matsim.core.mobsim.framework.events.MobsimBeforeSimStepEvent;
 import org.matsim.core.mobsim.framework.listeners.MobsimBeforeSimStepListener;

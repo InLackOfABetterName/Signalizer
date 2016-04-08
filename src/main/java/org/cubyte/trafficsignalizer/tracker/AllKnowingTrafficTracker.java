@@ -1,11 +1,11 @@
-package org.cubyte.trafficsignalizer.traffictracker;
+package org.cubyte.trafficsignalizer.tracker;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import org.cubyte.trafficsignalizer.trafficsensors.TrafficSensorFactory;
-import org.cubyte.trafficsignalizer.trafficsensors.TrafficSensorHandler;
-import org.cubyte.trafficsignalizer.trafficsensors.events.CountingTrafficEvent;
-import org.cubyte.trafficsignalizer.trafficsensors.sensors.AllKnowingTrafficSensor;
+import org.cubyte.trafficsignalizer.sensors.TrafficSensorFactory;
+import org.cubyte.trafficsignalizer.sensors.TrafficSensorHandler;
+import org.cubyte.trafficsignalizer.sensors.events.CountingTrafficEvent;
+import org.cubyte.trafficsignalizer.sensors.sensors.AllKnowingTrafficSensor;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Network;

@@ -1,6 +1,6 @@
 package org.cubyte.trafficsignalizer.stress;
 
-import org.cubyte.trafficsignalizer.traffictracker.TrafficTracker;
+import org.cubyte.trafficsignalizer.tracker.TrafficTracker;
 import org.matsim.api.core.v01.network.Network;
 import org.matsim.contrib.signals.model.Signal;
 import org.matsim.contrib.signals.model.SignalSystem;

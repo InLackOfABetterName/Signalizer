@@ -1,4 +1,4 @@
-package org.cubyte.trafficsignalizer.trafficsensors.events;
+package org.cubyte.trafficsignalizer.sensors.events;
 
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.events.Event;

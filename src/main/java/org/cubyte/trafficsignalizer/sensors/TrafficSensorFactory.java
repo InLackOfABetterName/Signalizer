@@ -1,9 +1,9 @@
-package org.cubyte.trafficsignalizer.trafficsensors;
+package org.cubyte.trafficsignalizer.sensors;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import org.cubyte.trafficsignalizer.trafficsensors.events.TrafficSensorEvent;
-import org.cubyte.trafficsignalizer.trafficsensors.sensors.TrafficSensor;
+import org.cubyte.trafficsignalizer.sensors.events.TrafficSensorEvent;
+import org.cubyte.trafficsignalizer.sensors.sensors.TrafficSensor;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.core.api.experimental.events.EventsManager;

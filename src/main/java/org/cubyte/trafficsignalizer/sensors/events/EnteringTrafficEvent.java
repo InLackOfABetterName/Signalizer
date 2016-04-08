@@ -1,4 +1,4 @@
-package org.cubyte.trafficsignalizer.trafficsensors.events;
+package org.cubyte.trafficsignalizer.sensors.events;
 
 public class EnteringTrafficEvent extends TrafficSensorEvent {
 
