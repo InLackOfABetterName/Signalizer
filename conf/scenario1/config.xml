@@ -13,7 +13,7 @@
 
     <module name="signalizer">
         <param name="routesInputFile" value="./conf/scenario1/routes.xml" />
-        <param name="neuralSaveFolder" value="./output/scenario1/neuralnetworks" />
+        <param name="neuralSaveFolder" value="./conf/scenario1/neuralnetworks" />
     </module>
 
     <module name="controler">

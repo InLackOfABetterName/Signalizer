@@ -3,7 +3,7 @@ package org.cubyte.trafficsignalizer.tracker;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.cubyte.trafficsignalizer.sensors.TrafficSensorFactory;
-import org.cubyte.trafficsignalizer.sensors.TrafficSensorHandler;
+import org.cubyte.trafficsignalizer.sensors.handlers.CountingTrafficHandler;
 import org.cubyte.trafficsignalizer.sensors.events.CountingTrafficEvent;
 import org.cubyte.trafficsignalizer.sensors.sensors.AllKnowingTrafficSensor;
 import org.matsim.api.core.v01.Id;
@@ -33,7 +33,7 @@ public class AllKnowingTrafficTracker implements TrafficTracker {
         return count != null ? count : 0;
     }
 
-    private class Handler implements TrafficSensorHandler<CountingTrafficEvent> {
+    private class Handler implements CountingTrafficHandler {
 
         @Override
         public void handleEvent(CountingTrafficEvent event) {

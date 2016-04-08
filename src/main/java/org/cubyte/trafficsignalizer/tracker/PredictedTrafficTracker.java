@@ -4,8 +4,9 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.cubyte.trafficsignalizer.prediction.PredictionNetwork;
 import org.cubyte.trafficsignalizer.sensors.TrafficSensorFactory;
-import org.cubyte.trafficsignalizer.sensors.TrafficSensorHandler;
+import org.cubyte.trafficsignalizer.sensors.handlers.CountingTrafficHandler;
 import org.cubyte.trafficsignalizer.sensors.events.EnteringTrafficEvent;
+import org.cubyte.trafficsignalizer.sensors.handlers.EnteringTrafficHandler;
 import org.cubyte.trafficsignalizer.sensors.sensors.EnteringTrafficSensor;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;
@@ -85,7 +86,7 @@ public class PredictedTrafficTracker implements TrafficTracker {
         return (int) trackedVehicles.stream().filter((vehicle) -> vehicle.getCurrentLinkId() == link).count();
     }
 
-    private class Handler implements TrafficSensorHandler<EnteringTrafficEvent>, MobsimBeforeSimStepListener {
+    private class Handler implements EnteringTrafficHandler, MobsimBeforeSimStepListener {
 
         @Override
         public void handleEvent(EnteringTrafficEvent event) {
