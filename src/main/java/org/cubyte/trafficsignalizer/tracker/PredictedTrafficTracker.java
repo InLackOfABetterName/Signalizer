@@ -23,6 +23,9 @@ public class PredictedTrafficTracker implements TrafficTracker, MobsimBeforeSimS
     private final PredictionNetwork predictionNetwork;
     private final Map<Id<Link>, List<TrackedVehicle>> trackedVehicleQueques;
     private final Random random;
+    private double lastSimStepTime;
+    private Map<Id<Link>, Double> remainingTime; // Time that remains after vehicles exiting the link.
+    // Only an even amount of vehicles can exit a link in a simstep
 
     @Inject
     public PredictedTrafficTracker(Network network, PredictionNetwork predictionNetwork,
@@ -31,8 +34,11 @@ public class PredictedTrafficTracker implements TrafficTracker, MobsimBeforeSimS
         this.predictionNetwork = predictionNetwork;
         this.trackedVehicleQueques = new HashMap<>();
         this.random = new Random();
+        this.lastSimStepTime = 0;
+        this.remainingTime = new HashMap<>();
         for (Map.Entry<Id<Link>, ? extends Link> link : network.getLinks().entrySet()) {
             this.trackedVehicleQueques.put(link.getKey(), new ArrayList<>());
+            this.remainingTime.put(link.getKey(), 0d);
             trafficSensorFactory.createTrafficSensor(EnteringTrafficSensor.class, link.getKey());
         }
         Handler handler = new Handler();
@@ -46,10 +52,21 @@ public class PredictedTrafficTracker implements TrafficTracker, MobsimBeforeSimS
             toAdd.put(entry.getKey(), new ArrayList<>());
             toRemove.put(entry.getKey(), new ArrayList<>());
         });
+        double timeSinceLastSimStep = simulationTime - lastSimStepTime;
         for (Map.Entry<Id<Link>, List<TrackedVehicle>> entry : trackedVehicleQueques.entrySet()) {
             Link link = network.getLinks().get(entry.getKey());
             double travelTime = link.getLength() / link.getFreespeed();
-            for (TrackedVehicle vehicle : entry.getValue()) {
+            timeSinceLastSimStep += remainingTime.get(link.getId());
+            double capacity = link.getCapacity(timeSinceLastSimStep);
+            double newRemainingTime;
+            if (entry.getValue().size() <= capacity) {
+                newRemainingTime = 0;
+            } else {
+                newRemainingTime = capacity % 1 * (timeSinceLastSimStep / capacity);
+            }
+            int capacityAsInt = (int) Math.floor(capacity);
+            int vehicleCount = entry.getValue().size();
+            for (TrackedVehicle vehicle : entry.getValue().subList(0, capacityAsInt > vehicleCount ? vehicleCount : capacityAsInt )) {
                 double timeSinceEnteredLink = simulationTime - vehicle.getCurrentLinkEnteredTime();
                 if (timeSinceEnteredLink >= travelTime) {
                     List<Id<Link>> toLinks = new ArrayList<>(link.getToNode().getOutLinks().keySet());
@@ -82,17 +99,19 @@ public class PredictedTrafficTracker implements TrafficTracker, MobsimBeforeSimS
                         }
                         toAdd.get(newLinkId).add(vehicle);
                         toRemove.get(link.getId()).add(vehicle);
-                        vehicle.setCurrentLinkEnteredTime(timeWhenEnteredNewLink);
+                        vehicle.setCurrentLinkEnteredTime(timeWhenEnteredNewLink - remainingTime.get(link.getId()));
                     } else {
                         toRemove.get(link.getId()).add(vehicle);
                     }
                 }
             }
+            remainingTime.put(link.getId(), newRemainingTime);
         }
         trackedVehicleQueques.entrySet().stream().forEach(entry -> {
             entry.getValue().addAll(toAdd.get(entry.getKey()));
             entry.getValue().removeAll(toRemove.get(entry.getKey()));
         });
+        lastSimStepTime = simulationTime;
     }
 
     @Override
@@ -115,6 +134,10 @@ public class PredictedTrafficTracker implements TrafficTracker, MobsimBeforeSimS
         @Override
         public void reset(int iteration) {
             trackedVehicleQueques.entrySet().stream().forEach(entry -> entry.getValue().clear());
+            lastSimStepTime = 0;
+            for (Id<Link> linkId: network.getLinks().keySet()) {
+                remainingTime.put(linkId, 0d);
+            }
         }
     }
 }
