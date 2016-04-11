@@ -11,10 +11,8 @@ import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Network;
 import org.matsim.core.api.experimental.events.EventsManager;
-import org.matsim.core.mobsim.framework.Mobsim;
 import org.matsim.core.mobsim.framework.events.MobsimBeforeSimStepEvent;
 import org.matsim.core.mobsim.framework.listeners.MobsimBeforeSimStepListener;
-import org.matsim.core.mobsim.qsim.QSim;
 
 import java.util.*;
 
@@ -23,7 +21,7 @@ public class PredictedTrafficTracker implements TrafficTracker, MobsimBeforeSimS
 
     private final Network network;
     private final PredictionNetwork predictionNetwork;
-    private final List<TrackedVehicle> trackedVehicles;
+    private final Map<Id<Link>, List<TrackedVehicle>> trackedVehicleQueques;
     private final Random random;
 
     @Inject
@@ -31,9 +29,10 @@ public class PredictedTrafficTracker implements TrafficTracker, MobsimBeforeSimS
                                    TrafficSensorFactory trafficSensorFactory, EventsManager em) {
         this.network = network;
         this.predictionNetwork = predictionNetwork;
-        this.trackedVehicles = new ArrayList<>();
+        this.trackedVehicleQueques = new HashMap<>();
         this.random = new Random();
         for (Map.Entry<Id<Link>, ? extends Link> link : network.getLinks().entrySet()) {
+            this.trackedVehicleQueques.put(link.getKey(), new ArrayList<>());
             trafficSensorFactory.createTrafficSensor(EnteringTrafficSensor.class, link.getKey());
         }
         Handler handler = new Handler();
@@ -41,48 +40,59 @@ public class PredictedTrafficTracker implements TrafficTracker, MobsimBeforeSimS
     }
 
     private void simulate(double simulationTime) {
-        List<TrackedVehicle> toRemove = new ArrayList<>();
-        for (TrackedVehicle vehicle : trackedVehicles) {
-            Link link = network.getLinks().get(vehicle.getCurrentLinkId());
+        Map<Id<Link>, List<TrackedVehicle>> toAdd = new HashMap<>();
+        Map<Id<Link>, List<TrackedVehicle>> toRemove = new HashMap<>();
+        trackedVehicleQueques.entrySet().stream().forEach(entry -> {
+            toAdd.put(entry.getKey(), new ArrayList<>());
+            toRemove.put(entry.getKey(), new ArrayList<>());
+        });
+        for (Map.Entry<Id<Link>, List<TrackedVehicle>> entry : trackedVehicleQueques.entrySet()) {
+            Link link = network.getLinks().get(entry.getKey());
             double travelTime = link.getLength() / link.getFreespeed();
-            double timeSinceEnteredLink = simulationTime - vehicle.getCurrentLinkEnteredTime();
-            if (timeSinceEnteredLink >= travelTime) {
-                List<Id<Link>> toLinks = new ArrayList<>(link.getToNode().getOutLinks().keySet());
-                toLinks.sort(Id<Link>::compareTo);
-                Id<Link> newLink;
-                if (toLinks.size() > 0) {
-                    double timeWhenEnteredNewLink = simulationTime - (timeSinceEnteredLink - travelTime);
-                    if (toLinks.size() > 1) {
-                        double[] predictions = predictionNetwork.getPrediction(vehicle.getCurrentLinkId(), 1, timeWhenEnteredNewLink);
-                        double acc = 0;
-                        for (double prediction : predictions) {
-                            acc += prediction;
-                        }
-                        acc /= predictions.length;
-                        for (int i = 0; i < predictions.length; i++) {
-                            predictions[i] /= acc;
-                        }
-                        double choice = random.nextDouble();
-                        acc = 0;
-                        for (int i = 0; i < predictions.length; i++) {
-                            acc += predictions[i];
-                            if (choice <= acc) {
-                                choice = i;
-                                break;
+            for (TrackedVehicle vehicle : entry.getValue()) {
+                double timeSinceEnteredLink = simulationTime - vehicle.getCurrentLinkEnteredTime();
+                if (timeSinceEnteredLink >= travelTime) {
+                    List<Id<Link>> toLinks = new ArrayList<>(link.getToNode().getOutLinks().keySet());
+                    toLinks.sort(Id<Link>::compareTo);
+                    Id<Link> newLinkId;
+                    if (toLinks.size() > 0) {
+                        double timeWhenEnteredNewLink = simulationTime - (timeSinceEnteredLink - travelTime);
+                        if (toLinks.size() > 1) {
+                            double[] predictions = predictionNetwork.getPrediction(link.getId(), 1, timeWhenEnteredNewLink);
+                            double acc = 0;
+                            for (double prediction : predictions) {
+                                acc += prediction;
                             }
+                            acc /= predictions.length;
+                            for (int i = 0; i < predictions.length; i++) {
+                                predictions[i] /= acc;
+                            }
+                            double choice = random.nextDouble();
+                            acc = 0;
+                            for (int i = 0; i < predictions.length; i++) {
+                                acc += predictions[i];
+                                if (choice <= acc) {
+                                    choice = i;
+                                    break;
+                                }
+                            }
+                            newLinkId = toLinks.get((int) choice);
+                        } else {
+                            newLinkId = toLinks.get(0);
                         }
-                        newLink = toLinks.get((int) choice);
+                        toAdd.get(newLinkId).add(vehicle);
+                        toRemove.get(link.getId()).add(vehicle);
+                        vehicle.setCurrentLinkEnteredTime(timeWhenEnteredNewLink);
                     } else {
-                        newLink = toLinks.get(0);
+                        toRemove.get(link.getId()).add(vehicle);
                     }
-                    vehicle.setCurrentLinkId(newLink);
-                    vehicle.setCurrentLinkEnteredTime(timeWhenEnteredNewLink);
-                } else {
-                    toRemove.add(vehicle);
                 }
             }
         }
-        trackedVehicles.removeAll(toRemove);
+        trackedVehicleQueques.entrySet().stream().forEach(entry -> {
+            entry.getValue().addAll(toAdd.get(entry.getKey()));
+            entry.getValue().removeAll(toRemove.get(entry.getKey()));
+        });
     }
 
     @Override
@@ -92,19 +102,19 @@ public class PredictedTrafficTracker implements TrafficTracker, MobsimBeforeSimS
 
     @Override
     public int getCarCount(Id<Link> link) {
-        return (int) trackedVehicles.stream().filter((vehicle) -> vehicle.getCurrentLinkId() == link).count();
+        return trackedVehicleQueques.get(link).size();
     }
 
     private class Handler implements EnteringTrafficHandler {
 
         @Override
         public void handleEvent(EnteringTrafficEvent event) {
-            trackedVehicles.add(new TrackedVehicle(event.getLinkId(), event.getTime()));
+            trackedVehicleQueques.get(event.getLinkId()).add(new TrackedVehicle(event.getTime()));
         }
 
         @Override
         public void reset(int iteration) {
-            trackedVehicles.clear();
+            trackedVehicleQueques.entrySet().stream().forEach(entry -> entry.getValue().clear());
         }
     }
 }

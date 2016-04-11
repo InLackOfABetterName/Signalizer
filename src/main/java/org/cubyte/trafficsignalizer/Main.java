@@ -50,7 +50,7 @@ public class Main {
         argParser.addArgument("-l", "--learn").action(storeTrue()).help("This flag starts the simulation in learning mode");
         argParser.addArgument("-r", "--refresh-groups").action(storeTrue()).help("The flag forces the regeneration of controlled signal groups");
         argParser.addArgument("-c", "--calculate-length").action(storeTrue()).help("This flag forces the recalculation of the street lengths");
-        argParser.addArgument("-s", "--coord-scale").type(Double.class).metavar("scale").setDefault(1).help("This flag forces the recalculation of the street lengths");
+        argParser.addArgument("-s", "--coord-scale").type(Double.class).metavar("scale").setDefault(1d).help("This flag forces the recalculation of the street lengths");
         Namespace ns;
         try {
             ns = argParser.parseArgs(args);
