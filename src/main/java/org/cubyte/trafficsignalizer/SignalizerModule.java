@@ -103,7 +103,7 @@ public class SignalizerModule extends AbstractModule {
             cm.connectWriterToReader(TextObject.Writer.class, TextObject.Reader.class);
             cm.connectReaderToReceiver(TextObject.Reader.class, TextObject.Drawer.class);
             cm.connectReceiverToLayer(TextObject.Drawer.class, SimpleSceneLayer.class);
-            //server.addAdditionalElement(writer);
+            server.addAdditionalElement(writer);
             runClient(cm, server, scenario.getConfig());
         }
     }

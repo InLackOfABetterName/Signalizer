@@ -45,8 +45,6 @@ public class SignalNetworkController {
                 }
                 if (ctrl != null) {
                     ctrl.groupStateChanged(event.getSignalGroupId(), event.getNewState(), event.getTime());
-
-                    textWriter.put("signal_group_event", "Time: " + event.getTime(), 10, 10, true);
                 }
             }
 

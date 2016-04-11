@@ -10,7 +10,6 @@ import org.matsim.api.core.v01.network.Network;
 import org.matsim.contrib.signals.model.*;
 import org.matsim.core.mobsim.qsim.interfaces.SignalGroupState;
 import org.matsim.core.utils.geometry.CoordinateTransformation;
-import org.matsim.vis.otfvis.data.OTFServerQuadTree;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -77,6 +76,10 @@ public class StressBasedController implements SignalController {
             stressPerGroup.put(g.getId(), stress);
         }
 
+        for (Signal signal : system.getSignals().values()) {
+            drawCurrentStress(signal, stressPerSignal);
+        }
+
         //System.out.println("Stress in " + system.getId() + ": " + stressPerSignal.values().stream().mapToDouble(i -> i).sum());
 
         if (activeGroup != null && upcomingGroup == null && expiringGroup == null) {
@@ -127,17 +130,19 @@ public class StressBasedController implements SignalController {
                 this.activeGroup = this.upcomingGroup;
                 this.upcomingGroup = null;
                 this.greenSince = time;
-                drawCurrentState();
                 break;
         }
     }
 
-    private void drawCurrentState() {
+    private void drawCurrentStress(Signal signal, Map<Id<Signal>, Double> stressPerSignal) {
         final CoordinateTransformation trans = getOTFTransformation();
         if (trans != null) {
-            Link link = network.getLinks().get(this.system.getSignals().values().iterator().next().getLinkId());
-            Coord transformedCoord = trans.transform(link.getFromNode().getCoord());
-            textWriter.put("switched_" + system.getId(), system.getId().toString(), transformedCoord.getX(), transformedCoord.getY(), false);
+            final double stress = stressPerSignal.get(signal.getId());
+            Link link = network.getLinks().get(signal.getLinkId());
+            Coord to = link.getToNode().getCoord();
+            Coord from = link.getFromNode().getCoord();
+            Coord transformedCoord = trans.transform(new Coord(from.getX() + (to.getX() - from.getX()) / 2d, from.getY() + (to.getY() - from.getY()) / 2d));
+            textWriter.put("signal_stress_" + signal.getId(), stress + "", transformedCoord.getX(), transformedCoord.getY(), false);
         }
     }
 }
