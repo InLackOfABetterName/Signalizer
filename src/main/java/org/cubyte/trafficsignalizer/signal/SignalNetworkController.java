@@ -3,18 +3,15 @@ package org.cubyte.trafficsignalizer.signal;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.cubyte.trafficsignalizer.signal.stress.StressFunction;
+import org.cubyte.trafficsignalizer.ui.TextObject;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Network;
 import org.matsim.contrib.signals.events.SignalGroupStateChangedEvent;
 import org.matsim.contrib.signals.events.SignalGroupStateChangedEventHandler;
-import org.matsim.contrib.signals.model.Signal;
 import org.matsim.contrib.signals.model.SignalSystem;
 import org.matsim.core.api.experimental.events.EventsManager;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static java.util.stream.Collectors.toList;
 
@@ -25,7 +22,7 @@ public class SignalNetworkController {
     private final StressFunction stressFunction;
 
     @Inject
-    public SignalNetworkController(Network network, StressFunction stressFunction, EventsManager em) {
+    public SignalNetworkController(Network network, StressFunction stressFunction, EventsManager em, TextObject.Writer textWriter) {
         this.network = network;
         this.stressFunction = stressFunction;
         this.controllers = new ArrayList<>();
@@ -48,6 +45,8 @@ public class SignalNetworkController {
                 }
                 if (ctrl != null) {
                     ctrl.groupStateChanged(event.getSignalGroupId(), event.getNewState(), event.getTime());
+
+                    textWriter.put("signal_group_event", "Time: " + event.getTime(), 10, 10, true);
                 }
             }
 

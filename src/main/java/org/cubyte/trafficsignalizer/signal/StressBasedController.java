@@ -2,21 +2,29 @@ package org.cubyte.trafficsignalizer.signal;
 
 import com.google.inject.Inject;
 import org.cubyte.trafficsignalizer.signal.stress.StressFunction;
+import org.cubyte.trafficsignalizer.ui.TextObject;
+import org.matsim.api.core.v01.Coord;
 import org.matsim.api.core.v01.Id;
+import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Network;
 import org.matsim.contrib.signals.model.*;
 import org.matsim.core.mobsim.qsim.interfaces.SignalGroupState;
+import org.matsim.core.utils.geometry.CoordinateTransformation;
+import org.matsim.vis.otfvis.data.OTFServerQuadTree;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import static org.matsim.vis.otfvis.data.OTFServerQuadTree.getOTFTransformation;
+
 public class StressBasedController implements SignalController {
 
     private final Network network;
     private final SignalNetworkController networkController;
     private final StressFunction stressFunction;
+    private final TextObject.Writer textWriter;
     private SignalSystem system;
     private SignalGroup upcomingGroup;
     private SignalGroup activeGroup;
@@ -25,10 +33,11 @@ public class StressBasedController implements SignalController {
     private Map<Id<Signal>, Double> redSince = new HashMap<>();
 
     @Inject
-    public StressBasedController(Network network, SignalNetworkController networkController, StressFunction stressFunction) {
+    public StressBasedController(Network network, SignalNetworkController networkController, StressFunction stressFunction, TextObject.Writer textWriter) {
         this.network = network;
         this.networkController = networkController;
         this.stressFunction = stressFunction;
+        this.textWriter = textWriter;
     }
 
     public void setSignalSystem(SignalSystem system) {
@@ -106,6 +115,7 @@ public class StressBasedController implements SignalController {
     }
 
     public void groupStateChanged(Id<SignalGroup> signalGroupId, SignalGroupState newState, double time) {
+
         switch (newState) {
             case RED:
                 for (Signal signal : this.system.getSignalGroups().get(signalGroupId).getSignals().values()) {
@@ -117,7 +127,17 @@ public class StressBasedController implements SignalController {
                 this.activeGroup = this.upcomingGroup;
                 this.upcomingGroup = null;
                 this.greenSince = time;
+                drawCurrentState();
                 break;
+        }
+    }
+
+    private void drawCurrentState() {
+        final CoordinateTransformation trans = getOTFTransformation();
+        if (trans != null) {
+            Link link = network.getLinks().get(this.system.getSignals().values().iterator().next().getLinkId());
+            Coord transformedCoord = trans.transform(link.getFromNode().getCoord());
+            textWriter.put("switched_" + system.getId(), system.getId().toString(), transformedCoord.getX(), transformedCoord.getY(), false);
         }
     }
 }

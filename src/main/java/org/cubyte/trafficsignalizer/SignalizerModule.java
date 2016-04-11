@@ -13,13 +13,12 @@ import org.cubyte.trafficsignalizer.signal.stress.StressFunction;
 import org.cubyte.trafficsignalizer.tracker.AllKnowingTrafficTracker;
 import org.cubyte.trafficsignalizer.tracker.PredictedTrafficTracker;
 import org.cubyte.trafficsignalizer.tracker.TrafficTracker;
+import org.cubyte.trafficsignalizer.ui.TextObject;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.api.core.v01.network.Network;
 import org.matsim.contrib.signals.builder.FromDataBuilder;
 import org.matsim.contrib.signals.builder.SignalModelFactory;
 import org.matsim.contrib.signals.model.SignalSystemsManager;
-import org.matsim.contrib.signals.otfvis.OTFClientLiveWithSignals;
-import org.matsim.contrib.signals.otfvis.OTFVisWithSignals;
 import org.matsim.core.api.experimental.events.EventsManager;
 import org.matsim.core.controler.AbstractModule;
 import org.matsim.core.mobsim.framework.events.MobsimInitializedEvent;
@@ -27,9 +26,13 @@ import org.matsim.core.mobsim.framework.listeners.MobsimInitializedListener;
 import org.matsim.core.mobsim.qsim.QSim;
 import org.matsim.core.replanning.ReplanningContext;
 import org.matsim.vis.otfvis.OnTheFlyServer;
+import org.matsim.vis.otfvis.caching.SimpleSceneLayer;
+import org.matsim.vis.otfvis.data.OTFConnectionManager;
 
 import javax.inject.Inject;
 
+import static org.cubyte.trafficsignalizer.ui.OTFClientVisWithSignalizer.runClient;
+import static org.matsim.contrib.signals.otfvis.OTFVisWithSignals.startServerAndRegisterWithQSim;
 import static org.matsim.core.config.ConfigUtils.addOrGetModule;
 
 
@@ -53,8 +56,9 @@ public class SignalizerModule extends AbstractModule {
         this.bind(StressFunction.class).to(CarCountStressFunction.class);
         this.bind(SignalModelFactory.class).to(SignalizerSignalModelFactory.class);
         this.bind(StressBasedController.class);
-        this.bind(TrafficTracker.class).to(AllKnowingTrafficTracker.class).asEagerSingleton();
+        this.bind(TrafficTracker.class).to(AllKnowingTrafficTracker.class);
         this.bind(TrafficSensorFactory.class);
+        this.bind(TextObject.Writer.class).asEagerSingleton();
         this.bind(PredictedTrafficTracker.class);
         this.addMobsimListenerBinding().to(PredictedTrafficTracker.class);
     }
@@ -84,16 +88,24 @@ public class SignalizerModule extends AbstractModule {
 
     public static class OTFVisMobsimListener implements MobsimInitializedListener {
         @Inject
-        private Scenario s;
+        private Scenario scenario;
 
         @Inject
         private EventsManager events;
 
+        @Inject
+        private TextObject.Writer writer;
+
         @Override
         public void notifyMobsimInitialized(MobsimInitializedEvent e) {
-            QSim qSim = (QSim) e.getQueueSimulation();
-            OnTheFlyServer server = OTFVisWithSignals.startServerAndRegisterWithQSim(s.getConfig(), s, events, qSim);
-            OTFClientLiveWithSignals.run(s.getConfig(), server);
+            final OnTheFlyServer server = startServerAndRegisterWithQSim(scenario.getConfig(), scenario, events, (QSim) e.getQueueSimulation());
+            final OTFConnectionManager cm = new OTFConnectionManager();
+            cm.connectWriterToReader(TextObject.Writer.class, TextObject.Reader.class);
+            cm.connectReaderToReceiver(TextObject.Reader.class, TextObject.Drawer.class);
+            cm.connectReceiverToLayer(TextObject.Drawer.class, SimpleSceneLayer.class);
+            //server.addAdditionalElement(writer);
+            runClient(cm, server, scenario.getConfig());
         }
     }
+
 }
