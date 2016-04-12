@@ -4,16 +4,16 @@
 <config>
 
     <module name="network">
-        <param name="inputNetworkFile" value="./conf/scenario1/network.xml" />
+        <param name="inputNetworkFile" value="./conf/city_like/network.xml" />
     </module>
 
     <module name="plans">
-        <param name="inputPlansFile" value="./conf/scenario1/plans.xml" />
+        <param name="inputPlansFile" value="./conf/city_like/plans.xml" />
     </module>
 
     <module name="signalizer">
-        <param name="routesInputFile" value="./conf/scenario1/routes.xml" />
-        <param name="neuralSaveFolder" value="./conf/scenario1/neuralnetworks" />
+        <param name="routesInputFile" value="./conf/city_like/routes.xml" />
+        <param name="neuralSaveFolder" value="./conf/city_like/neuralnetworks" />
     </module>
 
     <module name="controler">
@@ -26,9 +26,9 @@
     <module name="signalsystems">
         <param name="useSignalsystems" value="true" />
         <param name="useAmbertimes" value="true" />
-        <param name="signalsystems" value="./conf/scenario1/signal/systems.xml" />
-        <param name="signalcontrol" value="./conf/scenario1/signal/control.xml" />
-        <param name="signalgroups" value="./conf/scenario1/signal/groups.xml" />
+        <param name="signalsystems" value="./conf/city_like/signal/systems.xml" />
+        <param name="signalcontrol" value="./conf/city_like/signal/control.xml" />
+        <param name="signalgroups" value="./conf/city_like/signal/groups.xml" />
     </module>
 
     <module name="qsim">
