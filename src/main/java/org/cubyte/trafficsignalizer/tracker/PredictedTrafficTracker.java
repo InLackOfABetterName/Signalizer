@@ -8,6 +8,8 @@ import org.cubyte.trafficsignalizer.sensors.events.EnteringTrafficEvent;
 import org.cubyte.trafficsignalizer.sensors.handlers.EnteringTrafficHandler;
 import org.cubyte.trafficsignalizer.sensors.sensors.EnteringTrafficSensor;
 import org.cubyte.trafficsignalizer.signal.SignalNetworkController;
+import org.cubyte.trafficsignalizer.ui.TextObject;
+import org.matsim.api.core.v01.Coord;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Network;
@@ -15,10 +17,12 @@ import org.matsim.contrib.signals.model.SignalGroup;
 import org.matsim.core.api.experimental.events.EventsManager;
 import org.matsim.core.mobsim.framework.events.MobsimBeforeSimStepEvent;
 import org.matsim.core.mobsim.framework.listeners.MobsimBeforeSimStepListener;
+import org.matsim.core.utils.geometry.CoordinateTransformation;
 
 import java.util.*;
 
 import static org.matsim.core.mobsim.qsim.interfaces.SignalGroupState.GREEN;
+import static org.matsim.vis.otfvis.data.OTFServerQuadTree.getOTFTransformation;
 
 @Singleton
 public class PredictedTrafficTracker implements TrafficTracker, MobsimBeforeSimStepListener {
@@ -26,6 +30,7 @@ public class PredictedTrafficTracker implements TrafficTracker, MobsimBeforeSimS
     private final Network network;
     private final PredictionNetwork predictionNetwork;
     private final SignalNetworkController signalNetworkController;
+    private final TextObject.Writer textWriter;
     private final Map<Id<Link>, List<TrackedVehicle>> trackedVehicleQueques;
     private final Random random;
     private double lastSimStepTime;
@@ -33,12 +38,13 @@ public class PredictedTrafficTracker implements TrafficTracker, MobsimBeforeSimS
     // Only an even amount of vehicles can exit a link in a simstep
 
     @Inject
-    public PredictedTrafficTracker(Network network, PredictionNetwork predictionNetwork,
-                                   SignalNetworkController signalNetworkController,
-                                   TrafficSensorFactory trafficSensorFactory, EventsManager em) {
+    public PredictedTrafficTracker(Network network, PredictionNetwork predictionNetwork, TextObject.Writer textWriter,
+                                   SignalNetworkController signalNetworkController, EventsManager em,
+                                   TrafficSensorFactory trafficSensorFactory) {
         this.network = network;
         this.predictionNetwork = predictionNetwork;
         this.signalNetworkController = signalNetworkController;
+        this.textWriter = textWriter;
         this.trackedVehicleQueques = new HashMap<>();
         this.random = new Random();
         this.lastSimStepTime = 0;
@@ -62,9 +68,24 @@ public class PredictedTrafficTracker implements TrafficTracker, MobsimBeforeSimS
         double timeSinceLastSimStep = simulationTime - lastSimStepTime;
         for (Map.Entry<Id<Link>, List<TrackedVehicle>> entry : trackedVehicleQueques.entrySet()) {
             Link link = network.getLinks().get(entry.getKey());
+            Optional<Set<SignalGroup>> groupsOptional = signalNetworkController.getGroupsAtLink(link.getId());
+            if (groupsOptional.isPresent()) {
+                Set<SignalGroup> groups = groupsOptional.get();
+                if (!groups.stream().anyMatch(group -> group.getState() == GREEN)) {
+                    remainingTime.put(link.getId(), 0d);
+                    continue;
+                }
+            }
+
+            /*CoordinateTransformation trans = getOTFTransformation();
+            if (trans != null) {
+                Coord coord = trans.transform(link.getToNode().getCoord());
+                textWriter.put("vehicles_on_link_" + link.getId(), String.valueOf(entry.getValue().size()), coord.getX(), coord.getY(), false);
+            }*/
+
             double travelTime = link.getLength() / link.getFreespeed();
             timeSinceLastSimStep += remainingTime.get(link.getId());
-            double capacity = link.getCapacity(timeSinceLastSimStep);
+            double capacity = link.getCapacity() * timeSinceLastSimStep / 3600;
             double newRemainingTime;
             if (entry.getValue().size() <= capacity) {
                 newRemainingTime = 0;
@@ -103,13 +124,6 @@ public class PredictedTrafficTracker implements TrafficTracker, MobsimBeforeSimS
                             newLinkId = toLinks.get((int) choice);
                         } else {
                             newLinkId = toLinks.get(0);
-                        }
-                        Optional<Set<SignalGroup>> groupsOptional = signalNetworkController.getGroupsAtLink(newLinkId);
-                        if (groupsOptional.isPresent()) {
-                            Set<SignalGroup> groups = groupsOptional.get();
-                            if (!groups.stream().anyMatch(group -> group.getState() == GREEN)) {
-                                break;
-                            }
                         }
                         toAdd.get(newLinkId).add(vehicle);
                         toRemove.get(link.getId()).add(vehicle);

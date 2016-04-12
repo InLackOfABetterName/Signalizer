@@ -56,10 +56,14 @@ public class SignalizerModule extends AbstractModule {
         this.bind(StressFunction.class).to(CarCountStressFunction.class);
         this.bind(SignalModelFactory.class).to(SignalizerSignalModelFactory.class);
         this.bind(StressBasedController.class);
-        this.bind(TrafficTracker.class).to(AllKnowingTrafficTracker.class);
+        if (this.learn) {
+            this.bind(TrafficTracker.class).to(AllKnowingTrafficTracker.class);
+        } else {
+            this.bind(TrafficTracker.class).to(PredictedTrafficTracker.class);
+        }
         this.bind(TrafficSensorFactory.class);
         this.bind(TextObject.Writer.class).asEagerSingleton();
-        this.bind(PredictedTrafficTracker.class);
+        this.bind(AllKnowingTrafficTracker.class);
         this.addMobsimListenerBinding().to(PredictedTrafficTracker.class);
     }
 
