@@ -48,7 +48,7 @@ public class SignalizerModule extends AbstractModule {
         this.bind(StressFunction.class).to(CarCountStressFunction.class);
         this.bind(SignalModelFactory.class).to(SignalizerSignalModelFactory.class);
         this.bind(StressBasedController.class);
-        if (this.learn) {
+        if (this.params.learn) {
             this.bind(TrafficTracker.class).to(AllKnowingTrafficTracker.class);
         } else {
             this.bind(TrafficTracker.class).to(PredictedTrafficTracker.class);
