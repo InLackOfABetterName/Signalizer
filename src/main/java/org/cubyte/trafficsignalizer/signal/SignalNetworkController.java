@@ -10,12 +10,16 @@ import org.matsim.api.core.v01.network.Network;
 import org.matsim.contrib.signals.events.SignalGroupStateChangedEvent;
 import org.matsim.contrib.signals.events.SignalGroupStateChangedEventHandler;
 import org.matsim.contrib.signals.model.Signal;
+import org.matsim.contrib.signals.model.SignalGroup;
 import org.matsim.contrib.signals.model.SignalSystem;
 import org.matsim.core.api.experimental.events.EventsManager;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 
 @Singleton
 public class SignalNetworkController {
@@ -23,6 +27,7 @@ public class SignalNetworkController {
     private final Network network;
     private final StressFunction stressFunction;
     private final Map<Id<Link>, Signal> linkToSignalTable = new HashMap<>();
+    private final Map<Id<Link>, Set<SignalGroup>> linkToGroups = new HashMap<>();
 
     @Inject
     public SignalNetworkController(Network network, StressFunction stressFunction, EventsManager em, TextObject.Writer textWriter) {
@@ -62,6 +67,10 @@ public class SignalNetworkController {
         return Optional.ofNullable(this.linkToSignalTable.get(link));
     }
 
+    public Optional<Set<SignalGroup>> getGroupsAtLink(Id<Link> link) {
+        return Optional.ofNullable(this.linkToGroups.get(link));
+    }
+
     public void addController(StressBasedController c) {
         this.controllers.add(c);
     }
@@ -77,6 +86,16 @@ public class SignalNetworkController {
     public void controllerReady(StressBasedController controller, SignalSystem system) {
         for (Signal signal : system.getSignals().values()) {
             this.linkToSignalTable.put(signal.getLinkId(), signal);
+        }
+
+        for (Signal signal : system.getSignals().values()) {
+            Set<SignalGroup> groups = this.linkToGroups.get(signal.getLinkId());
+            if (groups == null) {
+                groups = new HashSet<>();
+                this.linkToGroups.put(signal.getLinkId(), groups);
+            }
+
+            groups.addAll(system.getSignalGroups().values().stream().filter(g -> g.getSignals().containsKey(signal.getId())).collect(toSet()));
         }
     }
 
