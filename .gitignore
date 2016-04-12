@@ -1,5 +1,5 @@
-/conf/scenario1/neuralnetworks
-/conf/scenario1/plans.xml
+/conf/*/neuralnetworks
+/conf/*/plans.xml
 /.idea/*
 !/.idea/codeStyleSettings.xml
 /*.iml

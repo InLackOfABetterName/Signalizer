@@ -8,20 +8,11 @@ public class SignalizerConfigGroup extends ReflectiveConfigGroup {
     public static final String INPUT_ROUTES_FILE = "routesInputFile";
     public static final String NEURAL_SAVE_FOLDER = "neuralSaveFolder";
 
-    private boolean learn;
     private String inputRoutesFile;
     private String neuralNetworkSaveFolder;
 
     public SignalizerConfigGroup() {
         super(GROUPNAME);
-    }
-
-    public boolean isLearn() {
-        return learn;
-    }
-
-    public void setLearn(boolean learn) {
-        this.learn = learn;
     }
 
     @StringGetter( INPUT_ROUTES_FILE )

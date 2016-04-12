@@ -94,6 +94,7 @@ public class OTFClientVisWithSignalizer {
             if (visconf == null) {
                 visconf = server.getOTFVisConfig();
             }
+            visconf.setDelay_ms(1);
             OTFClientControl.getInstance().setOTFVisConfig(visconf); // has to be set before OTFClientQuadTree.getConstData() is invoked!
             OTFServerQuadTree serverQuadTree = server.getQuad(cm);
             OTFClientQuadTree clientQuadTree = serverQuadTree.convertToClient(server, cm);

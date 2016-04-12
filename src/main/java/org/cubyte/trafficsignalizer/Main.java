@@ -1,9 +1,5 @@
 package org.cubyte.trafficsignalizer;
 
-import net.sourceforge.argparse4j.ArgumentParsers;
-import net.sourceforge.argparse4j.inf.ArgumentParser;
-import net.sourceforge.argparse4j.inf.ArgumentParserException;
-import net.sourceforge.argparse4j.inf.Namespace;
 import org.cubyte.trafficsignalizer.routes.Routes;
 import org.cubyte.trafficsignalizer.signal.SignalGroups;
 import org.matsim.api.core.v01.Coord;
@@ -36,7 +32,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
-import static net.sourceforge.argparse4j.impl.Arguments.storeTrue;
+import static org.cubyte.trafficsignalizer.SignalizerParams.fromArgs;
 import static org.cubyte.trafficsignalizer.signal.SignalGroups.determineGroups;
 import static org.matsim.core.config.ConfigUtils.addOrGetModule;
 import static org.matsim.core.controler.OutputDirectoryHierarchy.OverwriteFileSetting.deleteDirectoryIfExists;
@@ -45,22 +41,9 @@ public class Main {
 
     public static void main(String[] args) {
 
-        final ArgumentParser argParser = ArgumentParsers.newArgumentParser("Signalizer");
-        argParser.addArgument("scenario").type(String.class).setDefault("initial").help("The scenario folder name in ./conf");
-        argParser.addArgument("-l", "--learn").action(storeTrue()).help("This flag starts the simulation in learning mode");
-        argParser.addArgument("-r", "--refresh-groups").action(storeTrue()).help("The flag forces the regeneration of controlled signal groups");
-        argParser.addArgument("-c", "--calculate-length").action(storeTrue()).help("This flag forces the recalculation of the street lengths");
-        argParser.addArgument("-s", "--coord-scale").type(Double.class).metavar("scale").setDefault(1d).help("This flag forces the recalculation of the street lengths");
-        Namespace ns;
-        try {
-            ns = argParser.parseArgs(args);
-        } catch (ArgumentParserException e) {
-            argParser.handleError(e);
-            System.exit(1);
-            return; // compiler will no detect termination here unless return is added
-        }
+        SignalizerParams params = fromArgs(args);
 
-        final Path base = Paths.get("conf", ns.getString("scenario"));
+        final Path base = Paths.get("conf", params.scenario);
         final Config config = ConfigUtils.loadConfig(base.resolve("config.xml").toString());
         final SignalSystemsConfigGroup signalsConf = addOrGetModule(config, SignalSystemsConfigGroup.GROUPNAME, SignalSystemsConfigGroup.class);
         final SignalizerConfigGroup signalizerConf = addOrGetModule(config, SignalizerConfigGroup.GROUPNAME, SignalizerConfigGroup.class);
@@ -77,13 +60,13 @@ public class Main {
             }
         }
 
-        recalculateLengths(networkConf, ns.getDouble("coord_scale"), ns.getBoolean("calculate_length"));
+        recalculateLengths(networkConf, params.coordScale, params.caculateLinkLengths);
 
         final Scenario scenario = ScenarioUtils.loadScenario(config);
         final SignalsData signalsData = new SignalsScenarioLoader(signalsConf).loadSignalsData();
         scenario.addScenarioElement(SignalsData.ELEMENT_NAME, signalsData);
 
-        generateSignalGroups(scenario.getNetwork(), signalsConf, signalsData, ns.getBoolean("refresh_groups"));
+        generateSignalGroups(scenario.getNetwork(), signalsConf, signalsData, params.refreshGroups);
 
         if (scenario.getPopulation().getPersons().isEmpty()) {
             generatePopulation(scenario.getPopulation(),
@@ -94,7 +77,7 @@ public class Main {
         final Controler c = new Controler(scenario);
         //c.addOverridingModule(new OTFVisLiveModule());
         c.addOverridingModule(new SignalsModule());
-        c.addOverridingModule(new SignalizerModule(ns.getBoolean("learn")));
+        c.addOverridingModule(new SignalizerModule(params));
         c.getConfig().controler().setOverwriteFileSetting(deleteDirectoryIfExists);
         c.run();
     }
