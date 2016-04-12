@@ -22,9 +22,8 @@
 
 package org.cubyte.trafficsignalizer.ui;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import com.jogamp.opengl.GLAutoDrawable;
+import org.cubyte.trafficsignalizer.SignalizerParams;
 import org.jdesktop.swingx.mapviewer.DefaultTileFactory;
 import org.jdesktop.swingx.mapviewer.TileFactory;
 import org.jdesktop.swingx.mapviewer.TileFactoryInfo;
@@ -53,15 +52,13 @@ import org.matsim.vis.otfvis.opengl.layer.OGLSimpleStaticNetLayer;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionStage;
 
 import static org.matsim.core.config.ConfigUtils.addOrGetModule;
 
 public class OTFClientVisWithSignalizer {
 
 
-    public static void runClient(OTFConnectionManager cm, OTFServer server, Config config) {
+    public static void runClient(OTFConnectionManager cm, OTFServer server, Config config, SignalizerParams params) {
         SwingUtilities.invokeLater(() -> {
             final OTFVisConfigGroup otfVisConf = addOrGetModule(config, OTFVisConfigGroup.GROUP_NAME, OTFVisConfigGroup.class);
             final SignalSystemsConfigGroup signalConf = addOrGetModule(config, SignalSystemsConfigGroup.GROUPNAME, SignalSystemsConfigGroup.class);
@@ -94,7 +91,7 @@ public class OTFClientVisWithSignalizer {
             if (visconf == null) {
                 visconf = server.getOTFVisConfig();
             }
-            visconf.setDelay_ms(1);
+            visconf.setDelay_ms(params.timeStepDelay);
             OTFClientControl.getInstance().setOTFVisConfig(visconf); // has to be set before OTFClientQuadTree.getConstData() is invoked!
             OTFServerQuadTree serverQuadTree = server.getQuad(cm);
             OTFClientQuadTree clientQuadTree = serverQuadTree.convertToClient(server, cm);

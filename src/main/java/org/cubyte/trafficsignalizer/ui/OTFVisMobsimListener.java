@@ -1,5 +1,6 @@
 package org.cubyte.trafficsignalizer.ui;
 
+import org.cubyte.trafficsignalizer.SignalizerParams;
 import org.matsim.api.core.v01.Scenario;
 import org.matsim.core.api.experimental.events.EventsManager;
 import org.matsim.core.mobsim.framework.events.MobsimInitializedEvent;
@@ -24,6 +25,9 @@ public class OTFVisMobsimListener implements MobsimInitializedListener {
     @Inject
     private TextObject.Writer writer;
 
+    @Inject
+    private SignalizerParams params;
+
     @Override
     public void notifyMobsimInitialized(MobsimInitializedEvent e) {
         final OnTheFlyServer server = startServerAndRegisterWithQSim(scenario.getConfig(), scenario, events, (QSim) e.getQueueSimulation());
@@ -32,6 +36,6 @@ public class OTFVisMobsimListener implements MobsimInitializedListener {
         cm.connectReaderToReceiver(TextObject.Reader.class, TextObject.Drawer.class);
         cm.connectReceiverToLayer(TextObject.Drawer.class, SimpleSceneLayer.class);
         server.addAdditionalElement(writer);
-        runClient(cm, server, scenario.getConfig());
+        runClient(cm, server, scenario.getConfig(), params);
     }
 }
