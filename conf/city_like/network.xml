@@ -110,7 +110,6 @@
 		<node id="22" x="1550.0" y="-200.0" />
 		<node id="223" x="165.7741557615011" y="3806.6635235483027" />
 		<node id="227" x="3136.353613476535" y="-10.937430106963006" />
-		<node id="228" x="-1773.7449459308928" y="-125.49618473262046" />
 		<node id="23" x="1450.0" y="-700.0" />
 		<node id="230" x="1545.4795073961836" y="1052.2865908897238" />
 		<node id="231" x="2.3704363878600816" y="-826.2994520942998" />
@@ -321,7 +320,6 @@
 		<node id="686" x="1794.7633604020336" y="3060.7692912268285" />
 		<node id="687" x="4806.371063083883" y="3188.282833110726" />
 		<node id="689" x="1808.1164570544015" y="3130.471752210562" />
-		<node id="692" x="-1782.8216519900989" y="-126.14844136228442" />
 		<node id="7" x="100.0" y="-100.0" />
 		<node id="704" x="-938.2320948577562" y="-6548.125941074064" />
 		<node id="706" x="2055.441321666449" y="3330.887821314204" />
@@ -433,6 +431,7 @@
 		<link id="115" from="168" to="99" length="60.871453407598345" freespeed="8.3333" capacity="600.0" permlanes="1.0" oneway="1" modes="car" />
 		<link id="116" from="616" to="521" length="362.84545814865396" freespeed="8.3333" capacity="600.0" permlanes="1.0" oneway="1" modes="car" />
 		<link id="1176" from="932" to="1067" length="515.56999540701" freespeed="8.3333" capacity="600.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="1178" from="299" to="372" length="228.36353372481847" freespeed="8.3333" capacity="600.0" permlanes="1.0" oneway="1" modes="car" />
 		<link id="1179" from="558" to="523" length="266.98205136735953" freespeed="8.3333" capacity="600.0" permlanes="1.0" oneway="1" modes="car" />
 		<link id="118" from="374" to="508" length="298.27816681063234" freespeed="8.3333" capacity="600.0" permlanes="1.0" oneway="1" modes="car" />
 		<link id="1184" from="807" to="160" length="785.741679149306" freespeed="8.3333" capacity="600.0" permlanes="1.0" oneway="1" modes="car" />
@@ -501,7 +500,6 @@
 		<link id="191" from="346" to="504" length="180.63082070383194" freespeed="8.3333" capacity="600.0" permlanes="1.0" oneway="1" modes="car" />
 		<link id="192" from="134" to="239" length="122.15880861646492" freespeed="8.3333" capacity="600.0" permlanes="1.0" oneway="1" modes="car" />
 		<link id="195" from="639" to="422" length="274.37202027437917" freespeed="8.3333" capacity="600.0" permlanes="1.0" oneway="1" modes="car" />
-		<link id="196" from="299" to="228" length="231.81247609386838" freespeed="8.3333" capacity="600.0" permlanes="1.0" oneway="1" modes="car" />
 		<link id="197" from="159" to="73" length="264.90353926885155" freespeed="8.3333" capacity="600.0" permlanes="1.0" oneway="1" modes="car" />
 		<link id="2" from="5" to="4" length="300.0" freespeed="13.88888931274414" capacity="3000.0" permlanes="2.0" oneway="1" modes="car" />
 		<link id="20" from="21" to="23" length="500.0" freespeed="13.88888931274414" capacity="3000.0" permlanes="1.0" oneway="1" modes="car" />
@@ -714,6 +712,7 @@
 		<link id="598" from="564" to="59" length="35.04686969328365" freespeed="8.3333" capacity="600.0" permlanes="1.0" oneway="1" modes="car" />
 		<link id="599" from="564" to="468" length="58.50143897636817" freespeed="8.3333" capacity="600.0" permlanes="1.0" oneway="1" modes="car" />
 		<link id="603" from="480" to="149" length="365.2798068079293" freespeed="8.3333" capacity="600.0" permlanes="1.0" oneway="1" modes="car" />
+		<link id="604" from="178" to="372" length="107.61186276900783" freespeed="8.3333" capacity="600.0" permlanes="1.0" oneway="1" modes="car" />
 		<link id="609" from="149" to="639" length="246.02331544064748" freespeed="8.3333" capacity="600.0" permlanes="1.0" oneway="1" modes="car" />
 		<link id="610" from="54" to="355" length="286.4453404034926" freespeed="8.3333" capacity="600.0" permlanes="1.0" oneway="1" modes="car" />
 		<link id="614" from="545" to="386" length="1152.9546031252112" freespeed="8.3333" capacity="600.0" permlanes="1.0" oneway="1" modes="car" />
@@ -791,7 +790,6 @@
 		<link id="8" from="200" to="200" length="0.0" freespeed="8.3333" capacity="600.0" permlanes="1.0" oneway="1" modes="car" />
 		<link id="80" from="143" to="352" length="84.90126008540054" freespeed="8.3333" capacity="600.0" permlanes="1.0" oneway="1" modes="car" />
 		<link id="800" from="415" to="188" length="6021.769219415744" freespeed="8.3333" capacity="600.0" permlanes="1.0" oneway="1" modes="car" />
-		<link id="802" from="178" to="692" length="105.04221798579378" freespeed="8.3333" capacity="600.0" permlanes="1.0" oneway="1" modes="car" />
 		<link id="809" from="488" to="499" length="291.9311552849406" freespeed="8.3333" capacity="600.0" permlanes="1.0" oneway="1" modes="car" />
 		<link id="81" from="138" to="168" length="177.8721857169914" freespeed="8.3333" capacity="600.0" permlanes="1.0" oneway="1" modes="car" />
 		<link id="813" from="189" to="456" length="914.1237357154808" freespeed="8.3333" capacity="600.0" permlanes="1.0" oneway="1" modes="car" />
