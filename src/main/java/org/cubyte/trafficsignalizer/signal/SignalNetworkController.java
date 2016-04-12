@@ -5,9 +5,11 @@ import com.google.inject.Singleton;
 import org.cubyte.trafficsignalizer.signal.stress.StressFunction;
 import org.cubyte.trafficsignalizer.ui.TextObject;
 import org.matsim.api.core.v01.Id;
+import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Network;
 import org.matsim.contrib.signals.events.SignalGroupStateChangedEvent;
 import org.matsim.contrib.signals.events.SignalGroupStateChangedEventHandler;
+import org.matsim.contrib.signals.model.Signal;
 import org.matsim.contrib.signals.model.SignalSystem;
 import org.matsim.core.api.experimental.events.EventsManager;
 
@@ -20,6 +22,7 @@ public class SignalNetworkController {
     private final List<StressBasedController> controllers;
     private final Network network;
     private final StressFunction stressFunction;
+    private final Map<Id<Link>, Signal> linkToSignalTable = new HashMap<>();
 
     @Inject
     public SignalNetworkController(Network network, StressFunction stressFunction, EventsManager em, TextObject.Writer textWriter) {
@@ -55,6 +58,10 @@ public class SignalNetworkController {
         });
     }
 
+    public Optional<Signal> getSignalByLink(Id<Link> link) {
+        return Optional.ofNullable(this.linkToSignalTable.get(link));
+    }
+
     public void addController(StressBasedController c) {
         this.controllers.add(c);
     }
@@ -68,6 +75,9 @@ public class SignalNetworkController {
     }
 
     public void controllerReady(StressBasedController controller, SignalSystem system) {
+        for (Signal signal : system.getSignals().values()) {
+            this.linkToSignalTable.put(signal.getLinkId(), signal);
+        }
     }
 
 
