@@ -7,20 +7,25 @@ import org.cubyte.trafficsignalizer.sensors.TrafficSensorFactory;
 import org.cubyte.trafficsignalizer.sensors.events.EnteringTrafficEvent;
 import org.cubyte.trafficsignalizer.sensors.handlers.EnteringTrafficHandler;
 import org.cubyte.trafficsignalizer.sensors.sensors.EnteringTrafficSensor;
+import org.cubyte.trafficsignalizer.signal.SignalNetworkController;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Network;
+import org.matsim.contrib.signals.model.SignalGroup;
 import org.matsim.core.api.experimental.events.EventsManager;
 import org.matsim.core.mobsim.framework.events.MobsimBeforeSimStepEvent;
 import org.matsim.core.mobsim.framework.listeners.MobsimBeforeSimStepListener;
 
 import java.util.*;
 
+import static org.matsim.core.mobsim.qsim.interfaces.SignalGroupState.GREEN;
+
 @Singleton
 public class PredictedTrafficTracker implements TrafficTracker, MobsimBeforeSimStepListener {
 
     private final Network network;
     private final PredictionNetwork predictionNetwork;
+    private final SignalNetworkController signalNetworkController;
     private final Map<Id<Link>, List<TrackedVehicle>> trackedVehicleQueques;
     private final Random random;
     private double lastSimStepTime;
@@ -29,9 +34,11 @@ public class PredictedTrafficTracker implements TrafficTracker, MobsimBeforeSimS
 
     @Inject
     public PredictedTrafficTracker(Network network, PredictionNetwork predictionNetwork,
+                                   SignalNetworkController signalNetworkController,
                                    TrafficSensorFactory trafficSensorFactory, EventsManager em) {
         this.network = network;
         this.predictionNetwork = predictionNetwork;
+        this.signalNetworkController = signalNetworkController;
         this.trackedVehicleQueques = new HashMap<>();
         this.random = new Random();
         this.lastSimStepTime = 0;
@@ -96,6 +103,13 @@ public class PredictedTrafficTracker implements TrafficTracker, MobsimBeforeSimS
                             newLinkId = toLinks.get((int) choice);
                         } else {
                             newLinkId = toLinks.get(0);
+                        }
+                        Optional<Set<SignalGroup>> groupsOptional = signalNetworkController.getGroupsAtLink(newLinkId);
+                        if (groupsOptional.isPresent()) {
+                            Set<SignalGroup> groups = groupsOptional.get();
+                            if (!groups.stream().anyMatch(group -> group.getState() == GREEN)) {
+                                break;
+                            }
                         }
                         toAdd.get(newLinkId).add(vehicle);
                         toRemove.get(link.getId()).add(vehicle);

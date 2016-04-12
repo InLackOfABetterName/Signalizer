@@ -24,15 +24,11 @@ import static java.util.stream.Collectors.toSet;
 @Singleton
 public class SignalNetworkController {
     private final List<StressBasedController> controllers;
-    private final Network network;
-    private final StressFunction stressFunction;
     private final Map<Id<Link>, Signal> linkToSignalTable = new HashMap<>();
     private final Map<Id<Link>, Set<SignalGroup>> linkToGroups = new HashMap<>();
 
     @Inject
-    public SignalNetworkController(Network network, StressFunction stressFunction, EventsManager em, TextObject.Writer textWriter) {
-        this.network = network;
-        this.stressFunction = stressFunction;
+    public SignalNetworkController(EventsManager em) {
         this.controllers = new ArrayList<>();
         em.addHandler(new SignalGroupStateChangedEventHandler() {
             private final Map<Id<SignalSystem>, StressBasedController> cache = new HashMap<>();
