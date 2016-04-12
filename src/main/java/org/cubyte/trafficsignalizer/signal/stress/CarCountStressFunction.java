@@ -1,6 +1,7 @@
 package org.cubyte.trafficsignalizer.signal.stress;
 
 import org.cubyte.trafficsignalizer.SignalizerConfigGroup;
+import org.cubyte.trafficsignalizer.SignalizerParams;
 import org.cubyte.trafficsignalizer.tracker.AllKnowingTrafficTracker;
 import org.cubyte.trafficsignalizer.tracker.TrafficTracker;
 import org.cubyte.trafficsignalizer.ui.TextObject;
@@ -18,15 +19,15 @@ public class CarCountStressFunction implements StressFunction {
     private final TrafficTracker trafficTracker;
     private final AllKnowingTrafficTracker allKnowingTrafficTracker;
     private final TextObject.Writer textWriter;
-    private final SignalizerConfigGroup signalizerConfigGroup;
+    private SignalizerParams signalizerParams;
 
     @Inject
     public CarCountStressFunction(TrafficTracker trafficTracker, AllKnowingTrafficTracker allKnowingTrafficTracker,
-                                  TextObject.Writer textWriter, SignalizerConfigGroup signalizerConfigGroup) {
+                                  TextObject.Writer textWriter, SignalizerParams signalizerParams) {
         this.trafficTracker = trafficTracker;
         this.allKnowingTrafficTracker = allKnowingTrafficTracker;
         this.textWriter = textWriter;
-        this.signalizerConfigGroup = signalizerConfigGroup;
+        this.signalizerParams = signalizerParams;
     }
 
     @Override
@@ -34,7 +35,7 @@ public class CarCountStressFunction implements StressFunction {
         int actual = allKnowingTrafficTracker.getCarCount(signal.getLinkId());
         int predicted = trafficTracker.getCarCount(signal.getLinkId());
 
-        if (!signalizerConfigGroup.isLearn() && predicted != 0 && actual != 0) {
+        if (!signalizerParams.learn && predicted != 0 && actual != 0) {
             Coord coord = getOTFTransformation().transform(network.getLinks().get(signal.getLinkId()).getToNode().getCoord());
             textWriter.put("signal_prediction_" + signal.getId(), predicted + "/" + actual, coord.getX(), coord.getY(), false);
             //System.out.println("predicted: " + predicted + " actual: " + actual);
