@@ -70,7 +70,7 @@ public class Main {
 
         if (scenario.getPopulation().getPersons().isEmpty()) {
             generatePopulation(scenario.getPopulation(),
-                    Routes.load(signalizerConf.getInputRoutesFile(), scenario.getNetwork()));
+                    Routes.load(signalizerConf.getInputRoutesFile(), scenario.getNetwork()), params.populationSize);
             new PopulationWriter(scenario.getPopulation(), scenario.getNetwork()).write(config.plans().getInputFile());
         }
 
@@ -124,12 +124,12 @@ public class Main {
         }
     }
 
-    private static void generatePopulation(Population population, Routes routes) {
+    private static void generatePopulation(Population population, Routes routes, int populationSize) {
         final double SIMULATION_START = 0;
-        final double SIMULATION_END = 25000;
+        final double SIMULATION_END = 60000;
         Random random = new Random(System.currentTimeMillis());
         PopulationFactory populationFactory = population.getFactory();
-        for (int i = 0; i < 5000; i++) {
+        for (int i = 0; i < populationSize; i++) {
             Person person = populationFactory.createPerson(Id.createPersonId(i));
             for (int n = 0; n < random.nextInt(3) + 1; n++) {
                 Plan plan = populationFactory.createPlan();

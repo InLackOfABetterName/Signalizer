@@ -2,15 +2,27 @@
 <!DOCTYPE routes SYSTEM "routes_v1.dtd">
 <routes>
     <links>
-        <start id="50" weight="30" />
-        <start id="17" weight="30" />
-        <start id="178" weight="20" />
+        <start id="862" weight="40000" />
+        <start id="694" weight="30000" />
+        <start id="557" weight="10000" />
+        <start id="584" weight="1000" />
+        <start id="695" weight="10000" />
+        <start id="261" weight="10000" />
+        <start id="200" weight="1000" />
 
-        <inter id="108" weight="50"/>
-        <nointer weight="700"/>
+        <inter id="689" weight="1000"/>
+        <inter id="23" weight="7000"/>
+        <inter id="157" weight="10000"/>
+        <inter id="552" weight="5000"/>
+        <inter id="349" weight="3000"/>
+        <nointer weight="80000"/>
 
-        <end id="5" weight="70"/>
-        <end id="36" weight="30"/>
-        <end id="10" weight="50" />
+        <end id="844" weight="1000" />
+        <end id="686" weight="2000"/>
+        <end id="731" weight="15000" />
+        <end id="330" weight="25000" />
+        <end id="203" weight="30000" />
+        <end id="1000" weight="20000" />
+        <end id="527" weight="10000" />
     </links>
 </routes>

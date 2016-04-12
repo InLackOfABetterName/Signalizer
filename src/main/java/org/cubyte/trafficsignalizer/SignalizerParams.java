@@ -14,14 +14,16 @@ public class SignalizerParams {
     public final boolean caculateLinkLengths;
     public final double coordScale;
     public final int timeStepDelay;
+    public final int populationSize;
 
-    public SignalizerParams(String scenario, boolean learn, boolean refreshGroups, boolean caculateLinkLengths, double coordScale, int timeStepDelay) {
+    public SignalizerParams(String scenario, boolean learn, boolean refreshGroups, boolean caculateLinkLengths, double coordScale, int timeStepDelay, int populationSize) {
         this.scenario = scenario;
         this.learn = learn;
         this.refreshGroups = refreshGroups;
         this.caculateLinkLengths = caculateLinkLengths;
         this.coordScale = coordScale;
         this.timeStepDelay = timeStepDelay;
+        this.populationSize = populationSize;
     }
 
     public static SignalizerParams fromNamespace(Namespace ns) {
@@ -31,8 +33,8 @@ public class SignalizerParams {
                 ns.getBoolean("refresh_groups"),
                 ns.getBoolean("calculate_length"),
                 ns.getDouble("coord_scale"),
-                ns.getInt("timestep_delay")
-        );
+                ns.getInt("timestep_delay"),
+                ns.getInt("population_size"));
     }
 
     public static SignalizerParams fromArgs(String[] args) {
@@ -44,6 +46,7 @@ public class SignalizerParams {
         argParser.addArgument("-c", "--calculate-length").action(storeTrue()).help("This flag forces the recalculation of the street lengths");
         argParser.addArgument("-s", "--coord-scale").type(Double.class).metavar("scale").setDefault(1d).help("This parameter specifies a scale factor to scala the node coords in the network");
         argParser.addArgument("--timestep-delay").type(Integer.class).metavar("delay").setDefault(1).help("This parameter indirectly specifies the visual simulation speed by giving the timestep delay in milliseconds");
+        argParser.addArgument("-p", "--population-size").type(Integer.class).metavar("population").help("This value is used when new plans are generated");
 
         try {
             return fromNamespace(argParser.parseArgs(args));
