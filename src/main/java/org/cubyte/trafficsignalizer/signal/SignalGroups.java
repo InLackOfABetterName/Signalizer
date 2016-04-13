@@ -85,7 +85,7 @@ public class SignalGroups {
         for (Link outer : linkA) {
             for (Link inner : linkB) {
                 if (inner == outer) {
-                    continue;
+                    return true;
                 }
                 if (intersect(inner, outer)) {
                     return true;

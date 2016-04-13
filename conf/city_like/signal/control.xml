@@ -1,17 +1,76 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <signalControl xsi:schemaLocation="http://www.matsim.org/files/dtd http://www.matsim.org/files/dtd/signalControl_v2.0.xsd" xmlns="http://www.matsim.org/files/dtd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <signalSystem refId="topleft">
-        <signalSystemController>
-            <controllerIdentifier>org.cubyte.trafficsignalizer.signal.StressBasedController</controllerIdentifier>
-            <!--<signalPlan id="dummy"/>-->
-        </signalSystemController>
-    </signalSystem>
-    <signalSystem refId="bottomleft">
+    <signalSystem refId="t_junction_1">
         <signalSystemController>
             <controllerIdentifier>org.cubyte.trafficsignalizer.signal.StressBasedController</controllerIdentifier>
         </signalSystemController>
     </signalSystem>
-    <signalSystem refId="topright">
+    <signalSystem refId="t_junction_2">
+        <signalSystemController>
+            <controllerIdentifier>org.cubyte.trafficsignalizer.signal.StressBasedController</controllerIdentifier>
+        </signalSystemController>
+    </signalSystem>
+    <signalSystem refId="t_junction_3">
+        <signalSystemController>
+            <controllerIdentifier>org.cubyte.trafficsignalizer.signal.StressBasedController</controllerIdentifier>
+        </signalSystemController>
+    </signalSystem>
+    <signalSystem refId="t_junction_4">
+        <signalSystemController>
+            <controllerIdentifier>org.cubyte.trafficsignalizer.signal.StressBasedController</controllerIdentifier>
+        </signalSystemController>
+    </signalSystem>
+    <signalSystem refId="oneway_we">
+        <signalSystemController>
+            <controllerIdentifier>org.cubyte.trafficsignalizer.signal.StressBasedController</controllerIdentifier>
+        </signalSystemController>
+    </signalSystem>
+    <signalSystem refId="highway_ns_ew">
+        <signalSystemController>
+            <controllerIdentifier>org.cubyte.trafficsignalizer.signal.StressBasedController</controllerIdentifier>
+        </signalSystemController>
+    </signalSystem>
+    <signalSystem refId="highway_ns_we">
+        <signalSystemController>
+            <controllerIdentifier>org.cubyte.trafficsignalizer.signal.StressBasedController</controllerIdentifier>
+        </signalSystemController>
+    </signalSystem>
+    <signalSystem refId="highway_sn_ew">
+        <signalSystemController>
+            <controllerIdentifier>org.cubyte.trafficsignalizer.signal.StressBasedController</controllerIdentifier>
+        </signalSystemController>
+    </signalSystem>
+    <signalSystem refId="highway_sn_we">
+        <signalSystemController>
+            <controllerIdentifier>org.cubyte.trafficsignalizer.signal.StressBasedController</controllerIdentifier>
+        </signalSystemController>
+    </signalSystem>
+    <signalSystem refId="crossing_1">
+        <signalSystemController>
+            <controllerIdentifier>org.cubyte.trafficsignalizer.signal.StressBasedController</controllerIdentifier>
+        </signalSystemController>
+    </signalSystem>
+    <signalSystem refId="crossing_2">
+        <signalSystemController>
+            <controllerIdentifier>org.cubyte.trafficsignalizer.signal.StressBasedController</controllerIdentifier>
+        </signalSystemController>
+    </signalSystem>
+    <signalSystem refId="crossing_3">
+        <signalSystemController>
+            <controllerIdentifier>org.cubyte.trafficsignalizer.signal.StressBasedController</controllerIdentifier>
+        </signalSystemController>
+    </signalSystem>
+    <signalSystem refId="crossing_4">
+        <signalSystemController>
+            <controllerIdentifier>org.cubyte.trafficsignalizer.signal.StressBasedController</controllerIdentifier>
+        </signalSystemController>
+    </signalSystem>
+    <signalSystem refId="crossing_5">
+        <signalSystemController>
+            <controllerIdentifier>org.cubyte.trafficsignalizer.signal.StressBasedController</controllerIdentifier>
+        </signalSystemController>
+    </signalSystem>
+    <signalSystem refId="oneway_ns">
         <signalSystemController>
             <controllerIdentifier>org.cubyte.trafficsignalizer.signal.StressBasedController</controllerIdentifier>
         </signalSystemController>

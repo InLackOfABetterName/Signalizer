@@ -87,8 +87,10 @@ public class Main {
         for (SignalSystemData system : signalsData.getSignalSystemsData().getSignalSystemData().values()) {
             if (SignalGroups.shouldGenerate(signalsData, system.getId())) {
                 final Map<Id<SignalGroup>, SignalGroupData> existingGroups = groupsData.getSignalGroupDataBySystemId(system.getId());
-                if (refresh || existingGroups.size() == 1 && existingGroups.values().iterator().next().getId().toString().equals("generate_me")) {
-                    existingGroups.clear();
+                if (refresh || existingGroups == null || existingGroups.size() == 1 && existingGroups.values().iterator().next().getId().toString().equals("generate_me")) {
+                    if (existingGroups != null) {
+                        existingGroups.clear();
+                    }
                     final Collection<SignalGroupData> groups = determineGroups(network, system.getId(), system.getSignalData().values(), groupsData.getFactory());
                     groups.stream().forEach(groupsData::addSignalGroupData);
                 }

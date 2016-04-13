@@ -46,7 +46,7 @@ public class SignalizerParams {
         argParser.addArgument("-c", "--calculate-length").action(storeTrue()).help("This flag forces the recalculation of the street lengths");
         argParser.addArgument("-s", "--coord-scale").type(Double.class).metavar("scale").setDefault(1d).help("This parameter specifies a scale factor to scala the node coords in the network");
         argParser.addArgument("--timestep-delay").type(Integer.class).metavar("delay").setDefault(1).help("This parameter indirectly specifies the visual simulation speed by giving the timestep delay in milliseconds");
-        argParser.addArgument("-p", "--population-size").type(Integer.class).metavar("population").help("This value is used when new plans are generated");
+        argParser.addArgument("-p", "--population-size").required(true).type(Integer.class).metavar("population").help("This value is used when new plans are generated");
 
         try {
             return fromNamespace(argParser.parseArgs(args));

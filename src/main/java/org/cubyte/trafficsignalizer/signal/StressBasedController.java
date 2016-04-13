@@ -142,7 +142,7 @@ public class StressBasedController implements SignalController {
             Coord to = link.getToNode().getCoord();
             Coord from = link.getFromNode().getCoord();
             Coord transformedCoord = trans.transform(new Coord(from.getX() + (to.getX() - from.getX()) / 2d, from.getY() + (to.getY() - from.getY()) / 2d));
-            textWriter.put("signal_stress_" + signal.getId(), stress + "", transformedCoord.getX(), transformedCoord.getY(), false);
+            textWriter.put("signal_stress_" + system.getId() + "_" + signal.getId(), stress + "", transformedCoord.getX(), transformedCoord.getY(), false);
         }
     }
 }

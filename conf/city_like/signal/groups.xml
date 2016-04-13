@@ -1,138 +1,622 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <signalGroups xsi:schemaLocation="http://www.matsim.org/files/dtd http://www.matsim.org/files/dtd/signalGroups_v2.0.xsd" xmlns="http://www.matsim.org/files/dtd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <signalSystem refId="bottomleft">
-        <signalGroup id="1_bottomleft">
-            <signal refId="bottomleft"/>
+    <signalSystem refId="oneway_we">
+        <signalGroup id="1_1">
+            <signal refId="1"/>
         </signalGroup>
-        <signalGroup id="0_topleft_bottomright">
-            <signal refId="bottomright_topright"/>
-            <signal refId="topleft_bottomright"/>
-        </signalGroup>
-    </signalSystem>
-    <signalSystem refId="topleft">
-        <signalGroup id="1_topright_topleft">
-            <signal refId="bottomright_topright"/>
-            <signal refId="topleft_bottomleft"/>
-            <signal refId="topright_topleft"/>
-        </signalGroup>
-        <signalGroup id="2_topright_topleft">
-            <signal refId="bottomright_topright"/>
-            <signal refId="topright_bottomleft"/>
-            <signal refId="topright_topleft"/>
-        </signalGroup>
-        <signalGroup id="3_topright_topleft">
-            <signal refId="topleft_bottomleft"/>
-            <signal refId="topleft_topright"/>
-            <signal refId="topright_topleft"/>
-        </signalGroup>
-        <signalGroup id="0_topleft_bottomleft">
-            <signal refId="bottomright_topright"/>
-            <signal refId="topleft_bottomleft"/>
-            <signal refId="bottomright_topleft"/>
+        <signalGroup id="0_3">
+            <signal refId="2"/>
+            <signal refId="3"/>
         </signalGroup>
     </signalSystem>
-    <signalSystem refId="topright">
-        <signalGroup id="1_top_left">
-            <signal refId="top_bottom"/>
-            <signal refId="top_left"/>
-            <signal refId="bottom_top"/>
-            <signal refId="bottom_right"/>
+    <signalSystem refId="highway_sn_we">
+        <signalGroup id="1_straight">
+            <signal refId="straight"/>
         </signalGroup>
-        <signalGroup id="10_top_left">
-            <signal refId="top_left"/>
-            <signal refId="left_bottom"/>
-            <signal refId="left_right"/>
-            <signal refId="left_top"/>
+        <signalGroup id="0_highway">
+            <signal refId="highway"/>
         </signalGroup>
-        <signalGroup id="7_top_left">
-            <signal refId="top_bottom"/>
-            <signal refId="top_left"/>
-            <signal refId="bottom_right"/>
-            <signal refId="right_top"/>
+    </signalSystem>
+    <signalSystem refId="highway_sn_ew">
+        <signalGroup id="1_highway">
+            <signal refId="highway"/>
         </signalGroup>
-        <signalGroup id="15_right_top">
-            <signal refId="bottom_right"/>
-            <signal refId="right_left"/>
-            <signal refId="left_bottom"/>
-            <signal refId="right_top"/>
+        <signalGroup id="0_straight">
+            <signal refId="straight"/>
         </signalGroup>
-        <signalGroup id="5_right_top">
-            <signal refId="right_left"/>
-            <signal refId="left_bottom"/>
-            <signal refId="right_top"/>
-            <signal refId="left_right"/>
+    </signalSystem>
+    <signalSystem refId="t_junction_4">
+        <signalGroup id="0_3">
+            <signal refId="1"/>
+            <signal refId="2"/>
+            <signal refId="3"/>
         </signalGroup>
-        <signalGroup id="8_top_right">
-            <signal refId="top_right"/>
-            <signal refId="top_left"/>
-            <signal refId="left_bottom"/>
-            <signal refId="right_top"/>
+        <signalGroup id="1_5">
+            <signal refId="3"/>
+            <signal refId="4"/>
+            <signal refId="5"/>
         </signalGroup>
-        <signalGroup id="0_top_left">
-            <signal refId="right_bottom"/>
-            <signal refId="top_left"/>
-            <signal refId="bottom_right"/>
-            <signal refId="left_top"/>
+        <signalGroup id="2_6">
+            <signal refId="1"/>
+            <signal refId="5"/>
+            <signal refId="6"/>
         </signalGroup>
-        <signalGroup id="3_top_left">
-            <signal refId="top_left"/>
-            <signal refId="bottom_right"/>
-            <signal refId="left_bottom"/>
-            <signal refId="right_top"/>
+        <signalGroup id="3_5">
+            <signal refId="1"/>
+            <signal refId="3"/>
+            <signal refId="5"/>
         </signalGroup>
-        <signalGroup id="9_top_right">
-            <signal refId="top_right"/>
-            <signal refId="top_bottom"/>
-            <signal refId="top_left"/>
-            <signal refId="right_top"/>
+    </signalSystem>
+    <signalSystem refId="crossing_4">
+        <signalGroup id="10_7">
+            <signal refId="1"/>
+            <signal refId="12"/>
+            <signal refId="6"/>
+            <signal refId="7"/>
         </signalGroup>
-        <signalGroup id="12_left_bottom">
-            <signal refId="bottom_top"/>
-            <signal refId="bottom_right"/>
-            <signal refId="bottom_left"/>
-            <signal refId="left_bottom"/>
+        <signalGroup id="1_4">
+            <signal refId="1"/>
+            <signal refId="2"/>
+            <signal refId="3"/>
+            <signal refId="4"/>
         </signalGroup>
-        <signalGroup id="14_top_left">
-            <signal refId="right_bottom"/>
-            <signal refId="top_left"/>
-            <signal refId="bottom_right"/>
-            <signal refId="right_top"/>
+        <signalGroup id="0_12">
+            <signal refId="11"/>
+            <signal refId="1"/>
+            <signal refId="12"/>
+            <signal refId="10"/>
         </signalGroup>
-        <signalGroup id="4_right_top">
-            <signal refId="bottom_right"/>
-            <signal refId="bottom_left"/>
-            <signal refId="left_bottom"/>
-            <signal refId="right_top"/>
+        <signalGroup id="2_4">
+            <signal refId="1"/>
+            <signal refId="3"/>
+            <signal refId="4"/>
+            <signal refId="10"/>
         </signalGroup>
-        <signalGroup id="11_right_top">
-            <signal refId="right_bottom"/>
-            <signal refId="bottom_right"/>
-            <signal refId="right_left"/>
-            <signal refId="right_top"/>
+        <signalGroup id="3_4">
+            <signal refId="11"/>
+            <signal refId="1"/>
+            <signal refId="4"/>
+            <signal refId="10"/>
         </signalGroup>
-        <signalGroup id="6_top_right">
-            <signal refId="top_right"/>
-            <signal refId="bottom_left"/>
-            <signal refId="left_bottom"/>
-            <signal refId="right_top"/>
+        <signalGroup id="15_8">
+            <signal refId="1"/>
+            <signal refId="7"/>
+            <signal refId="8"/>
+            <signal refId="10"/>
         </signalGroup>
-        <signalGroup id="16_top_left">
-            <signal refId="top_left"/>
-            <signal refId="left_bottom"/>
-            <signal refId="right_top"/>
-            <signal refId="left_right"/>
+        <signalGroup id="14_8">
+            <signal refId="1"/>
+            <signal refId="2"/>
+            <signal refId="7"/>
+            <signal refId="8"/>
         </signalGroup>
-        <signalGroup id="2_top_left">
-            <signal refId="top_left"/>
-            <signal refId="bottom_right"/>
-            <signal refId="left_bottom"/>
-            <signal refId="left_top"/>
+        <signalGroup id="4_7">
+            <signal refId="4"/>
+            <signal refId="5"/>
+            <signal refId="7"/>
+            <signal refId="10"/>
         </signalGroup>
-        <signalGroup id="13_top_left">
-            <signal refId="top_left"/>
-            <signal refId="bottom_top"/>
-            <signal refId="bottom_right"/>
-            <signal refId="left_bottom"/>
+        <signalGroup id="16_5">
+            <signal refId="11"/>
+            <signal refId="4"/>
+            <signal refId="5"/>
+            <signal refId="10"/>
+        </signalGroup>
+        <signalGroup id="11_9">
+            <signal refId="3"/>
+            <signal refId="4"/>
+            <signal refId="9"/>
+            <signal refId="10"/>
+        </signalGroup>
+        <signalGroup id="13_7">
+            <signal refId="4"/>
+            <signal refId="5"/>
+            <signal refId="6"/>
+            <signal refId="7"/>
+        </signalGroup>
+        <signalGroup id="12_7">
+            <signal refId="1"/>
+            <signal refId="2"/>
+            <signal refId="4"/>
+            <signal refId="7"/>
+        </signalGroup>
+        <signalGroup id="5_9">
+            <signal refId="4"/>
+            <signal refId="7"/>
+            <signal refId="9"/>
+            <signal refId="10"/>
+        </signalGroup>
+        <signalGroup id="7_7">
+            <signal refId="1"/>
+            <signal refId="4"/>
+            <signal refId="6"/>
+            <signal refId="7"/>
+        </signalGroup>
+        <signalGroup id="6_9">
+            <signal refId="7"/>
+            <signal refId="8"/>
+            <signal refId="9"/>
+            <signal refId="10"/>
+        </signalGroup>
+        <signalGroup id="8_7">
+            <signal refId="1"/>
+            <signal refId="4"/>
+            <signal refId="7"/>
+            <signal refId="10"/>
+        </signalGroup>
+        <signalGroup id="9_7">
+            <signal refId="1"/>
+            <signal refId="12"/>
+            <signal refId="7"/>
+            <signal refId="10"/>
+        </signalGroup>
+    </signalSystem>
+    <signalSystem refId="crossing_3">
+        <signalGroup id="13_4">
+            <signal refId="1"/>
+            <signal refId="3"/>
+            <signal refId="4"/>
+            <signal refId="10"/>
+        </signalGroup>
+        <signalGroup id="11_5">
+            <signal refId="11"/>
+            <signal refId="4"/>
+            <signal refId="5"/>
+            <signal refId="10"/>
+        </signalGroup>
+        <signalGroup id="10_4">
+            <signal refId="11"/>
+            <signal refId="1"/>
+            <signal refId="4"/>
+            <signal refId="10"/>
+        </signalGroup>
+        <signalGroup id="0_7">
+            <signal refId="1"/>
+            <signal refId="2"/>
+            <signal refId="4"/>
+            <signal refId="7"/>
+        </signalGroup>
+        <signalGroup id="2_7">
+            <signal refId="4"/>
+            <signal refId="5"/>
+            <signal refId="6"/>
+            <signal refId="7"/>
+        </signalGroup>
+        <signalGroup id="14_9">
+            <signal refId="3"/>
+            <signal refId="4"/>
+            <signal refId="9"/>
+            <signal refId="10"/>
+        </signalGroup>
+        <signalGroup id="3_7">
+            <signal refId="1"/>
+            <signal refId="12"/>
+            <signal refId="7"/>
+            <signal refId="10"/>
+        </signalGroup>
+        <signalGroup id="15_7">
+            <signal refId="1"/>
+            <signal refId="4"/>
+            <signal refId="7"/>
+            <signal refId="10"/>
+        </signalGroup>
+        <signalGroup id="4_7">
+            <signal refId="1"/>
+            <signal refId="12"/>
+            <signal refId="6"/>
+            <signal refId="7"/>
+        </signalGroup>
+        <signalGroup id="12_9">
+            <signal refId="4"/>
+            <signal refId="7"/>
+            <signal refId="9"/>
+            <signal refId="10"/>
+        </signalGroup>
+        <signalGroup id="5_7">
+            <signal refId="1"/>
+            <signal refId="4"/>
+            <signal refId="6"/>
+            <signal refId="7"/>
+        </signalGroup>
+        <signalGroup id="16_4">
+            <signal refId="1"/>
+            <signal refId="2"/>
+            <signal refId="3"/>
+            <signal refId="4"/>
+        </signalGroup>
+        <signalGroup id="6_8">
+            <signal refId="1"/>
+            <signal refId="2"/>
+            <signal refId="7"/>
+            <signal refId="8"/>
+        </signalGroup>
+        <signalGroup id="7_7">
+            <signal refId="4"/>
+            <signal refId="5"/>
+            <signal refId="7"/>
+            <signal refId="10"/>
+        </signalGroup>
+        <signalGroup id="8_8">
+            <signal refId="1"/>
+            <signal refId="7"/>
+            <signal refId="8"/>
+            <signal refId="10"/>
+        </signalGroup>
+        <signalGroup id="9_9">
+            <signal refId="7"/>
+            <signal refId="8"/>
+            <signal refId="9"/>
+            <signal refId="10"/>
+        </signalGroup>
+        <signalGroup id="1_12">
+            <signal refId="11"/>
+            <signal refId="1"/>
+            <signal refId="12"/>
+            <signal refId="10"/>
+        </signalGroup>
+    </signalSystem>
+    <signalSystem refId="crossing_2">
+        <signalGroup id="10_7">
+            <signal refId="4"/>
+            <signal refId="5"/>
+            <signal refId="6"/>
+            <signal refId="7"/>
+        </signalGroup>
+        <signalGroup id="8_9">
+            <signal refId="1"/>
+            <signal refId="4"/>
+            <signal refId="7"/>
+            <signal refId="9"/>
+            <signal refId="10"/>
+        </signalGroup>
+        <signalGroup id="9_9">
+            <signal refId="7"/>
+            <signal refId="8"/>
+            <signal refId="9"/>
+            <signal refId="10"/>
+        </signalGroup>
+        <signalGroup id="0_8">
+            <signal refId="3"/>
+            <signal refId="7"/>
+            <signal refId="8"/>
+            <signal refId="10"/>
+        </signalGroup>
+        <signalGroup id="1_7">
+            <signal refId="1"/>
+            <signal refId="3"/>
+            <signal refId="4"/>
+            <signal refId="7"/>
+            <signal refId="10"/>
+        </signalGroup>
+        <signalGroup id="2_8">
+            <signal refId="2"/>
+            <signal refId="3"/>
+            <signal refId="7"/>
+            <signal refId="8"/>
+        </signalGroup>
+        <signalGroup id="3_7">
+            <signal refId="12"/>
+            <signal refId="3"/>
+            <signal refId="5"/>
+            <signal refId="7"/>
+        </signalGroup>
+        <signalGroup id="4_7">
+            <signal refId="3"/>
+            <signal refId="4"/>
+            <signal refId="5"/>
+            <signal refId="7"/>
+        </signalGroup>
+        <signalGroup id="5_7">
+            <signal refId="11"/>
+            <signal refId="3"/>
+            <signal refId="4"/>
+            <signal refId="7"/>
+            <signal refId="10"/>
+        </signalGroup>
+        <signalGroup id="6_7">
+            <signal refId="11"/>
+            <signal refId="12"/>
+            <signal refId="3"/>
+            <signal refId="7"/>
+            <signal refId="10"/>
+        </signalGroup>
+        <signalGroup id="7_7">
+            <signal refId="1"/>
+            <signal refId="2"/>
+            <signal refId="3"/>
+            <signal refId="4"/>
+            <signal refId="7"/>
+        </signalGroup>
+        <signalGroup id="11_7">
+            <signal refId="11"/>
+            <signal refId="4"/>
+            <signal refId="6"/>
+            <signal refId="7"/>
+            <signal refId="10"/>
+        </signalGroup>
+    </signalSystem>
+    <signalSystem refId="highway_ns_we">
+        <signalGroup id="1_straight">
+            <signal refId="straight"/>
+        </signalGroup>
+        <signalGroup id="0_highway">
+            <signal refId="highway"/>
+        </signalGroup>
+    </signalSystem>
+    <signalSystem refId="crossing_1">
+        <signalGroup id="0_7">
+            <signal refId="4"/>
+            <signal refId="5"/>
+            <signal refId="7"/>
+            <signal refId="10"/>
+        </signalGroup>
+        <signalGroup id="3_4">
+            <signal refId="11"/>
+            <signal refId="1"/>
+            <signal refId="4"/>
+            <signal refId="10"/>
+        </signalGroup>
+        <signalGroup id="4_4">
+            <signal refId="1"/>
+            <signal refId="3"/>
+            <signal refId="4"/>
+            <signal refId="10"/>
+        </signalGroup>
+        <signalGroup id="1_9">
+            <signal refId="7"/>
+            <signal refId="8"/>
+            <signal refId="9"/>
+            <signal refId="10"/>
+        </signalGroup>
+        <signalGroup id="2_8">
+            <signal refId="1"/>
+            <signal refId="7"/>
+            <signal refId="8"/>
+            <signal refId="10"/>
+        </signalGroup>
+        <signalGroup id="14_7">
+            <signal refId="4"/>
+            <signal refId="5"/>
+            <signal refId="6"/>
+            <signal refId="7"/>
+        </signalGroup>
+        <signalGroup id="12_8">
+            <signal refId="1"/>
+            <signal refId="2"/>
+            <signal refId="7"/>
+            <signal refId="8"/>
+        </signalGroup>
+        <signalGroup id="13_7">
+            <signal refId="12"/>
+            <signal refId="1"/>
+            <signal refId="6"/>
+            <signal refId="7"/>
+        </signalGroup>
+        <signalGroup id="15_5">
+            <signal refId="11"/>
+            <signal refId="4"/>
+            <signal refId="5"/>
+            <signal refId="10"/>
+        </signalGroup>
+        <signalGroup id="16_4">
+            <signal refId="1"/>
+            <signal refId="2"/>
+            <signal refId="3"/>
+            <signal refId="4"/>
+        </signalGroup>
+        <signalGroup id="6_7">
+            <signal refId="1"/>
+            <signal refId="2"/>
+            <signal refId="4"/>
+            <signal refId="7"/>
+        </signalGroup>
+        <signalGroup id="10_9">
+            <signal refId="4"/>
+            <signal refId="7"/>
+            <signal refId="9"/>
+            <signal refId="10"/>
+        </signalGroup>
+        <signalGroup id="5_9">
+            <signal refId="3"/>
+            <signal refId="4"/>
+            <signal refId="9"/>
+            <signal refId="10"/>
+        </signalGroup>
+        <signalGroup id="11_7">
+            <signal refId="1"/>
+            <signal refId="4"/>
+            <signal refId="7"/>
+            <signal refId="10"/>
+        </signalGroup>
+        <signalGroup id="8_7">
+            <signal refId="1"/>
+            <signal refId="4"/>
+            <signal refId="6"/>
+            <signal refId="7"/>
+        </signalGroup>
+        <signalGroup id="9_7">
+            <signal refId="12"/>
+            <signal refId="1"/>
+            <signal refId="7"/>
+            <signal refId="10"/>
+        </signalGroup>
+        <signalGroup id="7_12">
+            <signal refId="11"/>
+            <signal refId="12"/>
+            <signal refId="1"/>
+            <signal refId="10"/>
+        </signalGroup>
+    </signalSystem>
+    <signalSystem refId="t_junction_1">
+        <signalGroup id="0_3">
+            <signal refId="1"/>
+            <signal refId="2"/>
+            <signal refId="3"/>
+        </signalGroup>
+        <signalGroup id="1_5">
+            <signal refId="3"/>
+            <signal refId="4"/>
+            <signal refId="5"/>
+        </signalGroup>
+        <signalGroup id="2_5">
+            <signal refId="1"/>
+            <signal refId="3"/>
+            <signal refId="5"/>
+        </signalGroup>
+        <signalGroup id="3_6">
+            <signal refId="1"/>
+            <signal refId="5"/>
+            <signal refId="6"/>
+        </signalGroup>
+    </signalSystem>
+    <signalSystem refId="t_junction_2">
+        <signalGroup id="1_3">
+            <signal refId="1"/>
+            <signal refId="2"/>
+            <signal refId="3"/>
+        </signalGroup>
+        <signalGroup id="0_5">
+            <signal refId="1"/>
+            <signal refId="3"/>
+            <signal refId="5"/>
+        </signalGroup>
+        <signalGroup id="2_5">
+            <signal refId="3"/>
+            <signal refId="4"/>
+            <signal refId="5"/>
+        </signalGroup>
+        <signalGroup id="3_6">
+            <signal refId="1"/>
+            <signal refId="5"/>
+            <signal refId="6"/>
+        </signalGroup>
+    </signalSystem>
+    <signalSystem refId="t_junction_3">
+        <signalGroup id="0_6">
+            <signal refId="1"/>
+            <signal refId="5"/>
+            <signal refId="6"/>
+        </signalGroup>
+        <signalGroup id="1_5">
+            <signal refId="3"/>
+            <signal refId="4"/>
+            <signal refId="5"/>
+        </signalGroup>
+        <signalGroup id="3_3">
+            <signal refId="1"/>
+            <signal refId="2"/>
+            <signal refId="3"/>
+        </signalGroup>
+        <signalGroup id="2_5">
+            <signal refId="1"/>
+            <signal refId="3"/>
+            <signal refId="5"/>
+        </signalGroup>
+    </signalSystem>
+    <signalSystem refId="oneway_ns">
+        <signalGroup id="1_1">
+            <signal refId="1"/>
+        </signalGroup>
+        <signalGroup id="0_3">
+            <signal refId="2"/>
+            <signal refId="3"/>
+        </signalGroup>
+    </signalSystem>
+    <signalSystem refId="highway_ns_ew">
+        <signalGroup id="1_highway">
+            <signal refId="highway"/>
+        </signalGroup>
+        <signalGroup id="0_straight">
+            <signal refId="straight"/>
+        </signalGroup>
+    </signalSystem>
+    <signalSystem refId="crossing_5">
+        <signalGroup id="10_7">
+            <signal refId="12"/>
+            <signal refId="1"/>
+            <signal refId="4"/>
+            <signal refId="6"/>
+            <signal refId="7"/>
+        </signalGroup>
+        <signalGroup id="12_4">
+            <signal refId="1"/>
+            <signal refId="2"/>
+            <signal refId="3"/>
+            <signal refId="4"/>
+        </signalGroup>
+        <signalGroup id="2_4">
+            <signal refId="1"/>
+            <signal refId="3"/>
+            <signal refId="4"/>
+            <signal refId="10"/>
+        </signalGroup>
+        <signalGroup id="0_7">
+            <signal refId="12"/>
+            <signal refId="1"/>
+            <signal refId="4"/>
+            <signal refId="7"/>
+            <signal refId="10"/>
+        </signalGroup>
+        <signalGroup id="1_7">
+            <signal refId="1"/>
+            <signal refId="2"/>
+            <signal refId="4"/>
+            <signal refId="7"/>
+        </signalGroup>
+        <signalGroup id="3_8">
+            <signal refId="1"/>
+            <signal refId="2"/>
+            <signal refId="7"/>
+            <signal refId="8"/>
+        </signalGroup>
+        <signalGroup id="4_7">
+            <signal refId="4"/>
+            <signal refId="5"/>
+            <signal refId="7"/>
+            <signal refId="10"/>
+        </signalGroup>
+        <signalGroup id="8_4">
+            <signal refId="11"/>
+            <signal refId="12"/>
+            <signal refId="1"/>
+            <signal refId="4"/>
+            <signal refId="10"/>
+        </signalGroup>
+        <signalGroup id="11_9">
+            <signal refId="7"/>
+            <signal refId="8"/>
+            <signal refId="9"/>
+            <signal refId="10"/>
+        </signalGroup>
+        <signalGroup id="6_7">
+            <signal refId="4"/>
+            <signal refId="5"/>
+            <signal refId="6"/>
+            <signal refId="7"/>
+        </signalGroup>
+        <signalGroup id="5_9">
+            <signal refId="3"/>
+            <signal refId="4"/>
+            <signal refId="9"/>
+            <signal refId="10"/>
+        </signalGroup>
+        <signalGroup id="13_5">
+            <signal refId="11"/>
+            <signal refId="4"/>
+            <signal refId="5"/>
+            <signal refId="10"/>
+        </signalGroup>
+        <signalGroup id="7_9">
+            <signal refId="4"/>
+            <signal refId="7"/>
+            <signal refId="9"/>
+            <signal refId="10"/>
+        </signalGroup>
+        <signalGroup id="9_8">
+            <signal refId="1"/>
+            <signal refId="7"/>
+            <signal refId="8"/>
+            <signal refId="10"/>
         </signalGroup>
     </signalSystem>
 </signalGroups>

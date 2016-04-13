@@ -1,39 +1,161 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <signalSystems xsi:schemaLocation="http://www.matsim.org/files/dtd http://www.matsim.org/files/dtd/signalSystems_v2.0.xsd" xmlns="http://www.matsim.org/files/dtd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <signalSystem id="topleft">
+    <signalSystem id="t_junction_1">
         <signals>
-            <signal linkIdRef="134" id="topright_topleft" />
-            <signal linkIdRef="59" id="topleft_topright" />
-            <signal linkIdRef="11" id="bottomright_topleft" />
-            <signal linkIdRef="97" id="topright_bottomleft" />
-            <signal linkIdRef="168" id="bottomright_topright" />
-            <signal linkIdRef="207" id="topleft_bottomleft" />
+            <signal id="1" linkIdRef="207" />
+            <signal id="2" linkIdRef="59" />
+            <signal id="3" linkIdRef="134" />
+            <signal id="4" linkIdRef="97" />
+            <signal id="5" linkIdRef="168" />
+            <signal id="6" linkIdRef="11" />
         </signals>
     </signalSystem>
-    <signalSystem id="bottomleft">
+    <signalSystem id="t_junction_2">
         <signals>
-            <signal linkIdRef="23" id="bottomright_topright" />
-            <signal linkIdRef="15" id="topleft_bottomright" />
-            <signal linkIdRef="17" id="bottomleft" />
+            <signal id="1" linkIdRef="81" />
+            <signal id="2" linkIdRef="281" />
+            <signal id="3" linkIdRef="289" />
+            <signal id="4" linkIdRef="342" />
+            <signal id="5" linkIdRef="350" />
+            <signal id="6" linkIdRef="264" />
         </signals>
     </signalSystem>
-    <signalSystem id="topright">
+    <signalSystem id="t_junction_3">
         <signals>
-            <signal linkIdRef="121" id="right_left" />
-            <signal linkIdRef="64" id="left_right" />
-
-            <signal linkIdRef="125" id="top_bottom" />
-            <signal linkIdRef="166" id="bottom_top" />
-
-            <signal linkIdRef="219" id="top_left" />
-            <signal linkIdRef="105" id="left_top" />
-            <signal linkIdRef="92" id="right_bottom" />
-            <signal linkIdRef="155" id="bottom_right" />
-
-            <signal linkIdRef="77" id="right_top" />
-            <signal linkIdRef="94" id="top_right" />
-            <signal linkIdRef="13" id="bottom_left" />
-            <signal linkIdRef="98" id="left_bottom" />
+            <signal id="1" linkIdRef="171" />
+            <signal id="2" linkIdRef="310" />
+            <signal id="3" linkIdRef="238" />
+            <signal id="4" linkIdRef="317" />
+            <signal id="5" linkIdRef="205" />
+            <signal id="6" linkIdRef="213" />
+        </signals>
+    </signalSystem>
+    <signalSystem id="t_junction_4">
+        <signals>
+            <signal id="1" linkIdRef="137" />
+            <signal id="2" linkIdRef="181" />
+            <signal id="3" linkIdRef="95" />
+            <signal id="4" linkIdRef="146" />
+            <signal id="5" linkIdRef="70" />
+            <signal id="6" linkIdRef="345" />
+        </signals>
+    </signalSystem>
+    <signalSystem id="highway_ns_we">
+        <signals>
+            <signal id="highway" linkIdRef="604" />
+            <signal id="straight" linkIdRef="1178" />
+        </signals>
+    </signalSystem>
+    <signalSystem id="highway_ns_ew">
+        <signals>
+            <signal id="highway" linkIdRef="1206" />
+            <signal id="straight" linkIdRef="396" />
+        </signals>
+    </signalSystem>
+    <signalSystem id="highway_sn_we">
+        <signals>
+            <signal id="highway" linkIdRef="461" />
+            <signal id="straight" linkIdRef="1144" />
+        </signals>
+    </signalSystem>
+    <signalSystem id="highway_sn_ew">
+        <signals>
+            <signal id="highway" linkIdRef="218" />
+            <signal id="straight" linkIdRef="225" />
+        </signals>
+    </signalSystem>
+    <signalSystem id="crossing_1">
+        <signals>
+            <signal id="1"  linkIdRef="98"/>
+            <signal id="2" linkIdRef="64" />
+            <signal id="3" linkIdRef="105" />
+            <signal id="4" linkIdRef="219" />
+            <signal id="5" linkIdRef="125" />
+            <signal id="6" linkIdRef="94" />
+            <signal id="7" linkIdRef="77" />
+            <signal id="8" linkIdRef="121" />
+            <signal id="9" linkIdRef="92" />
+            <signal id="10" linkIdRef="155" />
+            <signal id="11" linkIdRef="166" />
+            <signal id="12" linkIdRef="13" />
+        </signals>
+    </signalSystem>
+    <signalSystem id="crossing_2">
+        <signals>
+            <signal id="1" linkIdRef="383" />
+            <signal id="2" linkIdRef="392" />
+            <signal id="3" linkIdRef="51" />
+            <signal id="4" linkIdRef="780" />
+            <signal id="5" linkIdRef="104" />
+            <signal id="6" linkIdRef="293" />
+            <signal id="7" linkIdRef="72" />
+            <signal id="8" linkIdRef="599" />
+            <signal id="9" linkIdRef="45" />
+            <signal id="10" linkIdRef="343" />
+            <signal id="11" linkIdRef="99" />
+            <signal id="12" linkIdRef="272" />
+        </signals>
+    </signalSystem>
+    <signalSystem id="crossing_3">
+        <signals>
+            <signal id="1" linkIdRef="259" />
+            <signal id="2" linkIdRef="523" />
+            <signal id="3" linkIdRef="304" />
+            <signal id="4" linkIdRef="718" />
+            <signal id="5" linkIdRef="685" />
+            <signal id="6" linkIdRef="387" />
+            <signal id="7" linkIdRef="435" />
+            <signal id="8" linkIdRef="629" />
+            <signal id="9" linkIdRef="201" />
+            <signal id="10" linkIdRef="389" />
+            <signal id="11" linkIdRef="80" />
+            <signal id="12" linkIdRef="206" />
+        </signals>
+    </signalSystem>
+    <signalSystem id="crossing_4">
+        <signals>
+            <signal id="1" linkIdRef="642" />
+            <signal id="2" linkIdRef="337" />
+            <signal id="3" linkIdRef="579" />
+            <signal id="4" linkIdRef="789" />
+            <signal id="5" linkIdRef="922" />
+            <signal id="6" linkIdRef="787" />
+            <signal id="7" linkIdRef="783" />
+            <signal id="8" linkIdRef="107" />
+            <signal id="9" linkIdRef="984" />
+            <signal id="10" linkIdRef="401" />
+            <signal id="11" linkIdRef="744" />
+            <signal id="12" linkIdRef="797" />
+        </signals>
+    </signalSystem>
+    <signalSystem id="crossing_5">
+        <signals>
+            <signal id="1" linkIdRef="1038" />
+            <signal id="2" linkIdRef="1069" />
+            <signal id="3" linkIdRef="1055" />
+            <signal id="4" linkIdRef="467" />
+            <signal id="5" linkIdRef="969" />
+            <signal id="6" linkIdRef="551" />
+            <signal id="7" linkIdRef="1079" />
+            <signal id="8" linkIdRef="348" />
+            <signal id="9" linkIdRef="837" />
+            <signal id="10" linkIdRef="1066" />
+            <signal id="11" linkIdRef="962" />
+            <signal id="12" linkIdRef="152" />
+        </signals>
+    </signalSystem>
+    <signalSystem id="oneway_ns">
+        <signals>
+            <signal id="1" linkIdRef="689" />
+            <signal id="2" linkIdRef="720" />
+            <signal id="3" linkIdRef="103" />
+        </signals>
+    </signalSystem>
+    <signalSystem id="oneway_we">
+        <signals>
+            <signal id="1" linkIdRef="17" />
+            <signal id="2" linkIdRef="15" />
+            <signal id="3" linkIdRef="23" />
         </signals>
     </signalSystem>
 </signalSystems>
