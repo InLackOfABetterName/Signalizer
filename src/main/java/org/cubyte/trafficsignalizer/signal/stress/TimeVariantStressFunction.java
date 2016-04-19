@@ -8,9 +8,6 @@ import org.matsim.contrib.signals.model.SignalSystem;
 
 import javax.inject.Inject;
 
-import static java.lang.Math.E;
-import static java.lang.Math.pow;
-
 public class TimeVariantStressFunction implements StressFunction {
 
     private final TrafficTracker trafficTracker;
@@ -26,6 +23,6 @@ public class TimeVariantStressFunction implements StressFunction {
     public double calculateStress(Network network, Signal signal, SignalSystem system, double t) {
         final double n = trafficTracker.getCarCount(signal.getLinkId());
 
-        return n * pow(E, t);
+        return (t + n) * (n + 1);
     }
 }
