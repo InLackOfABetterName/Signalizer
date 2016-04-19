@@ -80,8 +80,6 @@ public class StressBasedController implements SignalController {
             drawCurrentStress(signal, stressPerSignal);
         }
 
-        //System.out.println("Stress in " + system.getId() + ": " + stressPerSignal.values().stream().mapToDouble(i -> i).sum());
-
         if (activeGroup != null && upcomingGroup == null && expiringGroup == null) {
 
             if ((timeSeconds - greenSince) > 30) {
@@ -104,8 +102,14 @@ public class StressBasedController implements SignalController {
 
     }
 
-    protected double calculateStress(double timeSeconds, Signal s) {
-        return stressFunction.calculateStress(network, s, system, timeSeconds - redSince.get(s.getId()));
+    protected double calculateBackPressure(double t, Signal s) {
+        final Link link = network.getLinks().get(s.getLinkId());
+        final Map<Id<Link>, ? extends Link> outLinks = link.getToNode().getOutLinks();
+        return 1d;
+    }
+
+    protected double calculateStress(double t, Signal s) {
+        return stressFunction.calculateStress(network, s, system, t - redSince.get(s.getId()));
     }
 
 

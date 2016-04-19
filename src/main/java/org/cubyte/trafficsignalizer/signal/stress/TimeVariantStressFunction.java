@@ -21,7 +21,7 @@ public class TimeVariantStressFunction implements StressFunction {
 
     @Override
     public double calculateStress(Network network, Signal signal, SignalSystem system, double t) {
-        final double n = trafficTracker.getCarCount(signal.getLinkId());
+        final double n = trafficTracker.carCountAt(signal.getLinkId());
 
         return (t + n) * (n + 1);
     }

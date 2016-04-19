@@ -4,5 +4,5 @@ import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;
 
 public interface TrafficTracker {
-    int getCarCount(Id<Link> link);
+    int carCountAt(Id<Link> link);
 }
