@@ -3,6 +3,7 @@ package org.cubyte.trafficsignalizer.ui;
 import com.google.inject.Inject;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.util.awt.TextRenderer;
+import org.matsim.api.core.v01.Coord;
 import org.matsim.vis.otfvis.OTFClientControl;
 import org.matsim.vis.otfvis.caching.SceneGraph;
 import org.matsim.vis.otfvis.data.OTFDataWriter;
@@ -19,6 +20,7 @@ import java.util.*;
 import static java.lang.Math.round;
 import static org.matsim.core.utils.misc.ByteBufferUtils.getString;
 import static org.matsim.core.utils.misc.ByteBufferUtils.putString;
+import static org.matsim.vis.otfvis.data.OTFServerQuadTree.getOTFTransformation;
 
 public class TextObject {
     public final String id;
@@ -82,6 +84,11 @@ public class TextObject {
 
         public void put(String id, String text, double x, double y, boolean screenSpace) {
             this.put(id, text, (float)x, (float) y, screenSpace);
+        }
+
+        public void put(String id, String text, Coord c) {
+            Coord coord = getOTFTransformation().transform(c);
+            put(id, text, coord.getX(), coord.getY(), false);
         }
     }
 
