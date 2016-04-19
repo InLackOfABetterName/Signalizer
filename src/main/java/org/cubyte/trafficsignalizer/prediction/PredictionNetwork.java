@@ -41,8 +41,9 @@ public class PredictionNetwork {
             try {
                 neuralNetwork = NeuralNetwork.createFromFile(folder + "/node" + node.getId().toString() + ".nnet");
             } catch (NeurophException ex) {
-                neuralNetwork = new MultiLayerPerceptron(3, node.getOutLinks().size());
-                // Input: Vehicle count that came in aggregated over one minute | Hour of the day | Minute of the hour
+                neuralNetwork = new MultiLayerPerceptron(2, 3, node.getOutLinks().size());
+                // Input:  Hour of the day | Minute of the hour
+                // Output: Percentage chance that a vehicle drives down the lane
             }
             ((IterativeLearning)neuralNetwork.getLearningRule()).setMaxIterations(400);
             neuralNetworkMap.put(node.getId(), neuralNetwork);
@@ -105,13 +106,13 @@ public class PredictionNetwork {
     /**
      * Returns the prediction for all the outgoing links or {-1} if there is no neural network for the given link
      */
-    public double[] getPrediction(Id<Link> fromLinkId, int vehicles, double time) {
+    public double[] getPrediction(Id<Link> fromLinkId, double time) {
         Id<Node> nodeId = network.getLinks().get(fromLinkId).getToNode().getId();
         if (neuralNetworkMap.containsKey(nodeId)) {
             NeuralNetwork neuralNetwork = neuralNetworkMap.get(nodeId);
             double hours = Math.round(time / 60 / 60) % 24;
             double minutes = Math.round(time / 60) % 60;
-            neuralNetwork.setInput(vehicles, hours, minutes);
+            neuralNetwork.setInput(hours, minutes);
             neuralNetwork.calculate();
             return neuralNetwork.getOutput();
         } else {
@@ -123,13 +124,13 @@ public class PredictionNetwork {
      * Returns the prediction for the outgoing link or -1 when the outgoing link or a neural network for the fromlink cannot
      * be found
      */
-    public double getPrediction(Id<Link> fromLinkId, Id<Link> toLinkId, int vehicles, double time) {
+    public double getPrediction(Id<Link> fromLinkId, Id<Link> toLinkId, double time) {
         List<Id<Link>> outLinks = new ArrayList<>();
         outLinks.addAll(network.getLinks().get(fromLinkId).getToNode().getOutLinks().keySet());
         outLinks.sort(Id<Link>::compareTo);
         int indexOfOutLink = outLinks.indexOf(toLinkId);
         if (indexOfOutLink != -1) {
-            double[] predictions = getPrediction(fromLinkId, vehicles, time);
+            double[] predictions = getPrediction(fromLinkId, time);
             if (predictions.length == 1 && predictions[0] == -1) {
                 return -1;
             }

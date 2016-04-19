@@ -130,7 +130,7 @@ public class TextObject {
         private Map<String, TextObject> objects = new HashMap<>();
 
         public Drawer() {
-            Font font = new Font("SansSerif", Font.PLAIN, 100);
+            Font font = new Font("SansSerif", Font.PLAIN, 10);
             this.textRenderer = new TextRenderer(font, true, false);
         }
 

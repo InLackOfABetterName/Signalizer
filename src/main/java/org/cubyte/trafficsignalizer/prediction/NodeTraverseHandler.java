@@ -15,6 +15,7 @@ import org.neuroph.core.data.DataSetRow;
 
 import javax.inject.Inject;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Singleton
 public class NodeTraverseHandler implements LinkEnterEventHandler, LinkLeaveEventHandler {
@@ -54,7 +55,7 @@ public class NodeTraverseHandler implements LinkEnterEventHandler, LinkLeaveEven
                 double minutes = Math.round(event.getTime() / 60) % 60;
                 DataSetRow row = null;
                 for (DataSetRow current : dataSets.get(vehicleLeaveMap.get(event.getVehicleId())).getRows()) {
-                    if (current.getInput()[1] == hours && current.getInput()[2] == minutes) {
+                    if (current.getInput()[0] == hours && current.getInput()[1] == minutes) {
                         row = current;
                         break;
                     }
@@ -62,14 +63,11 @@ public class NodeTraverseHandler implements LinkEnterEventHandler, LinkLeaveEven
                 double[] input;
                 double[] desiredOutput = new double[outLinks.size()];
                 if (row != null) {
-                    input = row.getInput();
-                    input[0]++;
-                    row.setInput(input);
                     desiredOutput = row.getDesiredOutput();
                     desiredOutput[outLinks.indexOf(link.getId())]++;
                     row.setDesiredOutput(desiredOutput);
                 } else {
-                    input = new double[] {1, hours, minutes};
+                    input = new double[] {hours, minutes};
                     desiredOutput[outLinks.indexOf(link.getId())] = 1;
                     dataSets.get(vehicleLeaveMap.get(event.getVehicleId())).addRow(new DataSetRow(input, desiredOutput));
                 }
@@ -87,11 +85,22 @@ public class NodeTraverseHandler implements LinkEnterEventHandler, LinkLeaveEven
         vehicleLeaveMap = new HashMap<>();
         dataSets = new HashMap<>();
         for (Node node : PredictionNetwork.getNodesWithMultiOut(scenario.getNetwork())) {
-            dataSets.put(node.getId(), new DataSet(3, node.getOutLinks().size()));
+            dataSets.put(node.getId(), new DataSet(2, node.getOutLinks().size()));
         }
     }
 
     public Map<Id<Node>, DataSet> getDataSets() {
+        dataSets.values().stream().map(DataSet::getRows).flatMap(List::stream).forEach(row -> {
+            double[] desiredOutput = row.getDesiredOutput();
+            double acc = 0;
+            for (double n : desiredOutput) {
+                acc += n;
+            }
+            for (int i = 0; i < desiredOutput.length; i++) {
+                desiredOutput[i] = desiredOutput[i] / acc;
+            }
+            row.setDesiredOutput(desiredOutput);
+        });
         return dataSets;
     }
 }

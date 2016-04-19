@@ -22,7 +22,6 @@ import org.matsim.core.utils.geometry.CoordinateTransformation;
 import java.util.*;
 
 import static org.matsim.core.mobsim.qsim.interfaces.SignalGroupState.GREEN;
-import static org.matsim.vis.otfvis.data.OTFServerQuadTree.getOTFTransformation;
 
 @Singleton
 public class PredictedTrafficTracker implements TrafficTracker, MobsimBeforeSimStepListener {
@@ -103,7 +102,9 @@ public class PredictedTrafficTracker implements TrafficTracker, MobsimBeforeSimS
                     if (toLinks.size() > 0) {
                         double timeWhenEnteredNewLink = simulationTime - (timeSinceEnteredLink - travelTime);
                         if (toLinks.size() > 1) {
-                            double[] predictions = predictionNetwork.getPrediction(link.getId(), 1, timeWhenEnteredNewLink);
+                            double[] predictions = predictionNetwork.getPrediction(link.getId(), timeWhenEnteredNewLink);
+                            System.out.println("capacity: " + capacityAsInt + " timeSinceLastSimStep: " + timeSinceLastSimStep + " linkId: " + entry.getKey());
+                            System.out.println(Arrays.toString(predictions));
                             double acc = 0;
                             for (double prediction : predictions) {
                                 acc += prediction;
@@ -135,10 +136,13 @@ public class PredictedTrafficTracker implements TrafficTracker, MobsimBeforeSimS
             }
             remainingTime.put(link.getId(), newRemainingTime);
         }
-        trackedVehicleQueques.entrySet().stream().forEach(entry -> {
+        int vehicleCount = 0;
+        for (Map.Entry<Id<Link>, List<TrackedVehicle>> entry : trackedVehicleQueques.entrySet()) {
             entry.getValue().addAll(toAdd.get(entry.getKey()));
             entry.getValue().removeAll(toRemove.get(entry.getKey()));
-        });
+            vehicleCount += entry.getValue().size();
+        }
+        textWriter.put("vehicle_count", "vehicles in network: " + vehicleCount, 10, 10, true);
         lastSimStepTime = simulationTime;
     }
 
