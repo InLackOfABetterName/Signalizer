@@ -90,44 +90,20 @@ public class PredictedTrafficTracker implements TrafficTracker, MobsimBeforeSimS
             for (TrackedVehicle vehicle : trackedLink.getVehicles(capacityAsInt)) {
                 double timeSinceEnteredLink = simulationTime - vehicle.getCurrentLinkEnteredTime();
                 if (timeSinceEnteredLink >= travelTime) {
-                    List<Id<Link>> toLinks = new ArrayList<>(link.getToNode().getOutLinks().keySet());
-                    toLinks.sort(Id<Link>::compareTo);
-                    Id<Link> newLinkId;
-                    if (toLinks.size() > 0) {
-                        double timeWhenEnteredNewLink = simulationTime - (timeSinceEnteredLink - travelTime);
-                        if (toLinks.size() > 1) {
-                            double[] predictions = predictionNetwork.getPrediction(link.getId(), timeWhenEnteredNewLink);
-                            double acc = 0;
-                            for (double prediction : predictions) {
-                                acc += prediction;
-                            }
-                            acc /= predictions.length;
-                            for (int i = 0; i < predictions.length; i++) {
-                                predictions[i] /= acc;
-                            }
-                            double choice = random.nextDouble();
-                            acc = 0;
-                            for (int i = 0; i < predictions.length; i++) {
-                                acc += predictions[i];
-                                if (choice <= acc) {
-                                    choice = i;
-                                    break;
-                                }
-                            }
-                            newLinkId = toLinks.get((int) choice);
-                        } else {
-                            newLinkId = toLinks.get(0);
-                        }
-                        // TODO take into account that vehicles can come from multiple links and not all from one can fill the link
-                        if (trackedLink.getFreeStorage() <= 0) {
-                            break;
+                    double timeWhenEnteredNewLink = simulationTime - (timeSinceEnteredLink - travelTime);
+                    Id<Link> newLinkId = getNextPredictedLink(trackedLink, timeWhenEnteredNewLink);
+
+                    // TODO take into account that vehicles can come from multiple links and not all from one can fill the link
+                    // TODO take into account that vehicles can leave a link randomly to park or something
+                    if (newLinkId != null) {
+                        if (trackedLinks.get(newLinkId).getFreeStorage() <= 0) {
+                            break; // do not let through the vehicles following this or this, because this can not drive
+                                   // to the next link
                         }
                         trackedLinks.get(newLinkId).addVehicle(vehicle);
-                        trackedLink.removeVehicle(vehicle);
                         vehicle.setCurrentLinkEnteredTime(timeWhenEnteredNewLink - remainingTime.get(link.getId()));
-                    } else {
-                        trackedLink.removeVehicle(vehicle);
                     }
+                    trackedLink.removeVehicle(vehicle);
                 }
             }
             remainingTime.put(link.getId(), newRemainingTime);
@@ -139,6 +115,40 @@ public class PredictedTrafficTracker implements TrafficTracker, MobsimBeforeSimS
         }
         textWriter.put("vehicle_count", "vehicles in network: " + vehicleCount, 10, 10, true);
         lastSimStepTime = simulationTime;
+    }
+
+    private Id<Link> getNextPredictedLink(TrackedLink currentLink, double timeWhenEnteredNewLink) {
+        List<Id<Link>> toLinks = new ArrayList<>(currentLink.getLink().getToNode().getOutLinks().keySet());
+        toLinks.sort(Id<Link>::compareTo);
+        Id<Link> newLinkId;
+        if (toLinks.size() > 0) {
+            if (toLinks.size() > 1) {
+                double[] predictions = predictionNetwork.getPrediction(currentLink.getLink().getId(), timeWhenEnteredNewLink);
+                double acc = 0;
+                for (double prediction : predictions) {
+                    acc += prediction;
+                }
+                acc /= predictions.length;
+                for (int i = 0; i < predictions.length; i++) {
+                    predictions[i] /= acc;
+                }
+                double choice = random.nextDouble();
+                acc = 0;
+                for (int i = 0; i < predictions.length; i++) {
+                    acc += predictions[i];
+                    if (choice <= acc) {
+                        choice = i;
+                        break;
+                    }
+                }
+                newLinkId = toLinks.get((int) choice);
+            } else {
+                newLinkId = toLinks.get(0);
+            }
+            return newLinkId;
+        } else {
+            return null;
+        }
     }
 
     @Override
