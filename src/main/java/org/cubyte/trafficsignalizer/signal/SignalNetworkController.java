@@ -73,11 +73,11 @@ public class SignalNetworkController {
         return this.controllers.stream().filter(controller -> controller != c).collect(toList());
     }
 
-    public void updateState(StressBasedController controller, double timeSeconds) {
+    public void updateState(AbstractSignalController controller, double timeSeconds) {
 
     }
 
-    public void controllerReady(StressBasedController controller, SignalSystem system) {
+    public void controllerReady(AbstractSignalController controller, SignalSystem system) {
         for (Signal signal : system.getSignals().values()) {
             this.linkToSignalTable.put(signal.getLinkId(), signal);
         }
@@ -94,11 +94,11 @@ public class SignalNetworkController {
     }
 
 
-    public void controllerReset(StressBasedController controller, Integer iterationNumber) {
+    public void controllerReset(AbstractSignalController controller, Integer iterationNumber) {
 
     }
 
-    public void controllerInitialized(StressBasedController controller, double simStartTimeSeconds) {
+    public void controllerInitialized(AbstractSignalController controller, double simStartTimeSeconds) {
 
     }
 }
