@@ -75,9 +75,9 @@ public class SignalizerModule extends AbstractModule {
     PredictionNetwork providePredictionNetwork(Network network, SignalizerConfigGroup signalizerConfig) {
         PredictionNetwork predictionNetwork;
         if (signalizerConfig.getNeuralNetworkSaveFolder() != null) {
-            predictionNetwork = new PredictionNetwork(network, signalizerConfig.getNeuralNetworkSaveFolder());
+            predictionNetwork = new PredictionNetwork(network, signalizerConfig.getNeuralNetworkSaveFolder(), params.learn);
         } else {
-            predictionNetwork = new PredictionNetwork(network, "");
+            predictionNetwork = new PredictionNetwork(network, "", params.learn);
         }
         return predictionNetwork;
     }

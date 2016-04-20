@@ -23,6 +23,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class PredictionNetwork {
+    public final int INPUTLAYER_NODE_COUNT = 2;
+
     private Network network;
     public Map<Id<Node>, NeuralNetwork> neuralNetworkMap;
 
@@ -30,18 +32,23 @@ public class PredictionNetwork {
      * Loads the neural networks for the street network nodes (only the ones with multiple outputs) from the folder and
      * creates new multilayer perceptrons for the nodes where no neural network is found.
      */
-    public PredictionNetwork(Network network, String folder) {
+    public PredictionNetwork(Network network, String folder, boolean learn) {
         this.network = network;
         neuralNetworkMap = new HashMap<>();
         List<Node> nodesWithMultiOut = network.getNodes().values().stream()
                 .filter((Node node) -> node.getOutLinks().size() > 1).map(node -> (Node) node)
                 .collect(Collectors.toList());
         for (Node node : nodesWithMultiOut) {
-            NeuralNetwork neuralNetwork;
-            try {
-                neuralNetwork = NeuralNetwork.createFromFile(folder + "/node" + node.getId().toString() + ".nnet");
-            } catch (NeurophException ex) {
-                neuralNetwork = new MultiLayerPerceptron(2, 3, node.getOutLinks().size());
+            NeuralNetwork neuralNetwork = null;
+            if (!learn) {
+                try {
+                    neuralNetwork = NeuralNetwork.createFromFile(folder + "/node" + node.getId().toString() + ".nnet");
+                } catch (NeurophException ex) {
+                    // do nothing...
+                }
+            }
+            if (neuralNetwork == null) {
+                neuralNetwork = new MultiLayerPerceptron(INPUTLAYER_NODE_COUNT, 3, node.getOutLinks().size());
                 // Input:  Hour of the day | Minute of the hour
                 // Output: Percentage chance that a vehicle drives down the lane
             }
@@ -88,15 +95,12 @@ public class PredictionNetwork {
                 network.calculate();
                 double[] calculated = network.getOutput();
                 double distanceBetween = 0;
-                double actualLength = 0;
                 for (int i = 0; i < calculated.length; i++) {
                     distanceBetween += (calculated[i] - row.getDesiredOutput()[i]) *
                             (calculated[i] - row.getDesiredOutput()[i]);
-                    actualLength += row.getDesiredOutput()[i] * row.getDesiredOutput()[i];
                 }
-                distanceBetween /= calculated.length;
-                actualLength /= calculated.length;
-                error += distanceBetween / actualLength;
+                distanceBetween = Math.pow(distanceBetween, 1 / calculated.length);
+                error += distanceBetween;
                 tests++;
             }
         }
