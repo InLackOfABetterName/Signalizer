@@ -21,7 +21,7 @@ import static java.util.stream.Collectors.toSet;
 
 @Singleton
 public class SignalNetworkController {
-    private final List<StressBasedController> controllers;
+    private final List<AbstractSignalController> controllers;
     private final Map<Id<Link>, Signal> linkToSignalTable = new HashMap<>();
     private final Map<Id<Link>, Set<SignalGroup>> linkToGroups = new HashMap<>();
 
@@ -29,14 +29,14 @@ public class SignalNetworkController {
     public SignalNetworkController(EventsManager em) {
         this.controllers = new ArrayList<>();
         em.addHandler(new SignalGroupStateChangedEventHandler() {
-            private final Map<Id<SignalSystem>, StressBasedController> cache = new HashMap<>();
+            private final Map<Id<SignalSystem>, AbstractSignalController> cache = new HashMap<>();
 
             @Override
             public void handleEvent(SignalGroupStateChangedEvent event) {
                 final Id<SignalSystem> system = event.getSignalSystemId();
-                StressBasedController ctrl = cache.get(system);
+                AbstractSignalController ctrl = cache.get(system);
                 if (ctrl == null) {
-                    for (StressBasedController c : controllers) {
+                    for (AbstractSignalController c : controllers) {
                         final SignalSystem s = c.getSystem();
                         if (s != null && s.getId().equals(system)) {
                             cache.put(system, c);
@@ -65,11 +65,11 @@ public class SignalNetworkController {
         return Optional.ofNullable(this.linkToGroups.get(link));
     }
 
-    public void addController(StressBasedController c) {
+    public void addController(AbstractSignalController c) {
         this.controllers.add(c);
     }
 
-    public List<StressBasedController> otherControllers(StressBasedController c) {
+    public List<AbstractSignalController> otherControllers(StressBasedController c) {
         return this.controllers.stream().filter(controller -> controller != c).collect(toList());
     }
 

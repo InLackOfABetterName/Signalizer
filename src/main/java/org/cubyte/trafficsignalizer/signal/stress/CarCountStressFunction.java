@@ -25,12 +25,16 @@ public class CarCountStressFunction implements StressFunction {
 
     @Override
     public double calculateStress(Network network, Signal signal, SignalSystem system, double timeSeconds) {
-        int actual = trafficTracker.carCountAt(signal.getLinkId());
-        int predicted = trafficTracker.carCountAt(signal.getLinkId());
+        int actual = countCarsAtSignal(trafficTracker, signal);
+        int predicted = countCarsAtSignal(trafficTracker, signal);
 
         if (!signalizerParams.learn && predicted != 0 && actual != 0) {
             textWriter.put("signal_prediction_" + signal.getId(), predicted + "/" + actual, network.getLinks().get(signal.getLinkId()).getToNode().getCoord());
         }
         return predicted;
+    }
+
+    public static int countCarsAtSignal(TrafficTracker tracker, Signal s) {
+        return tracker.carCountAt(s.getLinkId());
     }
 }

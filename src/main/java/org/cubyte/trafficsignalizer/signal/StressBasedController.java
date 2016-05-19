@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import org.cubyte.trafficsignalizer.signal.stress.StressFunction;
 import org.cubyte.trafficsignalizer.tracker.TrafficTracker;
 import org.cubyte.trafficsignalizer.ui.TextObject;
+import org.matsim.api.core.v01.Coord;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Network;
@@ -11,15 +12,14 @@ import org.matsim.contrib.signals.model.*;
 import org.matsim.core.mobsim.qsim.interfaces.SignalGroupState;
 import org.matsim.core.utils.geometry.CoordinateTransformation;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
-import static java.lang.Math.round;
-import static java.lang.Math.sqrt;
+import static java.lang.Math.*;
 import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.toList;
+import static org.cubyte.trafficsignalizer.signal.stress.CarCountStressFunction.countCarsAtSignal;
 import static org.matsim.vis.otfvis.data.OTFServerQuadTree.getOTFTransformation;
 
 public class StressBasedController extends AbstractSignalController {
@@ -27,12 +27,14 @@ public class StressBasedController extends AbstractSignalController {
     private final StressFunction stressFunction;
     private final TextObject.Writer textWriter;
     private final TrafficTracker tracker;
-    private SignalSystem system;
     private SignalGroup upcomingGroup;
     private SignalGroup activeGroup;
     private SignalGroup expiringGroup;
     private double greenSince;
     private double dropAt;
+    private final double greenTimePerCar = 10d;
+    private final double maximumGreenTime = 100d;
+    private final double minimumGreenTime = 1 * greenTimePerCar;
     private Map<Id<Signal>, Double> redSince = new HashMap<>();
 
     @Inject
@@ -45,22 +47,13 @@ public class StressBasedController extends AbstractSignalController {
         this.tracker = tracker;
     }
 
-    public void setSignalSystem(SignalSystem system) {
-        this.system = system;
-        getNetworkController().controllerReady(this, system);
-    }
-
-    public SignalSystem getSystem() {
-        return system;
-    }
-
     public void simulationInitialized(double timeSeconds) {
-        for (Id<SignalGroup> group : system.getSignalGroups().keySet()) {
-            system.scheduleDropping(timeSeconds, group);
+        for (Id<SignalGroup> group : getSystem().getSignalGroups().keySet()) {
+            getSystem().scheduleDropping(timeSeconds, group);
         }
 
         this.redSince.clear();
-        for (Id<Signal> signalId : system.getSignals().keySet()) {
+        for (Id<Signal> signalId : getSystem().getSignals().keySet()) {
             this.redSince.put(signalId, timeSeconds);
         }
 
@@ -74,20 +67,20 @@ public class StressBasedController extends AbstractSignalController {
         mixInBackPressure(stressPerSignal, t);
 
         Map<Id<SignalGroup>, Double> stressPerGroup = new HashMap<>();
-        Collection<SignalGroup> groups = this.system.getSignalGroups().values();
+        Collection<SignalGroup> groups = getSystem().getSignalGroups().values();
         for (SignalGroup g : groups) {
             double stress = g.getSignals().keySet().stream().mapToDouble(stressPerSignal::get).sum();
             stressPerGroup.put(g.getId(), stress);
         }
 
-        for (Signal signal : system.getSignals().values()) {
+        for (Signal signal : getSystem().getSignals().values()) {
             drawCurrentStress(signal, stressPerSignal);
         }
 
         if (activeGroup != null && upcomingGroup == null && expiringGroup == null) {
 
             if (t >= this.dropAt) {
-                system.scheduleDropping(t, activeGroup.getId());
+                getSystem().scheduleDropping(t, activeGroup.getId());
                 this.expiringGroup = this.activeGroup;
                 this.activeGroup = null;
             }
@@ -96,8 +89,8 @@ public class StressBasedController extends AbstractSignalController {
 
             Optional<Map.Entry<Id<SignalGroup>, Double>> mostStressed = stressPerGroup.entrySet().stream().max((a, b) -> Double.compare(a.getValue(), b.getValue()));
             if (mostStressed.isPresent()) {
-                SignalGroup group = system.getSignalGroups().get(mostStressed.get().getKey());
-                system.scheduleOnset(t, group.getId());
+                SignalGroup group = getSystem().getSignalGroups().get(mostStressed.get().getKey());
+                getSystem().scheduleOnset(t, group.getId());
                 this.upcomingGroup = group;
             }
         }
@@ -106,7 +99,7 @@ public class StressBasedController extends AbstractSignalController {
     }
 
     protected Map<Id<Signal>, Double> stressTable(double t) {
-        return stressTable(this.system, t);
+        return stressTable(getSystem(), t);
     }
 
     protected Map<Id<Signal>, Double> stressTable(SignalSystem s, double t) {
@@ -134,7 +127,7 @@ public class StressBasedController extends AbstractSignalController {
         double maxPressure = 0d;
         Map<Id<Signal>, Double> backPressure = new HashMap<>();
         for (Map.Entry<Id<Signal>, Double> e : stress.entrySet()) {
-            Signal s = system.getSignals().get(e.getKey());
+            Signal s = getSystem().getSignals().get(e.getKey());
             double pressure = calculateBackPressure(t, s) + 1;
             backPressure.put(s.getId(), pressure);
             if (pressure > maxPressure) {
@@ -159,18 +152,25 @@ public class StressBasedController extends AbstractSignalController {
     }
 
     protected double calculateStress(double t, Signal s) {
-        return stressFunction.calculateStress(getNetwork(), s, system, t - redSince.get(s.getId()));
+        return stressFunction.calculateStress(getNetwork(), s, getSystem(), t - redSince.get(s.getId()));
     }
 
     protected double calculateGreenTime(Id<SignalGroup> groupId, double t) {
-        return 30d;
+        final SignalGroup signalGroup = getSystem().getSignalGroups().get(groupId);
+        final int cars = signalGroup.getSignals().values().stream().map(s -> countCarsAtSignal(tracker, s)).max(Integer::compare).get();
+        return clamp(greenTimePerCar * cars + greenTimePerCar * log(cars), minimumGreenTime, maximumGreenTime);
     }
 
+    private static double clamp(double x, double min, double max) {
+        return max(min, min(max, x));
+    }
+
+    @Override
     public void groupStateChanged(Id<SignalGroup> signalGroupId, SignalGroupState newState, double t) {
 
         switch (newState) {
             case RED:
-                for (Signal signal : this.system.getSignalGroups().get(signalGroupId).getSignals().values()) {
+                for (Signal signal : getSystem().getSignalGroups().get(signalGroupId).getSignals().values()) {
                     this.redSince.put(signal.getId(), t);
                 }
                 this.expiringGroup = null;
@@ -179,9 +179,23 @@ public class StressBasedController extends AbstractSignalController {
                 this.activeGroup = this.upcomingGroup;
                 this.upcomingGroup = null;
                 this.greenSince = t;
-                this.dropAt = t + calculateGreenTime(signalGroupId, t);
+                final double greenTime = calculateGreenTime(signalGroupId, t);
+                this.dropAt = t + greenTime;
+                drawGreenTime(greenTime);
                 break;
         }
+    }
+
+    private void drawGreenTime(double t) {
+        if (t == minimumGreenTime) {
+            return;
+        }
+        final List<Coord> coords = getSystem().getSignals().values().stream().map(s -> {
+            return getNetwork().getLinks().get(s.getLinkId()).getToNode().getCoord();
+        }).collect(toList());
+        double x = coords.stream().mapToDouble(Coord::getX).max().getAsDouble() + 100;
+        double y = coords.stream().mapToDouble(Coord::getY).max().getAsDouble() + 100;
+        textWriter.put(getSystem().getId() + "_green_time", "G: " + round(t), new Coord(x, y));
     }
 
     private void drawCurrentStress(Signal signal, Map<Id<Signal>, Double> stressPerSignal) {
@@ -189,8 +203,8 @@ public class StressBasedController extends AbstractSignalController {
         if (trans != null) {
             double roundedStress = round(stressPerSignal.get(signal.getId()) * 10) / 10;
             Link link = getNetwork().getLinks().get(signal.getLinkId());
-            String id = "signal_stress_" + system.getId() + "_" + signal.getId();
-            textWriter.putMid(id, roundedStress + "", link);
+            String id = "signal_stress_" + getSystem().getId() + "_" + signal.getId();
+            textWriter.putMid(id, countCarsAtSignal(tracker, signal) + "|" + roundedStress + "", link);
         }
     }
 }

@@ -8,6 +8,8 @@ import org.matsim.contrib.signals.model.SignalSystem;
 
 import javax.inject.Inject;
 
+import static org.cubyte.trafficsignalizer.signal.stress.CarCountStressFunction.countCarsAtSignal;
+
 public class TimeVariantStressFunction implements StressFunction {
 
     private final TrafficTracker trafficTracker;
@@ -26,7 +28,7 @@ public class TimeVariantStressFunction implements StressFunction {
 
     @Override
     public double calculateStress(Network network, Signal signal, SignalSystem system, double t) {
-        final double n = trafficTracker.carCountAt(signal.getLinkId());
+        final double n = countCarsAtSignal(trafficTracker, signal);
         return f(n, t);
     }
 }

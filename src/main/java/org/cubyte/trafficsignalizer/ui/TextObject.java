@@ -5,6 +5,7 @@ import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.util.awt.TextRenderer;
 import org.matsim.api.core.v01.Coord;
 import org.matsim.api.core.v01.network.Link;
+import org.matsim.core.utils.geometry.CoordinateTransformation;
 import org.matsim.vis.otfvis.OTFClientControl;
 import org.matsim.vis.otfvis.caching.SceneGraph;
 import org.matsim.vis.otfvis.data.OTFDataWriter;
@@ -88,8 +89,11 @@ public class TextObject {
         }
 
         public void put(String id, String text, Coord c) {
-            Coord coord = getOTFTransformation().transform(c);
-            put(id, text, coord.getX(), coord.getY(), false);
+            final CoordinateTransformation transformer = getOTFTransformation();
+            if (transformer != null) {
+                Coord coord = transformer.transform(c);
+                put(id, text, coord.getX(), coord.getY(), false);
+            }
         }
 
         public void putMid(String id, String text, Link l) {

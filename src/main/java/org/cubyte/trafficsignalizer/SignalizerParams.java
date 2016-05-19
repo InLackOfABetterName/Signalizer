@@ -2,6 +2,9 @@ package org.cubyte.trafficsignalizer;
 
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.inf.*;
+import org.cubyte.trafficsignalizer.signal.AbstractSignalController;
+import org.cubyte.trafficsignalizer.signal.DummyCycleController;
+import org.cubyte.trafficsignalizer.signal.StressBasedController;
 import org.cubyte.trafficsignalizer.signal.stress.StressFunction;
 import org.cubyte.trafficsignalizer.signal.stress.TimeVariantStressFunction;
 
@@ -16,8 +19,9 @@ public class SignalizerParams {
     public final int timeStepDelay;
     public final int populationSize;
     public final Class<? extends StressFunction> stressFunction;
+    public final Class<? extends AbstractSignalController> signalController;
 
-    public SignalizerParams(String scenario, boolean learn, boolean refreshGroups, boolean caculateLinkLengths, double coordScale, int timeStepDelay, int populationSize, Class<? extends StressFunction> stressFunction) {
+    public SignalizerParams(String scenario, boolean learn, boolean refreshGroups, boolean caculateLinkLengths, double coordScale, int timeStepDelay, int populationSize, Class<? extends StressFunction> stressFunction, Class<? extends AbstractSignalController> signalController) {
         this.scenario = scenario;
         this.learn = learn;
         this.refreshGroups = refreshGroups;
@@ -26,6 +30,7 @@ public class SignalizerParams {
         this.timeStepDelay = timeStepDelay;
         this.populationSize = populationSize;
         this.stressFunction = stressFunction;
+        this.signalController = signalController;
     }
 
     public static SignalizerParams fromNamespace(Namespace ns) {
@@ -37,7 +42,8 @@ public class SignalizerParams {
                 ns.getDouble("coord_scale"),
                 ns.getInt("timestep_delay"),
                 ns.getInt("population_size"),
-                ns.get("stress_function"));
+                ns.get("stress_function"),
+                ns.get("controller"));
     }
 
     public static SignalizerParams fromArgs(String[] args) {
@@ -50,6 +56,7 @@ public class SignalizerParams {
         argParser.addArgument("-s", "--coord-scale").type(Double.class).metavar("scale").setDefault(1d).help("This parameter specifies a scale factor to scala the node coords in the network");
         argParser.addArgument("--timestep-delay").type(Integer.class).metavar("delay").setDefault(1).help("This parameter indirectly specifies the visual simulation speed by giving the timestep delay in milliseconds");
         argParser.addArgument("-p", "--population-size").required(true).type(Integer.class).metavar("population").help("This value is used when new plans are generated");
+
         argParser.addArgument("--stress-function").type((ArgumentType<Class<? extends StressFunction>>) (parser, arg, value) -> {
             final Class<? extends StressFunction> c = StressFunction.byName(value);
             if (c == null) {
@@ -57,6 +64,14 @@ public class SignalizerParams {
             }
             return c;
         }).setDefault(TimeVariantStressFunction.class).metavar("name").help("Set the stress function to be used");
+
+        argParser.addArgument("--controller").type((ArgumentType<Class<? extends AbstractSignalController>>) (parser, arg, value) -> {
+            try {
+                return (Class<? extends AbstractSignalController>) Class.forName(value);
+            } catch (ClassNotFoundException e) {
+                throw new ArgumentParserException("Unknown stress function", parser);
+            }
+        }).setDefault(StressBasedController.class).metavar("class name").help("Set the signal controller to be used");
 
         try {
             return fromNamespace(argParser.parseArgs(args));
