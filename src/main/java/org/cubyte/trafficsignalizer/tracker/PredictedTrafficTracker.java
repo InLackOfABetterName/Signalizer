@@ -91,19 +91,51 @@ public class PredictedTrafficTracker implements TrafficTracker, MobsimBeforeSimS
                 double timeSinceEnteredLink = simulationTime - vehicle.getCurrentLinkEnteredTime();
                 if (timeSinceEnteredLink >= travelTime) {
                     double timeWhenEnteredNewLink = simulationTime - (timeSinceEnteredLink - travelTime);
-                    Id<Link> newLinkId = getNextPredictedLink(trackedLink, timeWhenEnteredNewLink);
 
                     // TODO take into account that vehicles can come from multiple links and not all from one can fill the link
                     // TODO take into account that vehicles can leave a link randomly to park or something
-                    if (newLinkId != null) {
-                        if (trackedLinks.get(newLinkId).getFreeStorage() <= 0) {
-                            break; // do not let through the vehicles following this or this, because this can not drive
-                                   // to the next link
+
+                    List<Id<Link>> toLinks = new ArrayList<>(trackedLink.getLink().getToNode().getOutLinks().keySet());
+                    toLinks.sort(Id<Link>::compareTo);
+
+                    if (toLinks.size() > 0) {
+                        if (toLinks.size() > 1) {
+                            double[] predictions = predictionNetwork.getPrediction(trackedLink.getLink().getId(), timeWhenEnteredNewLink);
+
+                            boolean fits = true;
+
+                            for (int i = 0; i < predictions.length; i++) {
+                                if (trackedLinks.get(toLinks.get(i)).getFreeStorage() < predictions[i]) {
+                                    fits = false;
+                                    break;
+                                }
+                            }
+
+                            if (fits) {
+                                vehicle.setCurrentLinkEnteredTime(timeWhenEnteredNewLink - remainingTime.get(link.getId()));
+                                trackedLink.removeVehicle(vehicle);
+                                List<TrackedVehicle> vehicles = vehicle.split(predictions);
+                                for (int i = 0; i < vehicles.size(); i++) {
+                                    trackedLinks.get(toLinks.get(i)).addVehicle(vehicles.get(i));
+                                }
+                            } else {
+                                break;  // do not let through the vehicles following this or this, because this can not drive
+                                        // to the next link
+                            }
+                        } else {
+                            TrackedLink newLink = trackedLinks.get(toLinks.get(0));
+                            if (newLink.getFreeStorage() > vehicle.getProbability()) {
+                                vehicle.setCurrentLinkEnteredTime(timeWhenEnteredNewLink - remainingTime.get(link.getId()));
+                                trackedLink.removeVehicle(vehicle);
+                                newLink.addVehicle(vehicle);
+                            } else {
+                                break;  // do not let through the vehicles following this or this, because this can not drive
+                                        // to the next link
+                            }
                         }
-                        trackedLinks.get(newLinkId).addVehicle(vehicle);
-                        vehicle.setCurrentLinkEnteredTime(timeWhenEnteredNewLink - remainingTime.get(link.getId()));
+                    } else {
+                        trackedLink.removeVehicle(vehicle);
                     }
-                    trackedLink.removeVehicle(vehicle);
                 }
             }
             remainingTime.put(link.getId(), newRemainingTime);
