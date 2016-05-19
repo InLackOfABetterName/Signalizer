@@ -52,7 +52,7 @@ public class NodeTraverseHandler implements LinkEnterEventHandler, LinkLeaveEven
                 outLinks.addAll(link.getFromNode().getOutLinks().keySet());
                 outLinks.sort(Id<Link>::compareTo);
                 double hours = Math.round(event.getTime() / 60 / 60) % 24;
-                double minutes = Math.round(event.getTime() / 60) % 60;
+                double minutes = Math.round(event.getTime() / 60 / 10) % 6;
                 DataSetRow row = null;
                 for (DataSetRow current : dataSets.get(vehicleLeaveMap.get(event.getVehicleId())).getRows()) {
                     if (current.getInput()[0] == hours && current.getInput()[1] == minutes) {

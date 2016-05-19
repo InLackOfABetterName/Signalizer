@@ -115,7 +115,7 @@ public class PredictionNetwork {
         if (neuralNetworkMap.containsKey(nodeId)) {
             NeuralNetwork neuralNetwork = neuralNetworkMap.get(nodeId);
             double hours = Math.round(time / 60 / 60) % 24;
-            double minutes = Math.round(time / 60) % 60;
+            double minutes = Math.round(time / 60 / 10) % 6;
             neuralNetwork.setInput(hours, minutes);
             neuralNetwork.calculate();
             return neuralNetwork.getOutput();
