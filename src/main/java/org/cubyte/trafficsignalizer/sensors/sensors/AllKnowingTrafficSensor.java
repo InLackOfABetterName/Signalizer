@@ -2,6 +2,7 @@ package org.cubyte.trafficsignalizer.sensors.sensors;
 
 import com.google.inject.Inject;
 import org.cubyte.trafficsignalizer.sensors.events.CountingTrafficEvent;
+import org.cubyte.trafficsignalizer.tracker.TrackedLink;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.events.LinkEnterEvent;
 import org.matsim.api.core.v01.events.LinkLeaveEvent;
@@ -42,6 +43,10 @@ public class AllKnowingTrafficSensor extends TrafficSensor<CountingTrafficEvent>
     public void handlePersonDeparture(PersonDepartureEvent event) {
         vehicles++;
         processEvent(new CountingTrafficEvent(event.getTime(), vehicles));
+    }
+
+    @Override
+    public void correctErrorIfNeeded(TrackedLink link) {
     }
 
     @Override

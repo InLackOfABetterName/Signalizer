@@ -149,40 +149,6 @@ public class PredictedTrafficTracker implements TrafficTracker, MobsimBeforeSimS
         lastSimStepTime = simulationTime;
     }
 
-    private Id<Link> getNextPredictedLink(TrackedLink currentLink, double timeWhenEnteredNewLink) {
-        List<Id<Link>> toLinks = new ArrayList<>(currentLink.getLink().getToNode().getOutLinks().keySet());
-        toLinks.sort(Id<Link>::compareTo);
-        Id<Link> newLinkId;
-        if (toLinks.size() > 0) {
-            if (toLinks.size() > 1) {
-                double[] predictions = predictionNetwork.getPrediction(currentLink.getLink().getId(), timeWhenEnteredNewLink);
-                double acc = 0;
-                for (double prediction : predictions) {
-                    acc += prediction;
-                }
-                acc /= predictions.length;
-                for (int i = 0; i < predictions.length; i++) {
-                    predictions[i] /= acc;
-                }
-                double choice = random.nextDouble();
-                acc = 0;
-                for (int i = 0; i < predictions.length; i++) {
-                    acc += predictions[i];
-                    if (choice <= acc) {
-                        choice = i;
-                        break;
-                    }
-                }
-                newLinkId = toLinks.get((int) choice);
-            } else {
-                newLinkId = toLinks.get(0);
-            }
-            return newLinkId;
-        } else {
-            return null;
-        }
-    }
-
     @Override
     public void notifyMobsimBeforeSimStep(MobsimBeforeSimStepEvent e) {
         simulate(e.getSimulationTime());

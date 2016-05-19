@@ -1,6 +1,7 @@
 package org.cubyte.trafficsignalizer.sensors.sensors;
 
 import org.cubyte.trafficsignalizer.sensors.events.EnteringTrafficEvent;
+import org.cubyte.trafficsignalizer.tracker.TrackedLink;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.events.LinkEnterEvent;
 import org.matsim.api.core.v01.events.LinkLeaveEvent;
@@ -34,5 +35,9 @@ public class EnteringTrafficSensor extends TrafficSensor<EnteringTrafficEvent> {
 
     @Override
     public void reset(int iteration) {
+    }
+
+    @Override
+    public void correctErrorIfNeeded(TrackedLink link) {
     }
 }

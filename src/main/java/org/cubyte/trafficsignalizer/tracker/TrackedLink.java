@@ -81,4 +81,12 @@ public class TrackedLink {
     public double getFreeStorage() {
         return storageCapacity - ((getVehicleCount() - toRemove.size()) + toAdd.size());
     }
+
+    public void raiseVehicleCountTo(double vehicleCount) {
+
+    }
+
+    public void reduceVehicleCountTo(double vehicleCount) {
+
+    }
 }

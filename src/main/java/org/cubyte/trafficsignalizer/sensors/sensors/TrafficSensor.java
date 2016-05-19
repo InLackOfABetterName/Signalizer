@@ -1,6 +1,7 @@
 package org.cubyte.trafficsignalizer.sensors.sensors;
 
 import org.cubyte.trafficsignalizer.sensors.events.TrafficSensorEvent;
+import org.cubyte.trafficsignalizer.tracker.TrackedLink;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.events.LinkEnterEvent;
 import org.matsim.api.core.v01.events.LinkLeaveEvent;
@@ -61,4 +62,6 @@ public abstract class TrafficSensor<T extends TrafficSensorEvent> implements Lin
             handlePersonDeparture(event);
         }
     }
+
+    public abstract void correctErrorIfNeeded(TrackedLink link);
 }
