@@ -28,7 +28,7 @@ public class AllKnowingTrafficTracker implements TrafficTracker {
         em.addHandler(new Handler());
     }
 
-    public int carCountAt(Id<Link> link) {
+    public double carCountAt(Id<Link> link) {
         final Integer count = linkState.get(link);
         return count != null ? count : 0;
     }

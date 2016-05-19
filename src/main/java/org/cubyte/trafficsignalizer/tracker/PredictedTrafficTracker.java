@@ -157,7 +157,7 @@ public class PredictedTrafficTracker implements TrafficTracker, MobsimBeforeSimS
     }
 
     @Override
-    public int carCountAt(Id<Link> link) {
+    public double carCountAt(Id<Link> link) {
         return trackedLinks.get(link).getVehicleCount();
     }
 
