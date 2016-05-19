@@ -29,7 +29,6 @@ public class DummyCycleController extends AbstractSignalController {
 
     @Override
     public void updateState(double v) {
-        //System.out.println(getSystem().getId() + " -> current: " + this.currentGroup);
     }
 
     @Override
@@ -52,14 +51,12 @@ public class DummyCycleController extends AbstractSignalController {
             case GREEN:
                 getSystem().scheduleDropping(t + PHASE_DURATION, signalGroupId);
                 active = signalGroupId;
-                if (getSystem().getId().toString().equals("crossing_1")) System.out.println(signalGroupId + " went green at " + t);
                 break;
             case RED:
                 if (signalGroupId.equals(active)) {
                     this.currentGroup = (this.currentGroup + 1) % this.groups.size();
                     getSystem().scheduleOnset(t + 1, this.groups.get(this.currentGroup));
                     drawActiveGroup();
-                    if (getSystem().getId().toString().equals("crossing_1")) System.out.println(signalGroupId + " went red at " + t);
                 }
         }
     }
