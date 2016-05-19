@@ -46,4 +46,8 @@ public class TrackedVehicle {
         }
         return vehicles;
     }
+
+    public double getProbability() {
+        return probability;
+    }
 }

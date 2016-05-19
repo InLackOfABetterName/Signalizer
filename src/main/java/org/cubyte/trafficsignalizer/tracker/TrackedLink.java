@@ -41,16 +41,18 @@ public class TrackedLink {
      * Adds the list of added vehicles and removes the list of removed vehicles from the actual vehicle queue
      */
     public void resolve() {
-        int removeSize = toRemove.size();
-        int addSize = toAdd.size();
         vehicleQueue.removeAll(toRemove);
         toRemove.clear();
         vehicleQueue.addAll(toAdd);
         toAdd.clear();
     }
 
-    public int getVehicleCount() {
-        return vehicleQueue.size();
+    public double getVehicleCount() {
+        double count = 0;
+        for (TrackedVehicle vehicle : vehicleQueue) {
+            count += vehicle.getProbability();
+        }
+        return count;
     }
 
     public void reset() {
@@ -65,10 +67,18 @@ public class TrackedLink {
      * Gets the sublist of the vehicle queue from the vehicle standing in front to count (exclusive)
      */
     public List<TrackedVehicle> getVehicles(int count) {
-        return vehicleQueue.subList(0, count > vehicleQueue.size() ? vehicleQueue.size() : count);
+        List<TrackedVehicle> vehicles = new ArrayList<>();
+        double countTillNow = 0;
+        for (TrackedVehicle vehicle : vehicleQueue) {
+            countTillNow += vehicle.getProbability();
+            if (countTillNow > count)
+                break;
+            vehicles.add(vehicle);
+        }
+        return vehicles;
     }
 
-    public int getFreeStorage() {
-        return storageCapacity - ((vehicleQueue.size() - toRemove.size()) + toAdd.size());
+    public double getFreeStorage() {
+        return storageCapacity - ((getVehicleCount() - toRemove.size()) + toAdd.size());
     }
 }
