@@ -50,4 +50,13 @@ public class TrackedVehicle {
     public double getProbability() {
         return probability;
     }
+
+    public void setProbability(double probability) {
+        this.probability = probability;
+        if (probability > 1) {
+            this.probability = 1;
+        } else if (probability < 0) {
+            this.probability = 0;
+        }
+    }
 }

@@ -83,10 +83,28 @@ public class TrackedLink {
     }
 
     public void raiseVehicleCountTo(double vehicleCount) {
-
+        double difference = vehicleCount - getVehicleCount();
+        double probabilityTotal = getVehicleCount();
+        for (TrackedVehicle vehicle : vehicleQueue) {
+            double partOfDifference = difference * vehicle.getProbability() / probabilityTotal;
+            difference -= partOfDifference;
+            if (partOfDifference + vehicle.getProbability() > 1) {
+                difference += partOfDifference + vehicle.getProbability() - 1;
+            }
+            vehicle.setProbability(vehicle.getProbability() + partOfDifference);
+        }
     }
 
     public void reduceVehicleCountTo(double vehicleCount) {
-
+        double difference = getVehicleCount() - vehicleCount;
+        double probabilityTotal = getVehicleCount();
+        for (TrackedVehicle vehicle : vehicleQueue) {
+            double partOfDifference = difference * vehicle.getProbability() / probabilityTotal;
+            difference -= partOfDifference;
+            if (vehicle.getProbability() - partOfDifference < 0) {
+                difference += partOfDifference - vehicle.getProbability();
+            }
+            vehicle.setProbability(vehicle.getProbability() - partOfDifference);
+        }
     }
 }
