@@ -204,7 +204,7 @@ public class StressBasedController extends AbstractSignalController {
             double roundedStress = round(stressPerSignal.get(signal.getId()) * 10) / 10;
             Link link = getNetwork().getLinks().get(signal.getLinkId());
             String id = "signal_stress_" + getSystem().getId() + "_" + signal.getId();
-            textWriter.putMid(id, countCarsAtSignal(tracker, signal) + "|" + roundedStress + "", link);
+            textWriter.putMid(id, Math.round(countCarsAtSignal(tracker, signal) * 100) / 100d + "|" + roundedStress + "", link);
         }
     }
 }
