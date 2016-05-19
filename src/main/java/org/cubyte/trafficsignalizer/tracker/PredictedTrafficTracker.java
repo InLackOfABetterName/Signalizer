@@ -116,7 +116,9 @@ public class PredictedTrafficTracker implements TrafficTracker, MobsimBeforeSimS
                                 trackedLink.removeVehicle(vehicle);
                                 List<TrackedVehicle> vehicles = vehicle.split(predictions);
                                 for (int i = 0; i < vehicles.size(); i++) {
-                                    trackedLinks.get(toLinks.get(i)).addVehicle(vehicles.get(i));
+                                    if (vehicles.get(i).getProbability() > 0.001) {
+                                        trackedLinks.get(toLinks.get(i)).addVehicle(vehicles.get(i));
+                                    }
                                 }
                             } else {
                                 break;  // do not let through the vehicles following this or this, because this can not drive
