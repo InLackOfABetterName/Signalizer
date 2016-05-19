@@ -13,10 +13,10 @@ public class SignalizerSignalModelFactory implements SignalModelFactory {
 
     private final SignalModelFactory defaultImpl = new DefaultSignalModelFactory();
     private final SignalNetworkController networkController;
-    private final Provider<StressBasedController> signalController;
+    private final Provider<AbstractSignalController> signalController;
 
     @Inject
-    public SignalizerSignalModelFactory(SignalNetworkController c, Provider<StressBasedController> signalController) {
+    public SignalizerSignalModelFactory(SignalNetworkController c, Provider<AbstractSignalController> signalController) {
         networkController = c;
         this.signalController = signalController;
     }
@@ -34,7 +34,7 @@ public class SignalizerSignalModelFactory implements SignalModelFactory {
         if (controllerIdentifier.equals(DefaultPlanbasedSignalSystemController.IDENTIFIER)) {
             return new DefaultPlanbasedSignalSystemController();
         } else {
-            StressBasedController c = signalController.get();
+            AbstractSignalController c = signalController.get();
             networkController.addController(c);
             return c;
         }

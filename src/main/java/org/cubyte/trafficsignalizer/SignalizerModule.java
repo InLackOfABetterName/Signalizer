@@ -5,6 +5,7 @@ import org.cubyte.trafficsignalizer.prediction.LearnAndMeasureHandler;
 import org.cubyte.trafficsignalizer.prediction.NodeTraverseHandler;
 import org.cubyte.trafficsignalizer.prediction.PredictionNetwork;
 import org.cubyte.trafficsignalizer.sensors.TrafficSensorFactory;
+import org.cubyte.trafficsignalizer.signal.AbstractSignalController;
 import org.cubyte.trafficsignalizer.signal.SignalNetworkController;
 import org.cubyte.trafficsignalizer.signal.SignalizerSignalModelFactory;
 import org.cubyte.trafficsignalizer.signal.StressBasedController;
@@ -46,7 +47,7 @@ public class SignalizerModule extends AbstractModule {
         this.addControlerListenerBinding().to(LearnAndMeasureHandler.class);
         this.bind(StressFunction.class).to(params.stressFunction);
         this.bind(SignalModelFactory.class).to(SignalizerSignalModelFactory.class);
-        this.bind(StressBasedController.class);
+        this.bind(AbstractSignalController.class).to(params.signalController);
         if (this.params.learn) {
             this.bind(TrafficTracker.class).to(AllKnowingTrafficTracker.class);
         } else {

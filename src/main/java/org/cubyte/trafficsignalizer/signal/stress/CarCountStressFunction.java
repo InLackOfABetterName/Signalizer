@@ -13,27 +13,28 @@ import javax.inject.Inject;
 public class CarCountStressFunction implements StressFunction {
 
     private final TrafficTracker trafficTracker;
-    private final AllKnowingTrafficTracker allKnowingTrafficTracker;
     private final TextObject.Writer textWriter;
     private SignalizerParams signalizerParams;
 
     @Inject
-    public CarCountStressFunction(TrafficTracker trafficTracker, AllKnowingTrafficTracker allKnowingTrafficTracker,
-                                  TextObject.Writer textWriter, SignalizerParams signalizerParams) {
+    public CarCountStressFunction(TrafficTracker trafficTracker, TextObject.Writer textWriter, SignalizerParams signalizerParams) {
         this.trafficTracker = trafficTracker;
-        this.allKnowingTrafficTracker = allKnowingTrafficTracker;
         this.textWriter = textWriter;
         this.signalizerParams = signalizerParams;
     }
 
     @Override
     public double calculateStress(Network network, Signal signal, SignalSystem system, double timeSeconds) {
-        double actual = allKnowingTrafficTracker.carCountAt(signal.getLinkId());
-        double predicted = trafficTracker.carCountAt(signal.getLinkId());
+        double actual = countCarsAtSignal(trafficTracker, signal);
+        double predicted = countCarsAtSignal(trafficTracker, signal);
 
         if (!signalizerParams.learn && predicted != 0 && actual != 0) {
             textWriter.put("signal_prediction_" + signal.getId(), predicted + "/" + actual, network.getLinks().get(signal.getLinkId()).getToNode().getCoord());
         }
         return predicted;
+    }
+
+    public static double countCarsAtSignal(TrafficTracker tracker, Signal s) {
+        return tracker.carCountAt(s.getLinkId());
     }
 }
